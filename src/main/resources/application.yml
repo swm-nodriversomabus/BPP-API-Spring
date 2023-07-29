@@ -1,0 +1,21 @@
+server:
+  servlet:
+    contextPath: /api/
+
+---
+spring:
+  profiles:
+    active: local
+---
+
+spring:
+  profiles:
+    active: prod
+---
+
+spring:
+  profiles:
+    active: dev
+
+
+
