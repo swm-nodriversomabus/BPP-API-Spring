@@ -20,9 +20,10 @@ public class UserEntity {
 
     @Column(nullable = false, length = 30)
     private String username;
-    @Column(nullable = false, length = 30)
 
+    @Column(nullable = false, length = 30)
     private String nickname;
+
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private UserGenderType gender;
