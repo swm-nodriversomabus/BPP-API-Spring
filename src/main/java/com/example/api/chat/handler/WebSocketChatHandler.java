@@ -29,9 +29,6 @@ public class WebSocketChatHandler extends TextWebSocketHandler {
      */
     @Override
     public void handleTextMessage(@Nonnull WebSocketSession session, @Nonnull TextMessage message){
-        log.info("session: {}",session);
-        log.info("message: {}",message);
-
         //메시지 전송
         String msg = message.getPayload();
         for(Map.Entry<String, WebSocketSession> entry : sessionHashMap.entrySet()){
@@ -55,6 +52,7 @@ public class WebSocketChatHandler extends TextWebSocketHandler {
     @Override
     public void afterConnectionEstablished(@Nonnull WebSocketSession session) throws Exception {
         super.afterConnectionEstablished(session);
+        log.info("소켓 연결 {}", session.getId());
         sessionHashMap.put(session.getId(), session);
     }
 
