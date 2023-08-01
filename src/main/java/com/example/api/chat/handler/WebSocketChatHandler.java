@@ -1,10 +1,13 @@
 package com.example.api.chat.handler;
 
 import com.example.api.chatroom.service.ChatRoomService;
+import com.example.api.chatroom.type.Message;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.annotation.Nonnull;
+import jdk.jshell.execution.Util;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+
 import org.springframework.stereotype.Component;
 import org.springframework.web.socket.CloseStatus;
 import org.springframework.web.socket.TextMessage;
@@ -31,6 +34,7 @@ public class WebSocketChatHandler extends TextWebSocketHandler {
     public void handleTextMessage(@Nonnull WebSocketSession session, @Nonnull TextMessage message){
         //메시지 전송
         String msg = message.getPayload();
+        log.info("yes");
         for(Map.Entry<String, WebSocketSession> entry : sessionHashMap.entrySet()){
             String key = entry.getKey();
             WebSocketSession wss = sessionHashMap.get(key);

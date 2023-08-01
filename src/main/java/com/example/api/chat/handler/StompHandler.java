@@ -22,6 +22,9 @@ public class StompHandler implements ChannelInterceptor{
             case CONNECT -> log.info("세션 접속 => {}", sessionId);
             case DISCONNECT -> // websocket으로 disconnect()를 한 뒤 호출됨 or 세션이 끊어졌을 때 발생
                     log.info("세션 아웃 => {}", sessionId);
+            default -> {
+
+            }
         }
     }
 }
