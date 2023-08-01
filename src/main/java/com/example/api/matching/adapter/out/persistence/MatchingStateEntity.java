@@ -1,4 +1,4 @@
-package com.example.api.chat.adapter.out.persistence;
+package com.example.api.matching.adapter.out.persistence;
 
 import jakarta.persistence.*;
 import lombok.*;
@@ -11,24 +11,21 @@ import java.util.Date;
 @ToString
 @Getter
 @Builder
-@Table(name="chat")
-public class ChatEntity {
+@Table(name="matchingState")
+public class MatchingStateEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long chatId;
-
+    private Long matchingStateId;
+    
     @Column(nullable = false)
-    private Long roomId;
-
+    private Integer matchingId;
+    
     @Column(nullable = false)
-    private Long senderId;
-
-    @Column(nullable = false, length = 6000)
-    private String content;
-
+    private Integer userId;
+    
     @Column(nullable = false)
-    private Boolean image;
-
+    private Boolean complete;
+    
     @Temporal(TemporalType.TIMESTAMP)
     private Date createdAt;
 }

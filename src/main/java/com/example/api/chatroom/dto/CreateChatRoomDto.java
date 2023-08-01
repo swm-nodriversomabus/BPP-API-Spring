@@ -6,7 +6,6 @@ import lombok.Data;
 
 @Data
 public class CreateChatRoomDto {
-
     @NotEmpty
     private ChatRoomType type;
     @NotEmpty

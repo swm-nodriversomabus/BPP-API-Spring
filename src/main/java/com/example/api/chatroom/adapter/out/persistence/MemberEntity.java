@@ -15,14 +15,15 @@ import java.util.Date;
 @IdClass(MemberPK.class)
 @Table(name="member")
 public class MemberEntity {
-
     @Id
     private Long chatroomId;
+    
     @Id
     private Long userId;
+    
     @Temporal(TemporalType.TIMESTAMP)
     private Date createdAt;
-
+    
     @Temporal(TemporalType.TIMESTAMP)
     private Date outAt;
 }

@@ -16,5 +16,4 @@ public class ChatRoomController {
     public void createChatroom(@RequestParam CreateChatRoomDto createChatRoomDto){
         createChatRoomUsecase.createRoom(createChatRoomDto);
     }
-
 }

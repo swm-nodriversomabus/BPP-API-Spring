@@ -1,4 +1,4 @@
-package com.example.api.chat.adapter.out.persistence;
+package com.example.api.friend.adapter.out.persistence;
 
 import jakarta.persistence.*;
 import lombok.*;
@@ -11,24 +11,18 @@ import java.util.Date;
 @ToString
 @Getter
 @Builder
-@Table(name="chat")
-public class ChatEntity {
+@Table(name="friend")
+public class FriendEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long chatId;
-
+    private Long friendId;
+    
     @Column(nullable = false)
-    private Long roomId;
-
+    private Integer userId;
+    
     @Column(nullable = false)
-    private Long senderId;
-
-    @Column(nullable = false, length = 6000)
-    private String content;
-
-    @Column(nullable = false)
-    private Boolean image;
-
+    private Integer targetUserId;
+    
     @Temporal(TemporalType.TIMESTAMP)
     private Date createdAt;
 }

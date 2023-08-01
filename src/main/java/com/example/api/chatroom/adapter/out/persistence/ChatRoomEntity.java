@@ -18,20 +18,19 @@ public class ChatRoomEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long chatroomId;
 
-    @Column(nullable = false)
-    @Enumerated(EnumType.STRING)
-    private ChatRoomType type;
-
     @Column(nullable = false, length = 300)
     private String chatroomName;
 
-
     @Column(nullable = false)
-    private Boolean isActive;
+    @Enumerated(EnumType.STRING)
+    private ChatRoomType type;
 
     @Temporal(TemporalType.TIMESTAMP)
     private Date createdAt;
 
     @Temporal(TemporalType.TIMESTAMP)
     private Date updatedAt;
+
+    @Column(nullable = false)
+    private Boolean isActive;
 }

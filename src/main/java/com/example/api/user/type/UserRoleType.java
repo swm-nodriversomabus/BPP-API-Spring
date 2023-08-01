@@ -9,7 +9,7 @@ import lombok.ToString;
 @Getter
 public enum UserRoleType {
     User("일반 유저"),
-    Admin("관리자ㄴ");
+    Admin("관리자");
 
     private final String role;
 }
