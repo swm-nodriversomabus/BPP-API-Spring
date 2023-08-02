@@ -6,6 +6,7 @@ server:
 spring:
   profiles:
     active: local
+
 ---
 
 spring:
@@ -16,6 +17,3 @@ spring:
 spring:
   profiles:
     active: dev
-
-
-
