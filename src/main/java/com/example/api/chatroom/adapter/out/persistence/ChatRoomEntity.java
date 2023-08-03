@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.util.Date;
+import java.util.UUID;
 
 @Entity
 @AllArgsConstructor
@@ -15,8 +16,8 @@ import java.util.Date;
 @Table(name="chatroom")
 public class ChatRoomEntity {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long chatroomId;
+    @Column(columnDefinition = "BINARY(16)")
+    private UUID chatroomId;
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)

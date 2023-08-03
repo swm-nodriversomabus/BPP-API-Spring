@@ -17,8 +17,9 @@ public class ChatConfiguration implements WebSocketMessageBrokerConfigurer {
     // end point 추가
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
-        registry.addEndpoint("/ws")
+        registry.addEndpoint("/ws/chat")
                 .setAllowedOriginPatterns("*");
+//                .withSockJS();
     }
 
     // TODO
@@ -32,8 +33,11 @@ public class ChatConfiguration implements WebSocketMessageBrokerConfigurer {
     @Override
     public void configureMessageBroker(MessageBrokerRegistry registry) {
         // sub으로 시작되는 요청을 구독한 모든 사용자들에게 메시지를 broadcast
-        registry.enableSimpleBroker("/sub");
+        // queue 는 1대1 전용
+        // topic은 1대다 전용
+        registry.enableSimpleBroker("/queue","/topic");
         // pub로 시작되네는 메시지는 message-handling methods로 라우팅
+        // 즉 브로커 보내준다.
         registry.setApplicationDestinationPrefixes("/pub");
     }
 }

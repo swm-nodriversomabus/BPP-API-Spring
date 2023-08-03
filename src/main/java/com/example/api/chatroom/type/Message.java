@@ -10,21 +10,16 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Message {
-    private String type;
+    public enum MessageType{
+        ENTER,TALK
+    }
+    private MessageType type;
     private String sender;
-    private String channelId;
-    private Object data;
+    private String roomId;
+    private Object message;
 
     public void setSender(String sender){
         this.sender = sender;
-    }
-
-    public void newConnect(){
-        this.type = "new";
-    }
-
-    public void closeConnect(){
-        this.type = "close";
     }
 
 }

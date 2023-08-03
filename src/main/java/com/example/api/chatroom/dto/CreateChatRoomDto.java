@@ -1,16 +1,16 @@
 package com.example.api.chatroom.dto;
 
 import com.example.api.chatroom.type.ChatRoomType;
-import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
 @Data
 public class CreateChatRoomDto {
 
-    @NotEmpty
+    @NotNull()
     private ChatRoomType type;
-    @NotEmpty
+    @NotNull
     private String chatroomName;
-    @NotEmpty
+    @NotNull
     private Boolean isActive;
 }
