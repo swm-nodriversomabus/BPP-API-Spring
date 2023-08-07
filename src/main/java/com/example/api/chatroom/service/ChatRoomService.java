@@ -12,6 +12,6 @@ public class ChatRoomService implements CreateChatRoomUsecase {
     private final SaveChatRoomPort saveChatRoomPort;
     @Override
     public void createRoom(CreateChatRoomDto createChatRoomDto) {
-
+        
     }
 }

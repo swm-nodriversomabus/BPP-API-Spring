@@ -2,10 +2,13 @@ package com.example.api.matching.adapter.out.persistence;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
 @Entity
+@EntityListeners(AuditingEntityListener.class)
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
@@ -18,14 +21,15 @@ public class MatchingStateEntity {
     private Long matchingStateId;
     
     @Column(nullable = false)
-    private Integer matchingId;
+    private Long matchingId;
     
     @Column(nullable = false)
-    private Integer userId;
+    private Long userId;
     
     @Column(nullable = false)
     private Boolean complete;
     
+    @CreatedDate
     @Temporal(TemporalType.TIMESTAMP)
-    private Date createdAt;
+    private LocalDateTime createdAt;
 }

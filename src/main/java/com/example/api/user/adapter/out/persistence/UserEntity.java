@@ -1,17 +1,24 @@
 package com.example.api.user.adapter.out.persistence;
 
+import com.example.api.user.dto.UserDto;
 import com.example.api.user.type.UserGenderType;
+import com.example.api.user.type.UserRoleType;
 import jakarta.persistence.*;
 import lombok.*;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
 @Entity
-@AllArgsConstructor
-@NoArgsConstructor
-@ToString
+@EntityListeners(AuditingEntityListener.class)
 @Getter
+@Setter
 @Builder
+@ToString
+@NoArgsConstructor
+@AllArgsConstructor
 @Table(name="user")
 public class UserEntity {
     @Id
@@ -28,9 +35,6 @@ public class UserEntity {
     @Enumerated(EnumType.STRING)
     private UserGenderType gender;
 
-    @Column(nullable = false, length = 300)
-    private String chatroomName;
-
     @Column(nullable = false)
     private Integer age;
 
@@ -42,6 +46,13 @@ public class UserEntity {
 
     @Column(nullable = false, length = 300)
     private String address;
+    
+    @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
+    private UserRoleType role;
+
+    @Column(nullable = false)
+    private Boolean blacklist;
 
     @Column(nullable = false, length = 300)
     private String personality;
@@ -56,17 +67,39 @@ public class UserEntity {
     private Long createdUserId;
 
     @Column(nullable = false)
-    private Long lastUpdateUserId;
+    private Long updatedUserId;
 
-    @Column(nullable = false)
-    private Boolean blacklist;
+    @CreatedDate
+    @Temporal(TemporalType.TIMESTAMP)
+    private LocalDateTime createdAt;
+
+    @LastModifiedDate
+    @Temporal(TemporalType.TIMESTAMP)
+    private LocalDateTime updatedAt;
 
     @Column(nullable = false)
     private Boolean isActive;
-
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date createdAt;
-
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date updatedAt;
+    
+    public UserDto toDto() {
+        return UserDto.builder()
+                .userId(userId)
+                .username(username)
+                .nickname(nickname)
+                .gender(gender)
+                .age(age)
+                .phone(phone)
+                .email(email)
+                .address(address)
+                .role(role)
+                .blacklist(blacklist)
+                .personality(personality)
+                .stateMessage(stateMessage)
+                .mannerScore(mannerScore)
+                .createdUserId(createdUserId)
+                .updatedUserId(updatedUserId)
+                .createdAt(createdAt)
+                .updatedAt(updatedAt)
+                .isActive(isActive)
+                .build();
+    }
 }

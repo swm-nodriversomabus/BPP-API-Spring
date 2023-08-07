@@ -16,7 +16,7 @@ public class ChatConfiguration implements WebSocketConfigurer {
     @Override
     public void registerWebSocketHandlers(WebSocketHandlerRegistry registry) {
         // endpoint 설정 : /ws/chat
-        // ws://localhost:8080/ws/chat 으로 요청이 들어오면 websocket으로 통신
+        // ws://localhost:8080/ws/chat으로 요청이 들어오면 websocket으로 통신
         registry.addHandler(webSocketHandler, "/ws/chat").setAllowedOrigins("*");
     }
 }

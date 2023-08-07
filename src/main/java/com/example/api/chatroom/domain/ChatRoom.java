@@ -15,6 +15,4 @@ public class ChatRoom {
         this.chatroomName = chatroomName;
         this.isActive = isActive;
     }
-
-
 }

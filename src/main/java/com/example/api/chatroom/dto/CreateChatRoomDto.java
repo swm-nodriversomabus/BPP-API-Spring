@@ -7,9 +7,11 @@ import lombok.Data;
 @Data
 public class CreateChatRoomDto {
     @NotEmpty
-    private ChatRoomType type;
-    @NotEmpty
     private String chatroomName;
+
+    @NotEmpty
+    private ChatRoomType type;
+    
     @NotEmpty
     private Boolean isActive;
 }

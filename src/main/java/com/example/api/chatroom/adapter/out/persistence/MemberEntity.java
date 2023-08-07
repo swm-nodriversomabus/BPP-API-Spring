@@ -1,12 +1,14 @@
 package com.example.api.chatroom.adapter.out.persistence;
 
-import com.example.api.chatroom.type.ChatRoomType;
 import jakarta.persistence.*;
 import lombok.*;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
 @Entity
+@EntityListeners(AuditingEntityListener.class)
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
@@ -21,9 +23,10 @@ public class MemberEntity {
     @Id
     private Long userId;
     
+    @CreatedDate
     @Temporal(TemporalType.TIMESTAMP)
-    private Date createdAt;
+    private LocalDateTime createdAt;
     
     @Temporal(TemporalType.TIMESTAMP)
-    private Date outAt;
+    private LocalDateTime outAt;
 }
