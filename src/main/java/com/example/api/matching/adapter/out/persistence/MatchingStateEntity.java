@@ -1,5 +1,6 @@
 package com.example.api.matching.adapter.out.persistence;
 
+import com.example.api.matching.dto.MatchingStateDto;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
@@ -33,4 +34,14 @@ public class MatchingStateEntity {
     @CreatedDate
     @Temporal(TemporalType.TIMESTAMP)
     private LocalDateTime createdAt;
+    
+    public MatchingStateDto toDto() {
+        return MatchingStateDto.builder()
+                .matchingStateId(matchingStateId)
+                .matchingId(matchingId)
+                .userId(userId)
+                .complete(complete)
+                .createdAt(createdAt)
+                .build();
+    }
 }
