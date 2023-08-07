@@ -1,4 +1,4 @@
-package com.example.api.chatroom.type;
+package com.example.api.chat.domain;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

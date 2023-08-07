@@ -1,11 +1,11 @@
 package com.example.api.chat.adapter.in.rest;
 
-import com.example.api.chatroom.type.Message;
+import com.example.api.chat.application.port.in.SendChatUsecase;
+import com.example.api.chat.domain.Message;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.messaging.handler.annotation.MessageMapping;
-import org.springframework.messaging.simp.SimpMessageSendingOperations;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @Slf4j
@@ -13,10 +13,13 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class ChatController {
     //임시용
-    private final SimpMessageSendingOperations simpMessageSendingOperations;
+    private final SendChatUsecase sendChatUsecase;
+    @Value("${kafka.my.push.topic.name}")
+    private String topicName;
     @MessageMapping("/message")
     public void message(Message message){
         log.info("message transfer");
-        simpMessageSendingOperations.convertAndSend("/topic/channel/" + message.getRoomId(), message);
+        sendChatUsecase.send("chatting", message);
+//        simpMessageSendingOperations.convertAndSend("/topic/channel/" + message.getRoomId(), message);
     }
 }

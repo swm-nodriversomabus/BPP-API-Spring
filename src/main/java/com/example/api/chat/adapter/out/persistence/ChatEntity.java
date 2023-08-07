@@ -3,6 +3,7 @@ package com.example.api.chat.adapter.out.persistence;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 
 @Entity
@@ -31,8 +32,10 @@ public class ChatEntity {
     private Boolean image;
 
     @Temporal(TemporalType.TIMESTAMP)
-    private Date createdAt;
+    private LocalDateTime createdAt;
 
+    @Column(nullable = false)
+    private Integer readCount;
 
 
 }

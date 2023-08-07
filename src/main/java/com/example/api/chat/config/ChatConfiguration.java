@@ -40,4 +40,12 @@ public class ChatConfiguration implements WebSocketMessageBrokerConfigurer {
         // 즉 브로커 보내준다.
         registry.setApplicationDestinationPrefixes("/pub");
     }
+
+    // 64 KB 이상의 데이터 전송을 위해 사용
+    @Override
+    public void configureWebSocketTransport(WebSocketTransportRegistration registry) {
+        registry.setMessageSizeLimit(160 * 64 * 1024);
+        registry.setSendTimeLimit(100 * 10000);
+        registry.setSendBufferSizeLimit(3 * 512 * 1024);
+    }
 }

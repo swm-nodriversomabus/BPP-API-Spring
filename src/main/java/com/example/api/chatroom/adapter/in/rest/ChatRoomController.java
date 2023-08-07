@@ -12,9 +12,13 @@ import org.springframework.web.bind.annotation.*;
 public class ChatRoomController {
     private final CreateChatRoomUsecase createChatRoomUsecase;
 
-    @PostMapping(value = "/create-chatroom")
+    /**
+     * 채팅방 생성
+     * @param createChatRoomDto
+     * @return 채팅 방 ID 값
+     */
+    @PostMapping(value = "/chatroom")
     public ChatRoom createChatroom(@RequestBody @Valid CreateChatRoomDto createChatRoomDto){
-        System.out.println(createChatRoomDto);
         return createChatRoomUsecase.createRoom(createChatRoomDto);
     }
 
