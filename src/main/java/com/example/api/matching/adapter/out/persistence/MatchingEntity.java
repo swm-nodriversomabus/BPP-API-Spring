@@ -1,5 +1,6 @@
 package com.example.api.matching.adapter.out.persistence;
 
+import com.example.api.matching.dto.MatchingDto;
 import com.example.api.matching.type.MatchingType;
 import jakarta.persistence.*;
 import lombok.*;
@@ -11,11 +12,12 @@ import java.time.LocalDateTime;
 
 @Entity
 @EntityListeners(AuditingEntityListener.class)
-@AllArgsConstructor
-@NoArgsConstructor
-@ToString
 @Getter
+@Setter
 @Builder
+@ToString
+@NoArgsConstructor
+@AllArgsConstructor
 @Table(name="matching")
 public class MatchingEntity {
     @Id
@@ -69,4 +71,25 @@ public class MatchingEntity {
     
     @Column(nullable = false)
     private Boolean isActive;
+    
+    public MatchingDto toDto() {
+        return MatchingDto.builder()
+                .matchingId(matchingId)
+                .writerId(writerId)
+                .type(type)
+                .title(title)
+                .place(place)
+                .content(content)
+                .startDate(startDate)
+                .endDate(endDate)
+                .maxMember(maxMember)
+                .minusAge(minusAge)
+                .plusAge(plusAge)
+                .readCount(readCount)
+                .likeCount(likeCount)
+                .createdAt(createdAt)
+                .updatedAt(updatedAt)
+                .isActive(isActive)
+                .build();
+    }
 }

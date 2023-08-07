@@ -41,7 +41,7 @@ public class UserService implements UserUsecase {
     @Override
     @Transactional
     public void updateUser(Long userId, UserDto userDto) {
-        //userRepository.updateUser(userId, userDto);
+        userRepository.updateUser(userId, userDto.toEntity());
     }
     
     @Override

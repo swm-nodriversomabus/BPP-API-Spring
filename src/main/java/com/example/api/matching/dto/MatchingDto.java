@@ -1,13 +1,21 @@
 package com.example.api.matching.dto;
 
+import com.example.api.matching.adapter.out.persistence.MatchingEntity;
 import com.example.api.matching.type.MatchingType;
 import jakarta.validation.constraints.NotEmpty;
-import lombok.Data;
+import lombok.*;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
-@Data
+@Getter
+@Setter
+@Builder
+@ToString
+@NoArgsConstructor
+@AllArgsConstructor
 public class MatchingDto {
+    private Long matchingId;
+    
     @NotEmpty
     private Long writerId;
     
@@ -24,10 +32,10 @@ public class MatchingDto {
     private String content;
     
     @NotEmpty
-    private Date startDate;
+    private LocalDateTime startDate;
     
     @NotEmpty
-    private Date endDate;
+    private LocalDateTime endDate;
     
     @NotEmpty
     private Integer maxMember;
@@ -43,7 +51,29 @@ public class MatchingDto {
     
     @NotEmpty
     private Integer likeCount;
+
+    private LocalDateTime createdAt;
+
+    private LocalDateTime updatedAt;
     
     @NotEmpty
     private Boolean isActive;
+    
+    public MatchingEntity toEntity() {
+        return MatchingEntity.builder()
+                .writerId(writerId)
+                .type(type)
+                .title(title)
+                .place(place)
+                .content(content)
+                .startDate(startDate)
+                .endDate(endDate)
+                .maxMember(maxMember)
+                .minusAge(minusAge)
+                .plusAge(plusAge)
+                .readCount(readCount)
+                .likeCount(likeCount)
+                .isActive(isActive)
+                .build();
+    }
 }

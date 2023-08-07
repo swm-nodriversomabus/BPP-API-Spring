@@ -9,11 +9,12 @@ import java.time.LocalDateTime;
 
 @Entity
 @EntityListeners(AuditingEntityListener.class)
-@AllArgsConstructor
-@NoArgsConstructor
-@ToString
 @Getter
+@Setter
 @Builder
+@ToString
+@NoArgsConstructor
+@AllArgsConstructor
 @IdClass(MemberPK.class)
 @Table(name="member")
 public class MemberEntity {

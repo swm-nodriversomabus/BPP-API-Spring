@@ -5,13 +5,16 @@ import com.example.api.preference.type.TasteType;
 import com.example.api.user.type.UserGenderType;
 import jakarta.persistence.*;
 import lombok.*;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 @Entity
-@AllArgsConstructor
-@NoArgsConstructor
-@ToString
+@EntityListeners(AuditingEntityListener.class)
 @Getter
+@Setter
 @Builder
+@ToString
+@NoArgsConstructor
+@AllArgsConstructor
 @Table(name="preference")
 public class PreferenceEntity {
     @Id

@@ -1,8 +1,13 @@
 package com.example.api.matching.dto;
 
-import lombok.Data;
+import lombok.*;
 
-@Data
+@Getter
+@Setter
+@Builder
+@ToString
+@NoArgsConstructor
+@AllArgsConstructor
 public class AccommodationMatchingDto {
     private Integer price;
     

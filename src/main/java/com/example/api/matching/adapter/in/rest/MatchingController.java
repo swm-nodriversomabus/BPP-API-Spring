@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequiredArgsConstructor
@@ -23,7 +24,7 @@ public class MatchingController {
     }
     
     @GetMapping("/matching/{matchingId}")
-    public MatchingDto getMatchingById(@PathVariable Long matchingId) {
+    public Optional<MatchingDto> getMatchingById(@PathVariable Long matchingId) {
         return matchingUsecase.getMatchingById(matchingId);
     }
     

@@ -1,28 +1,14 @@
 package com.example.api.matching.repository;
 
-import com.example.api.matching.dto.MatchingDto;
-import jakarta.persistence.EntityManager;
-import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Repository;
+import com.example.api.matching.adapter.out.persistence.MatchingEntity;
+import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
+import java.util.Optional;
 
-@Repository
-@RequiredArgsConstructor
-public class MatchingRepository {
-    @Autowired
-    private EntityManager em;
-    
-    public void createMatching(MatchingDto matchingDto) {
-        em.persist(matchingDto);
-    }
-    
-    public List<MatchingDto> getAll() {
-        return em.createQuery("SELECT M FROM MatchingEntity M", MatchingDto.class).getResultList();
-    }
-    
-    public MatchingDto getMatchingById(Long matchingId) {
-        return em.find(MatchingDto.class, matchingId);
-    }
+public interface MatchingRepository extends JpaRepository<MatchingEntity, Long>, MatchingRepositoryCustom {
+    List<MatchingEntity> getAllBy();
+    Optional<MatchingEntity> getMatchingByMatchingId(Long matchingId);
+    void deleteAllBy();
+    void deleteByMatchingId(Long matchingId);
 }

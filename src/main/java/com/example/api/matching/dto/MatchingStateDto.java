@@ -1,9 +1,14 @@
 package com.example.api.matching.dto;
 
 import jakarta.validation.constraints.NotEmpty;
-import lombok.Data;
+import lombok.*;
 
-@Data
+@Getter
+@Setter
+@Builder
+@ToString
+@NoArgsConstructor
+@AllArgsConstructor
 public class MatchingStateDto {
     @NotEmpty
     private Long matchingId;

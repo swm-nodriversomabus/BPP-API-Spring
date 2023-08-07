@@ -2,10 +2,10 @@ package com.example.api.user.repository;
 
 import com.example.api.user.adapter.out.persistence.UserEntity;
 import jakarta.persistence.EntityManager;
-import jakarta.persistence.EntityTransaction;
 import jakarta.persistence.PersistenceContext;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
+
 @Repository
 @RequiredArgsConstructor
 public class UserRepositoryImpl implements UserRepositoryCustom {
