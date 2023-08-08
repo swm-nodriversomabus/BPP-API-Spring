@@ -2,10 +2,12 @@ package com.example.api.chatroom.adapter.out.persistence;
 
 import com.example.api.chatroom.type.ChatRoomEnum;
 import com.example.api.common.entity.BaseEntity;
+import com.example.api.member.adapter.out.persistence.MemberEntity;
 import jakarta.persistence.*;
 import lombok.*;
-import org.hibernate.annotations.GenericGenerator;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 @Entity
@@ -33,4 +35,15 @@ public class ChatRoomEntity extends BaseEntity {
 
     @Column(nullable = false)
     private Boolean isActive;
+
+    @OneToMany(mappedBy = "chatroom",fetch = FetchType.LAZY)
+    private List<MemberEntity> members;
+
+    // 멤버 추가
+    public void addMember(MemberEntity member){
+        this.members.add(member);
+        member.addChatRoom(this);
+    }
+
+//    @OneToMany(mappedBy = "")
 }

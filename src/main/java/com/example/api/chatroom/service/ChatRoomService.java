@@ -1,7 +1,9 @@
 package com.example.api.chatroom.service;
 
 import com.example.api.chatroom.application.port.in.CreateChatRoomUsecase;
+import com.example.api.chatroom.application.port.in.FindChatRomListUsecase;
 import com.example.api.chatroom.application.port.out.CreateChatRoomPort;
+import com.example.api.chatroom.application.port.out.FindChatRoomListPort;
 import com.example.api.chatroom.domain.ChatRoom;
 import com.example.api.chatroom.dto.CreateChatRoomDto;
 import jakarta.annotation.PostConstruct;
@@ -16,8 +18,9 @@ import java.util.*;
 @Slf4j
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
-public class ChatRoomService implements CreateChatRoomUsecase {
+public class ChatRoomService implements CreateChatRoomUsecase, FindChatRomListUsecase {
     private final CreateChatRoomPort createChatRoomPort;
+    private final FindChatRoomListPort findChatRoomListPort;
     @Override
     @Transactional
     public ChatRoom createRoom(CreateChatRoomDto createChatRoomDto) {
@@ -29,4 +32,9 @@ public class ChatRoomService implements CreateChatRoomUsecase {
         return createChatRoomPort.createChatRoom(chatRoom);
     }
 
+    @Override
+    public List<ChatRoom> chatRoomList(Long userId) {
+        return findChatRoomListPort.chatRoomList(userId);
+//        return null;
+    }
 }
