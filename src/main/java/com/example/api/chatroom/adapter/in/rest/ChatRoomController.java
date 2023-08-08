@@ -36,6 +36,4 @@ public class ChatRoomController {
     public void outChatRoom(@PathVariable UUID chatRoomId){
         log.info("chatroom = {}", chatRoomId);
     }
-
-
 }

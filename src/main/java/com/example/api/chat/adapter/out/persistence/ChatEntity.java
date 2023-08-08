@@ -1,5 +1,6 @@
 package com.example.api.chat.adapter.out.persistence;
 
+import com.example.api.common.entity.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -13,8 +14,7 @@ import java.util.Date;
 @Getter
 @Builder
 @Table(name="chat")
-public class ChatEntity {
-
+public class ChatEntity extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long chatId;
@@ -30,9 +30,6 @@ public class ChatEntity {
 
     @Column(nullable = false)
     private Boolean image;
-
-    @Temporal(TemporalType.TIMESTAMP)
-    private LocalDateTime createdAt;
 
     @Column(nullable = false)
     private Integer readCount;
