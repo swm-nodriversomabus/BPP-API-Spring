@@ -1,33 +1,29 @@
 package com.example.api.chatroom.domain;
 
-import com.example.api.chatroom.type.ChatRoomType;
+import com.example.api.chatroom.type.ChatRoomEnum;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.util.UUID;
 
-@NoArgsConstructor
 @Getter
+@NoArgsConstructor
+@AllArgsConstructor
 public class ChatRoom {
     private UUID chatroomId;
-    private ChatRoomType type;
+    private ChatRoomEnum type;
+    private Long masterId;
     private String chatroomName;
     private Boolean isActive;
     @Builder
-    public ChatRoom(ChatRoomType type, String chatroomName, Boolean isActive){
-        this.chatroomId = UUID.randomUUID();
+    public ChatRoom(UUID chatroomId, ChatRoomEnum type, String chatroomName, Boolean isActive, Long masterId){
+        this.chatroomId = chatroomId;
         this.type = type;
+        this.masterId = masterId;
         this.chatroomName = chatroomName;
         this.isActive = isActive;
     }
-//    public static ChatRoom create(ChatRoomType type){
-//        ChatRoom room = new ChatRoom();
-//        room.chatroomId = UUID.randomUUID();
-//        room.type = type;
-//        room.isActive = true;
-//        room.chatroomName = "";
-//        return room;
-//    }
 
 }

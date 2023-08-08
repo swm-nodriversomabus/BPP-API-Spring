@@ -20,6 +20,5 @@ public class ChatController {
     public void message(Message message){
         log.info("message transfer");
         sendChatUsecase.send("chatting", message);
-//        simpMessageSendingOperations.convertAndSend("/topic/channel/" + message.getRoomId(), message);
     }
 }

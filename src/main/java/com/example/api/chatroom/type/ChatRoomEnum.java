@@ -7,7 +7,7 @@ import lombok.ToString;
 @ToString
 @AllArgsConstructor
 @Getter
-public enum ChatRoomType {
+public enum ChatRoomEnum {
     Normal("일반"),
     Inquery("상담");
 

@@ -10,7 +10,7 @@ import org.springframework.web.socket.config.annotation.*;
 @Configuration
 @EnableWebSocketMessageBroker // STOMP 사용 용도
 @RequiredArgsConstructor
-public class ChatConfiguration implements WebSocketMessageBrokerConfigurer {
+public class StompConfiguration implements WebSocketMessageBrokerConfigurer {
     // WebSocketHandler 생성자 추가
     private final StompHandler stompHandler;
 
@@ -18,8 +18,8 @@ public class ChatConfiguration implements WebSocketMessageBrokerConfigurer {
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
         registry.addEndpoint("/ws/chat")
-                .setAllowedOriginPatterns("*");
-//                .withSockJS();
+                .setAllowedOriginPatterns("*")
+                .withSockJS();
     }
 
     // TODO
