@@ -6,9 +6,9 @@ import com.example.api.chatroom.application.port.out.CreateChatRoomPort;
 import com.example.api.chatroom.application.port.out.FindChatRoomListPort;
 import com.example.api.chatroom.domain.ChatRoom;
 import com.example.api.chatroom.dto.CreateChatRoomDto;
-import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -33,8 +33,7 @@ public class ChatRoomService implements CreateChatRoomUsecase, FindChatRomListUs
     }
 
     @Override
-    public List<ChatRoom> chatRoomList(Long userId) {
-        return findChatRoomListPort.chatRoomList(userId);
-//        return null;
+    public List<ChatRoom> chatRoomList(Pageable pageable, Long userId) {
+        return findChatRoomListPort.chatRoomList(pageable, userId);
     }
 }

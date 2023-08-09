@@ -4,12 +4,14 @@ import com.example.api.chatroom.application.port.out.CreateChatRoomPort;
 import com.example.api.chatroom.application.port.out.FindChatRoomListPort;
 import com.example.api.chatroom.application.port.out.RetrieveChatRoomPort;
 import com.example.api.chatroom.domain.ChatRoom;
-import com.example.api.chatroom.dto.CreateChatRoomDto;
 import com.example.api.chatroom.repository.ChatRoomRepository;
 import com.example.api.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -35,10 +37,11 @@ public class ChatRoomPersistenceAdapter implements CreateChatRoomPort, FindChatR
     }
 
     @Override
-    public List<ChatRoom> chatRoomList(Long userId) {
-//        List<ChatRoomEntity> chatRoomEntityList = chatRoomRepository.
-        return chatRoomMapper.fromEntityListToDomain(chatRoomRepository.findAllByUserId(userId));
-//        return chatRoomMapper.fromEntityListToDomain(chatRoomRepository.findAll());
-//        return null;
+    public List<ChatRoom> chatRoomList(Pageable pageable, Long userId) {
+        Page<ChatRoomEntity> ret = chatRoomRepository.findAllByUserId(pageable, userId);
+        if(ret != null && ret.hasContent()) {
+            return chatRoomMapper.fromEntityListToDomain(ret.getContent());
+        }
+        return new ArrayList<>();
     }
 }

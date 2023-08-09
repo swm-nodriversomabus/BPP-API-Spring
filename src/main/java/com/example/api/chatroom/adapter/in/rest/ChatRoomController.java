@@ -7,6 +7,9 @@ import com.example.api.chatroom.dto.CreateChatRoomDto;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -35,16 +38,9 @@ public class ChatRoomController {
      * @return
      */
     @GetMapping
-    public List<ChatRoom> chatRoomList(@RequestParam Long userId){ //추후 바꾸자함
-        return findChatRomListUsecase.chatRoomList(userId);
+    public List<ChatRoom> chatRoomList(@RequestParam Long userid,@PageableDefault(sort = "createdAt",direction = Sort.Direction.DESC) Pageable pageable){ //추후 바꾸자함
+        return findChatRomListUsecase.chatRoomList(pageable, userid);
     }
-
-
-
-//    @PostMapping(value="/{chatRoomId}")
-//    public void enterChatRoom(@PathVariable UUID chatRoomId){
-//        log.info("chatroom = {}",chatRoomId);
-//    }
 
     @DeleteMapping(value = "/{chatRoomId}")
     public void outChatRoom(@PathVariable UUID chatRoomId){
