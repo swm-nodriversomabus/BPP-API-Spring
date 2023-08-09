@@ -39,7 +39,6 @@ public class MessageToKafka implements Serializable {
                 .senderId(senderId)
                 .roomId(roomId)
                 .readCount(readCount)
-                .createdAt(Instant.ofEpochMilli(createdAt).atZone(ZoneId.of("Asia/Seoul")).toLocalDateTime())
                 .image(image)
                 .content(content)
                 .build();
