@@ -1,73 +1,76 @@
-package com.example.api.user.dto;
+package com.example.api.user.domain;
 
-import com.example.api.user.domain.UserEntity;
+import com.example.api.common.entity.BaseEntity;
+import com.example.api.user.dto.UserDto;
 import com.example.api.user.type.UserGenderEnum;
 import com.example.api.user.type.UserRoleEnum;
-import jakarta.validation.constraints.NotEmpty;
+import jakarta.persistence.*;
 import lombok.*;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import java.time.LocalDateTime;
-
+@Entity
+@EntityListeners(AuditingEntityListener.class)
 @Getter
-@Setter
 @Builder
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserDto {
+@Table(name="user")
+public class UserEntity extends BaseEntity {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long userId;
-    
-    @NotEmpty
+
+    @Column(nullable = false, length = 30)
     private String username;
-    
-    @NotEmpty
+
+    @Column(nullable = false, length = 30)
     private String nickname;
-    
-    @NotEmpty
+
+    @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
     private UserGenderEnum gender;
-    
-    @NotEmpty
+
+    @Column(nullable = false)
     private Integer age;
-    
-    @NotEmpty
+
+    @Column(nullable = false, length = 30)
     private String phone;
-    
-    @NotEmpty
+
+    @Column(nullable = false, length = 100)
     private String email;
-    
-    @NotEmpty
+
+    @Column(nullable = false, length = 300)
     private String address;
     
-    @NotEmpty
+    @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
     private UserRoleEnum role;
-    
-    @NotEmpty
+
+    @Column(nullable = false)
     private Boolean blacklist;
-    
-    @NotEmpty
+
+    @Column(nullable = false, length = 300)
     private String personality;
-    
-    @NotEmpty
+
+    @Column(nullable = false, length = 300)
     private String stateMessage;
-    
-    @NotEmpty
+
+    @Column(nullable = false)
     private Integer mannerScore;
-    
-    @NotEmpty
+
+    @Column(nullable = false)
     private Long createdUserId;
-    
-    @NotEmpty
+
+    @Column(nullable = false)
     private Long updatedUserId;
-    
-    private LocalDateTime createdAt;
-    
-    private LocalDateTime updatedAt;
-    
-    @NotEmpty
+
+    @Column(nullable = false)
     private Boolean isActive;
     
-    public UserEntity toEntity() {
-        return UserEntity.builder()
+    public UserDto toDto() {
+        return UserDto.builder()
+                .userId(userId)
                 .username(username)
                 .nickname(nickname)
                 .gender(gender)
@@ -82,6 +85,8 @@ public class UserDto {
                 .mannerScore(mannerScore)
                 .createdUserId(createdUserId)
                 .updatedUserId(updatedUserId)
+                .createdAt(getCreatedAt())
+                .updatedAt(getUpdatedAt())
                 .isActive(isActive)
                 .build();
     }

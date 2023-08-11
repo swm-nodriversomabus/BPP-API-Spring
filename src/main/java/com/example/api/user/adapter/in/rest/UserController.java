@@ -1,6 +1,5 @@
 package com.example.api.user.adapter.in.rest;
 
-import com.example.api.user.adapter.out.persistence.UserEntity;
 import com.example.api.user.application.port.in.UserUsecase;
 import com.example.api.user.dto.UserDto;
 import lombok.RequiredArgsConstructor;
@@ -15,8 +14,8 @@ public class UserController {
     private final UserUsecase userUsecase;
     
     @PostMapping("/user")
-    public void createUser(@RequestBody UserDto userDto) {
-        userUsecase.createUser(userDto);
+    public UserDto createUser(@RequestBody UserDto userDto) {
+        return userUsecase.createUser(userDto);
     }
     
     @GetMapping("/user")
@@ -29,9 +28,9 @@ public class UserController {
         return userUsecase.getUserById(userId);
     }
     
-    @PatchMapping("/user/{userId}")
-    public void updateUser(@PathVariable Long userId, @RequestBody UserDto userDto) {
-        userUsecase.updateUser(userId, userDto);
+    @PatchMapping("/user")
+    public UserDto updateUser(@RequestBody UserDto userDto) {
+        return userUsecase.updateUser(userDto);
     }
     
     @DeleteMapping("/user")

@@ -14,8 +14,8 @@ public class MatchingController {
     private final MatchingUsecase matchingUsecase;
     
     @PostMapping("/matching")
-    public void createMatching(MatchingDto matchingDto) {
-        matchingUsecase.createMatching(matchingDto);
+    public MatchingDto createMatching(MatchingDto matchingDto) {
+        return matchingUsecase.createMatching(matchingDto);
     }
     
     @GetMapping ("/matching")
@@ -28,9 +28,19 @@ public class MatchingController {
         return matchingUsecase.getMatchingById(matchingId);
     }
     
-    @PatchMapping("/matching/{matchingId}")
-    public void updateMatching(@PathVariable Long matchingId, MatchingDto matchingDto) {
-        matchingUsecase.updateMatching(matchingId, matchingDto);
+    @GetMapping("/matching/{matchingId}/like")
+    public int getLikeCount(@PathVariable Long matchingId) {
+        return matchingUsecase.getLikeCount(matchingId);
+    }
+    
+    @PatchMapping("/matching")
+    public MatchingDto updateMatching(MatchingDto matchingDto) {
+        return matchingUsecase.updateMatching(matchingDto);
+    }
+    
+    @PatchMapping("/matching/like")
+    public void toggleLike() {
+        
     }
 
     @DeleteMapping("/matching")

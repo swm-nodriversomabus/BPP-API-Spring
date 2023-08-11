@@ -6,10 +6,12 @@ import java.util.List;
 import java.util.Optional;
 
 public interface MatchingUsecase {
-    void createMatching(MatchingDto createMatchingDto);
+    MatchingDto createMatching(MatchingDto createMatchingDto);
     List<MatchingDto> getAll();
     Optional<MatchingDto> getMatchingById(Long matchingId);
-    void updateMatching(Long matchingId, MatchingDto matchingDto);
+    int getLikeCount(Long matchingId);
+    MatchingDto updateMatching(MatchingDto matchingDto);
+    void toggleLike(Long userId, Long matchingId);
     void deleteAll();
     void deleteMatching(Long matchingId);
 }

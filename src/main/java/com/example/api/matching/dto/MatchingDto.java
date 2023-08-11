@@ -1,7 +1,8 @@
 package com.example.api.matching.dto;
 
-import com.example.api.matching.adapter.out.persistence.MatchingEntity;
-import com.example.api.matching.type.MatchingType;
+import com.example.api.matching.domain.Matching;
+import com.example.api.matching.domain.MatchingEntity;
+import com.example.api.matching.type.MatchingTypeEnum;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.*;
 
@@ -20,7 +21,7 @@ public class MatchingDto {
     private Long writerId;
     
     @NotEmpty
-    private MatchingType type;
+    private MatchingTypeEnum type;
     
     @NotEmpty
     private String title;
@@ -48,9 +49,6 @@ public class MatchingDto {
     
     @NotEmpty
     private Integer readCount;
-    
-    @NotEmpty
-    private Integer likeCount;
 
     private LocalDateTime createdAt;
 
@@ -72,7 +70,6 @@ public class MatchingDto {
                 .minusAge(minusAge)
                 .plusAge(plusAge)
                 .readCount(readCount)
-                .likeCount(likeCount)
                 .isActive(isActive)
                 .build();
     }

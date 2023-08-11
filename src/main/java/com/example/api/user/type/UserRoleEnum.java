@@ -1,0 +1,15 @@
+package com.example.api.user.type;
+
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.ToString;
+
+@ToString
+@AllArgsConstructor
+@Getter
+public enum UserRoleEnum {
+    User("일반 유저"),
+    Admin("관리자");
+
+    private final String role;
+}

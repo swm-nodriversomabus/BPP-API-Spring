@@ -1,7 +1,10 @@
 package com.example.api.matching.application.port.out;
 
-import com.example.api.matching.dto.MatchingDto;
+import com.example.api.matching.domain.MatchingEntity;
+import org.springframework.stereotype.Component;
 
+@Component
 public interface SaveMatchingPort {
-    void createMatching(MatchingDto matching);
+    MatchingEntity createMatching(MatchingEntity matching);
+    MatchingEntity updateMatching(MatchingEntity matching);
 }
