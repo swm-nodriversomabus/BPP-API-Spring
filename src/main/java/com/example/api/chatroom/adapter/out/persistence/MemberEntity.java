@@ -1,5 +1,6 @@
 package com.example.api.chatroom.adapter.out.persistence;
 
+import com.example.api.member.adapter.out.persistence.MemberPK;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
