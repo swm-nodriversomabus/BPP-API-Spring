@@ -1,4 +1,4 @@
-package com.example.api.preference.domain;
+package com.example.api.friend.adapter.out.persistence;
 
 import jakarta.persistence.*;
 import lombok.*;
@@ -15,14 +15,17 @@ import java.time.LocalDateTime;
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name="purpose")
-public class PurposeEntity {
+@Table(name="friend")
+public class FriendEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long purposeId;
+    private Long friendId;
     
-    @Column(nullable = false, length = 300)
-    private String content;
+    @Column(nullable = false)
+    private Long userId;
+    
+    @Column(nullable = false)
+    private Long targetUserId;
     
     @CreatedDate
     @Temporal(TemporalType.TIMESTAMP)

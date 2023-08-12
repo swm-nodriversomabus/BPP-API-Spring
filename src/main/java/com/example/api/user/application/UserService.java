@@ -1,6 +1,6 @@
 package com.example.api.user.application;
 
-import com.example.api.user.domain.UserEntity;
+import com.example.api.user.adapter.out.persistence.UserEntity;
 import com.example.api.user.adapter.out.persistence.UserMapper;
 import com.example.api.user.application.port.out.DeleteUserPort;
 import com.example.api.user.application.port.out.FindUserPort;

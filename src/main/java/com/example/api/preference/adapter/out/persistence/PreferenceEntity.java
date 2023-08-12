@@ -1,4 +1,4 @@
-package com.example.api.preference.domain;
+package com.example.api.preference.adapter.out.persistence;
 
 import com.example.api.preference.type.PreferSmokeEnum;
 import com.example.api.preference.type.TasteEnum;

@@ -1,6 +1,6 @@
 package com.example.api.matching.dto;
 
-import com.example.api.matching.domain.LikeEntity;
+import com.example.api.matching.adapter.out.persistence.LikeEntity;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.*;
 

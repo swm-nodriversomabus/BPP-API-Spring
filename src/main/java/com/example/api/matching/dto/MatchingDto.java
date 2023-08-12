@@ -1,7 +1,6 @@
 package com.example.api.matching.dto;
 
-import com.example.api.matching.domain.Matching;
-import com.example.api.matching.domain.MatchingEntity;
+import com.example.api.matching.adapter.out.persistence.MatchingEntity;
 import com.example.api.matching.type.MatchingTypeEnum;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.*;

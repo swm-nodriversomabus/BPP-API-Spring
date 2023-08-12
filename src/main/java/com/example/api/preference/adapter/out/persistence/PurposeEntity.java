@@ -1,4 +1,4 @@
-package com.example.api.preference.domain;
+package com.example.api.preference.adapter.out.persistence;
 
 import jakarta.persistence.*;
 import lombok.*;
@@ -15,11 +15,11 @@ import java.time.LocalDateTime;
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name="move")
-public class MoveEntity {
+@Table(name="purpose")
+public class PurposeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long moveId;
+    private Long purposeId;
     
     @Column(nullable = false, length = 300)
     private String content;

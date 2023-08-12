@@ -1,6 +1,6 @@
 package com.example.api.matching.dto;
 
-import com.example.api.matching.domain.AccommodationMatchingEntity;
+import com.example.api.matching.adapter.out.persistence.AccommodationMatchingEntity;
 import lombok.*;
 
 @Getter

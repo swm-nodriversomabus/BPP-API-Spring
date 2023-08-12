@@ -1,4 +1,4 @@
-package com.example.api.user.domain;
+package com.example.api.user.adapter.out.persistence;
 
 import com.example.api.common.entity.BaseEntity;
 import com.example.api.user.dto.UserDto;

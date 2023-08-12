@@ -2,7 +2,7 @@ package com.example.api.matching.application.port;
 
 import com.example.api.matching.adapter.out.persistence.MatchingMapper;
 import com.example.api.matching.domain.Matching;
-import com.example.api.matching.domain.MatchingEntity;
+import com.example.api.matching.adapter.out.persistence.MatchingEntity;
 import com.example.api.matching.application.port.in.MatchingUsecase;
 import com.example.api.matching.application.port.out.DeleteMatchingPort;
 import com.example.api.matching.application.port.out.FindMatchingPort;

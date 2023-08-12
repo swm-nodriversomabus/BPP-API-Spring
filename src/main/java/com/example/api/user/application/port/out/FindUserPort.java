@@ -1,6 +1,6 @@
 package com.example.api.user.application.port.out;
 
-import com.example.api.user.domain.UserEntity;
+import com.example.api.user.adapter.out.persistence.UserEntity;
 import org.springframework.stereotype.Component;
 
 import java.util.List;

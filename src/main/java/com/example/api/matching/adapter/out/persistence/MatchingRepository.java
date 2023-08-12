@@ -1,6 +1,5 @@
 package com.example.api.matching.adapter.out.persistence;
 
-import com.example.api.matching.domain.MatchingEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

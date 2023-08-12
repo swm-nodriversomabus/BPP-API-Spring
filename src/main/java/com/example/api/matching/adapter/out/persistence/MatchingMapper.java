@@ -1,7 +1,6 @@
 package com.example.api.matching.adapter.out.persistence;
 
 import com.example.api.matching.domain.Matching;
-import com.example.api.matching.domain.MatchingEntity;
 import com.example.api.matching.dto.MatchingDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;

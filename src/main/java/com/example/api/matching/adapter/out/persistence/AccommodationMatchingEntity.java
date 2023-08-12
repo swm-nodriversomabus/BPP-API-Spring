@@ -1,4 +1,4 @@
-package com.example.api.matching.domain;
+package com.example.api.matching.adapter.out.persistence;
 
 import com.example.api.matching.dto.AccommodationMatchingDto;
 import jakarta.persistence.*;

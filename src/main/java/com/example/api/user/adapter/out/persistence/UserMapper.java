@@ -1,7 +1,6 @@
 package com.example.api.user.adapter.out.persistence;
 
 import com.example.api.user.domain.User;
-import com.example.api.user.domain.UserEntity;
 import com.example.api.user.dto.UserDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;

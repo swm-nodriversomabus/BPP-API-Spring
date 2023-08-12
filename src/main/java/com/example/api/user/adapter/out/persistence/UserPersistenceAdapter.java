@@ -4,7 +4,6 @@ import com.example.api.user.application.port.out.DeleteUserPort;
 import com.example.api.user.application.port.out.FindUserPort;
 import com.example.api.user.application.port.out.SaveUserPort;
 import com.example.api.user.domain.User;
-import com.example.api.user.domain.UserEntity;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 

@@ -1,4 +1,4 @@
-package com.example.api.preference.domain;
+package com.example.api.preference.adapter.out.persistence;
 
 import jakarta.persistence.*;
 import lombok.*;
@@ -10,12 +10,12 @@ import lombok.*;
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor
-@IdClass(UserToPurposePK.class)
-@Table(name="userToPurpose")
-public class UserToPurposeEntity {
+@IdClass(UserToMovePK.class)
+@Table(name="userToMove")
+public class UserToMoveEntity {
     @Id
     private Long userId;
     
     @Id
-    private Long purposeId;
+    private Long moveId;
 }

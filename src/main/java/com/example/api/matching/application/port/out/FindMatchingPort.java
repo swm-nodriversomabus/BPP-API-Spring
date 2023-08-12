@@ -1,6 +1,6 @@
 package com.example.api.matching.application.port.out;
 
-import com.example.api.matching.domain.MatchingEntity;
+import com.example.api.matching.adapter.out.persistence.MatchingEntity;
 import org.springframework.stereotype.Component;
 
 import java.util.List;

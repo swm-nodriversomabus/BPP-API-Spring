@@ -1,6 +1,6 @@
 package com.example.api.user.dto;
 
-import com.example.api.user.domain.UserEntity;
+import com.example.api.user.adapter.out.persistence.UserEntity;
 import com.example.api.user.type.UserGenderEnum;
 import com.example.api.user.type.UserRoleEnum;
 import jakarta.validation.constraints.NotEmpty;
