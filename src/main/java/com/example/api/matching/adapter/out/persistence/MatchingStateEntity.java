@@ -1,16 +1,20 @@
 package com.example.api.matching.adapter.out.persistence;
 
+import com.example.api.matching.dto.MatchingStateDto;
 import jakarta.persistence.*;
 import lombok.*;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
 @Entity
-@AllArgsConstructor
-@NoArgsConstructor
-@ToString
+@EntityListeners(AuditingEntityListener.class)
 @Getter
 @Builder
+@ToString
+@NoArgsConstructor
+@AllArgsConstructor
 @Table(name="matchingState")
 public class MatchingStateEntity {
     @Id
@@ -18,14 +22,25 @@ public class MatchingStateEntity {
     private Long matchingStateId;
     
     @Column(nullable = false)
-    private Integer matchingId;
+    private Long matchingId;
     
     @Column(nullable = false)
-    private Integer userId;
+    private Long userId;
     
     @Column(nullable = false)
     private Boolean complete;
     
+    @CreatedDate
     @Temporal(TemporalType.TIMESTAMP)
-    private Date createdAt;
+    private LocalDateTime createdAt;
+    
+    public MatchingStateDto toDto() {
+        return MatchingStateDto.builder()
+                .matchingStateId(matchingStateId)
+                .matchingId(matchingId)
+                .userId(userId)
+                .complete(complete)
+                .createdAt(createdAt)
+                .build();
+    }
 }

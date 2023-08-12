@@ -1,17 +1,20 @@
 package com.example.api.preference.adapter.out.persistence;
 
-import com.example.api.preference.type.PreferSmokeType;
-import com.example.api.preference.type.TasteType;
-import com.example.api.user.type.UserGenderType;
+import com.example.api.preference.type.PreferSmokeEnum;
+import com.example.api.preference.type.TasteEnum;
+import com.example.api.user.type.UserGenderEnum;
 import jakarta.persistence.*;
 import lombok.*;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 @Entity
-@AllArgsConstructor
-@NoArgsConstructor
-@ToString
+@EntityListeners(AuditingEntityListener.class)
 @Getter
+@Setter
 @Builder
+@ToString
+@NoArgsConstructor
+@AllArgsConstructor
 @Table(name="preference")
 public class PreferenceEntity {
     @Id
@@ -25,7 +28,7 @@ public class PreferenceEntity {
     
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
-    private TasteType taste;
+    private TasteEnum taste;
     
     @Column(nullable = false)
     private Integer allowedMoveTime;
@@ -35,14 +38,14 @@ public class PreferenceEntity {
     
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
-    private UserGenderType preferGender;
+    private UserGenderEnum preferGender;
     
     @Column(nullable = false)
     private Boolean smoke;
     
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
-    private PreferSmokeType preferSmoke;
+    private PreferSmokeEnum preferSmoke;
     
     @Column(nullable = false)
     private Integer slang;

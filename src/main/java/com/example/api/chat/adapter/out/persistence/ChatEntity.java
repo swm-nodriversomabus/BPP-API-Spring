@@ -3,16 +3,16 @@ package com.example.api.chat.adapter.out.persistence;
 import com.example.api.common.entity.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
-
-import java.time.LocalDateTime;
-import java.util.Date;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 @Entity
-@AllArgsConstructor
-@NoArgsConstructor
-@ToString
+@EntityListeners(AuditingEntityListener.class)
 @Getter
+@Setter
 @Builder
+@ToString
+@NoArgsConstructor
+@AllArgsConstructor
 @Table(name="chat")
 public class ChatEntity extends BaseEntity {
     @Id
@@ -33,6 +33,4 @@ public class ChatEntity extends BaseEntity {
 
     @Column(nullable = false)
     private Integer readCount;
-
-
 }

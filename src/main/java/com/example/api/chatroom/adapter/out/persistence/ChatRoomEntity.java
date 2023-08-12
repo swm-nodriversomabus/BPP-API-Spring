@@ -5,17 +5,19 @@ import com.example.api.common.entity.BaseEntity;
 import com.example.api.member.adapter.out.persistence.MemberEntity;
 import jakarta.persistence.*;
 import lombok.*;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
 @Entity
-@AllArgsConstructor
-@NoArgsConstructor
-@ToString
+@EntityListeners(AuditingEntityListener.class)
 @Getter
+@Setter
 @Builder
+@ToString
+@NoArgsConstructor
+@AllArgsConstructor
 @Table(name="chatroom")
 public class ChatRoomEntity extends BaseEntity {
     @Id
@@ -31,6 +33,8 @@ public class ChatRoomEntity extends BaseEntity {
     private String chatroomName;
 
     @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
+    
     private Long masterId;
 
     @Column(nullable = false)

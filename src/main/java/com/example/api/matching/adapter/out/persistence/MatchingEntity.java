@@ -1,17 +1,22 @@
 package com.example.api.matching.adapter.out.persistence;
 
-import com.example.api.matching.type.MatchingType;
+import com.example.api.matching.dto.MatchingDto;
+import com.example.api.matching.type.MatchingTypeEnum;
 import jakarta.persistence.*;
 import lombok.*;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
 @Entity
-@AllArgsConstructor
-@NoArgsConstructor
-@ToString
+@EntityListeners(AuditingEntityListener.class)
 @Getter
 @Builder
+@ToString
+@NoArgsConstructor
+@AllArgsConstructor
 @Table(name="matching")
 public class MatchingEntity {
     @Id
@@ -19,11 +24,11 @@ public class MatchingEntity {
     private Long matchingId;
 
     @Column(nullable = false)
-    private Integer writerId;
+    private Long writerId;
     
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
-    private MatchingType type;
+    private MatchingTypeEnum type;
     
     @Column(nullable = false, length = 100)
     private String title;
@@ -35,10 +40,10 @@ public class MatchingEntity {
     private String content;
     
     @Temporal(TemporalType.TIMESTAMP)
-    private Date startDate;
+    private LocalDateTime startDate;
 
     @Temporal(TemporalType.TIMESTAMP)
-    private Date endDate;
+    private LocalDateTime endDate;
     
     @Column(nullable = false)
     private Integer maxMember;
@@ -52,15 +57,34 @@ public class MatchingEntity {
     @Column(nullable = false)
     private Integer readCount;
     
-    @Column(nullable = false)
-    private Integer likeCount;
-    
+    @CreatedDate
     @Temporal(TemporalType.TIMESTAMP)
-    private Date createdAt;
+    private LocalDateTime createdAt;
     
+    @LastModifiedDate
     @Temporal(TemporalType.TIMESTAMP)
-    private Date updatedAt;
+    private LocalDateTime updatedAt;
     
     @Column(nullable = false)
     private Boolean isActive;
+    
+    public MatchingDto toDto() {
+        return MatchingDto.builder()
+                .matchingId(matchingId)
+                .writerId(writerId)
+                .type(type)
+                .title(title)
+                .place(place)
+                .content(content)
+                .startDate(startDate)
+                .endDate(endDate)
+                .maxMember(maxMember)
+                .minusAge(minusAge)
+                .plusAge(plusAge)
+                .readCount(readCount)
+                .createdAt(createdAt)
+                .updatedAt(updatedAt)
+                .isActive(isActive)
+                .build();
+    }
 }

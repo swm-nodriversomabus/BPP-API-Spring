@@ -7,7 +7,7 @@ import lombok.ToString;
 @ToString
 @AllArgsConstructor
 @Getter
-public enum MatchingType {
+public enum MatchingTypeEnum {
     TravelMate("여행객 매칭"),
     Dining("식사 매칭"),
     Accommodation("숙소 매칭");

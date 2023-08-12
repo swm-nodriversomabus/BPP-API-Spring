@@ -1,19 +1,22 @@
 package com.example.api.user.adapter.out.persistence;
 
-import com.example.api.user.type.UserGenderType;
+import com.example.api.common.entity.BaseEntity;
+import com.example.api.user.dto.UserDto;
+import com.example.api.user.type.UserGenderEnum;
+import com.example.api.user.type.UserRoleEnum;
 import jakarta.persistence.*;
 import lombok.*;
-
-import java.util.Date;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 @Entity
-@AllArgsConstructor
-@NoArgsConstructor
-@ToString
+@EntityListeners(AuditingEntityListener.class)
 @Getter
 @Builder
+@ToString
+@NoArgsConstructor
+@AllArgsConstructor
 @Table(name="user")
-public class UserEntity {
+public class UserEntity extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long userId;
@@ -26,10 +29,7 @@ public class UserEntity {
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
-    private UserGenderType gender;
-
-    @Column(nullable = false, length = 300)
-    private String chatroomName;
+    private UserGenderEnum gender;
 
     @Column(nullable = false)
     private Integer age;
@@ -42,6 +42,13 @@ public class UserEntity {
 
     @Column(nullable = false, length = 300)
     private String address;
+    
+    @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
+    private UserRoleEnum role;
+
+    @Column(nullable = false)
+    private Boolean blacklist;
 
     @Column(nullable = false, length = 300)
     private String personality;
@@ -56,17 +63,31 @@ public class UserEntity {
     private Long createdUserId;
 
     @Column(nullable = false)
-    private Long lastUpdateUserId;
-
-    @Column(nullable = false)
-    private Boolean blacklist;
+    private Long updatedUserId;
 
     @Column(nullable = false)
     private Boolean isActive;
-
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date createdAt;
-
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date updatedAt;
+    
+    public UserDto toDto() {
+        return UserDto.builder()
+                .userId(userId)
+                .username(username)
+                .nickname(nickname)
+                .gender(gender)
+                .age(age)
+                .phone(phone)
+                .email(email)
+                .address(address)
+                .role(role)
+                .blacklist(blacklist)
+                .personality(personality)
+                .stateMessage(stateMessage)
+                .mannerScore(mannerScore)
+                .createdUserId(createdUserId)
+                .updatedUserId(updatedUserId)
+                .createdAt(getCreatedAt())
+                .updatedAt(getUpdatedAt())
+                .isActive(isActive)
+                .build();
+    }
 }

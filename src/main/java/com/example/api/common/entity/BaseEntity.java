@@ -1,5 +1,6 @@
 package com.example.api.common.entity;
 
+import jakarta.persistence.*;
 import jakarta.persistence.Column;
 import jakarta.persistence.EntityListeners;
 import jakarta.persistence.MappedSuperclass;
@@ -19,8 +20,10 @@ import java.time.LocalDateTime;
 public class BaseEntity {
     @CreatedDate
     @Column(updatable = false, nullable = false)
+    @Temporal(TemporalType.TIMESTAMP)
     private LocalDateTime createdAt;
-    
+
     @LastModifiedDate
+    @Temporal(TemporalType.TIMESTAMP)
     private LocalDateTime updatedAt;
 }

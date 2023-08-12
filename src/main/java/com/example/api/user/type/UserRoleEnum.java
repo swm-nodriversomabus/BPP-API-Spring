@@ -7,10 +7,9 @@ import lombok.ToString;
 @ToString
 @AllArgsConstructor
 @Getter
-public enum UserGenderType {
-    None("없음"),
-    Female("여자"),
-    Male("남자");
+public enum UserRoleEnum {
+    User("일반 유저"),
+    Admin("관리자");
 
-    private final String gender;
+    private final String role;
 }
