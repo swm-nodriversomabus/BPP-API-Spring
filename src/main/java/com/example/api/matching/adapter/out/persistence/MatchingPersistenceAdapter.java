@@ -39,7 +39,8 @@ public class MatchingPersistenceAdapter implements SaveMatchingPort, FindMatchin
     }
     
     @Override
-    public Matching updateMatching(Matching matching) {
+    public Matching updateMatching(Long matchingId, Matching matching) {
+        matching.setMatchingId(matchingId);
         MatchingEntity matchingData = matchingRepository.save(matchingMapper.fromDomainToEntity(matching));
         return matchingMapper.fromEntityToDomain(matchingData);
     }

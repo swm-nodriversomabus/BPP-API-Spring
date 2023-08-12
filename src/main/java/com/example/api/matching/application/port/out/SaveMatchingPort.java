@@ -6,5 +6,5 @@ import org.springframework.stereotype.Component;
 @Component
 public interface SaveMatchingPort {
     Matching createMatching(Matching matching);
-    Matching updateMatching(Matching matching);
+    Matching updateMatching(Long matchingId, Matching matching);
 }

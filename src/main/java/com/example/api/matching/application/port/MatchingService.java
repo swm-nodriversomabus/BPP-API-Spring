@@ -1,9 +1,12 @@
 package com.example.api.matching.application.port;
 
 import com.example.api.matching.adapter.out.persistence.MatchingMapper;
+import com.example.api.matching.application.port.in.DeleteMatchingUsecase;
+import com.example.api.matching.application.port.in.FindMatchingUsecase;
+import com.example.api.matching.application.port.in.LikeUsecase;
 import com.example.api.matching.domain.Matching;
 import com.example.api.matching.adapter.out.persistence.MatchingEntity;
-import com.example.api.matching.application.port.in.MatchingUsecase;
+import com.example.api.matching.application.port.in.SaveMatchingUsecase;
 import com.example.api.matching.application.port.out.DeleteMatchingPort;
 import com.example.api.matching.application.port.out.FindMatchingPort;
 import com.example.api.matching.application.port.out.LikePort;
@@ -20,7 +23,7 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
-public class MatchingService implements MatchingUsecase {
+public class MatchingService implements SaveMatchingUsecase, FindMatchingUsecase, DeleteMatchingUsecase, LikeUsecase {
     private final MatchingMapper matchingMapper;
     private final SaveMatchingPort saveMatchingPort;
     private final FindMatchingPort findMatchingPort;
@@ -30,7 +33,7 @@ public class MatchingService implements MatchingUsecase {
     @Override
     @Transactional
     public MatchingDto createMatching(MatchingDto matchingDto) {
-        Matching matching = saveMatchingPort.createMatching(matchingMapper.fromDtoToCreateDomain(matchingDto));
+        Matching matching = saveMatchingPort.createMatching(matchingMapper.fromDtoToDomain(matchingDto));
         return matchingMapper.fromDomainToDto(matching);
     }
 
@@ -54,8 +57,8 @@ public class MatchingService implements MatchingUsecase {
 
     @Override
     @Transactional
-    public MatchingDto updateMatching(MatchingDto matchingDto) {
-        Matching matching = saveMatchingPort.updateMatching(matchingMapper.fromDtoToUpdateDomain(matchingDto));
+    public MatchingDto updateMatching(Long matchingId, MatchingDto matchingDto) {
+        Matching matching = saveMatchingPort.updateMatching(matchingId, matchingMapper.fromDtoToDomain(matchingDto));
         return matchingMapper.fromDomainToDto(matching);
     }
     

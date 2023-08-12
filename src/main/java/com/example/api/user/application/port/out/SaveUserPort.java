@@ -6,5 +6,5 @@ import org.springframework.stereotype.Component;
 @Component
 public interface SaveUserPort {
     User createUser(User user);
-    User updateUser(User user);
+    User updateUser(Long userId, User user);
 }
