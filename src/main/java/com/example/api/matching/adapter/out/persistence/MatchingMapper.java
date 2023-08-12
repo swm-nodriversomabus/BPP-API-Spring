@@ -44,8 +44,9 @@ public class MatchingMapper {
                 .build();
     }
     
-    public MatchingEntity fromDomainToCreateEntity(Matching matching) {
+    public MatchingEntity fromDomainToEntity(Matching matching) {
         return MatchingEntity.builder()
+                .matchingId(matching.getMatchingId())
                 .writerId(matching.getWriterId())
                 .type(matching.getType())
                 .title(matching.getTitle())
@@ -60,9 +61,29 @@ public class MatchingMapper {
                 .isActive(matching.getIsActive())
                 .build();
     }
-
-    public MatchingEntity fromDomainToUpdateEntity(Matching matching) {
-        return MatchingEntity.builder()
+    
+    public Matching fromEntityToDomain(MatchingEntity matchingEntity) {
+        return Matching.builder()
+                .matchingId(matchingEntity.getMatchingId())
+                .writerId(matchingEntity.getWriterId())
+                .type(matchingEntity.getType())
+                .title(matchingEntity.getTitle())
+                .content(matchingEntity.getContent())
+                .place(matchingEntity.getPlace())
+                .startDate(matchingEntity.getStartDate())
+                .endDate(matchingEntity.getEndDate())
+                .maxMember(matchingEntity.getMaxMember())
+                .minusAge(matchingEntity.getMinusAge())
+                .plusAge(matchingEntity.getPlusAge())
+                .readCount(matchingEntity.getReadCount())
+                .createdAt(matchingEntity.getCreatedAt())
+                .updatedAt(matchingEntity.getUpdatedAt())
+                .isActive(matchingEntity.getIsActive())
+                .build();
+    }
+    
+    public MatchingDto fromDomainToDto(Matching matching) {
+        return MatchingDto.builder()
                 .matchingId(matching.getMatchingId())
                 .writerId(matching.getWriterId())
                 .type(matching.getType())

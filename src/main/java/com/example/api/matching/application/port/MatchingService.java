@@ -31,7 +31,7 @@ public class MatchingService implements MatchingUsecase {
     @Transactional
     public MatchingDto createMatching(MatchingDto matchingDto) {
         Matching matching = saveMatchingPort.createMatching(matchingMapper.fromDtoToCreateDomain(matchingDto));
-        
+        return matchingMapper.fromDomainToDto(matching);
     }
 
     @Override
@@ -56,7 +56,7 @@ public class MatchingService implements MatchingUsecase {
     @Transactional
     public MatchingDto updateMatching(MatchingDto matchingDto) {
         Matching matching = saveMatchingPort.updateMatching(matchingMapper.fromDtoToUpdateDomain(matchingDto));
-        
+        return matchingMapper.fromDomainToDto(matching);
     }
     
     @Override

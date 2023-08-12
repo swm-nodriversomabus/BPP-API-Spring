@@ -4,6 +4,7 @@ import com.example.api.matching.application.port.out.DeleteMatchingPort;
 import com.example.api.matching.application.port.out.FindMatchingPort;
 import com.example.api.matching.application.port.out.LikePort;
 import com.example.api.matching.application.port.out.SaveMatchingPort;
+import com.example.api.matching.domain.Matching;
 import com.example.api.matching.domain.MatchingEntity;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -14,11 +15,13 @@ import java.util.Optional;
 @Component
 @RequiredArgsConstructor
 public class MatchingPersistenceAdapter implements SaveMatchingPort, FindMatchingPort, DeleteMatchingPort, LikePort {
+    private final MatchingMapper matchingMapper;
     private final MatchingRepository matchingRepository;
     
     @Override
-    public MatchingEntity createMatching(MatchingEntity matchingEntity) {
-        return matchingRepository.save(matchingEntity);
+    public Matching createMatching(Matching matching) {
+        MatchingEntity matchingData = matchingRepository.save(matchingMapper.fromDomainToEntity(matching));
+        return matchingMapper.fromEntityToDomain(matchingData);
     }
     
     @Override
@@ -37,8 +40,9 @@ public class MatchingPersistenceAdapter implements SaveMatchingPort, FindMatchin
     }
     
     @Override
-    public MatchingEntity updateMatching(MatchingEntity matchingEntity) {
-        return matchingRepository.save(matchingEntity);
+    public Matching updateMatching(Matching matching) {
+        MatchingEntity matchingData = matchingRepository.save(matchingMapper.fromDomainToEntity(matching));
+        return matchingMapper.fromEntityToDomain(matchingData);
     }
     
     @Override

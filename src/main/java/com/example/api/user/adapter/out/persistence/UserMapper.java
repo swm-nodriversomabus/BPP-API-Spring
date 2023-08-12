@@ -49,28 +49,8 @@ public class UserMapper {
                 .isActive(userDto.getIsActive())
                 .build();
     }
-    
-    public UserEntity fromDomainToCreateEntity(User user) {
-        return UserEntity.builder()
-                .username(user.getUsername())
-                .nickname(user.getNickname())
-                .gender(user.getGender())
-                .age(user.getAge())
-                .phone(user.getPhone())
-                .email(user.getEmail())
-                .address(user.getAddress())
-                .role(user.getRole())
-                .blacklist(user.getBlacklist())
-                .personality(user.getPersonality())
-                .stateMessage(user.getStateMessage())
-                .mannerScore(user.getMannerScore())
-                .createdUserId(user.getCreatedUserId())
-                .updatedUserId(user.getUpdatedUserId())
-                .isActive(user.getIsActive())
-                .build();
-    }
 
-    public UserEntity fromDomainToUpdateEntity(User user) {
+    public UserEntity fromDomainToEntity(User user) {
         return UserEntity.builder()
                 .userId(user.getUserId())
                 .username(user.getUsername())

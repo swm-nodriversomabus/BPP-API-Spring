@@ -19,7 +19,7 @@ public class UserPersistenceAdapter implements SaveUserPort, FindUserPort, Delet
     
     @Override
     public User createUser(User user) {
-        UserEntity userData = userRepository.save(userMapper.fromDomainToCreateEntity(user));
+        UserEntity userData = userRepository.save(userMapper.fromDomainToEntity(user));
         return userMapper.fromEntityToDomain(userData);
     }
     
@@ -35,7 +35,7 @@ public class UserPersistenceAdapter implements SaveUserPort, FindUserPort, Delet
     
     @Override
     public User updateUser(User user) {
-        UserEntity userData = userRepository.save(userMapper.fromDomainToUpdateEntity(user));
+        UserEntity userData = userRepository.save(userMapper.fromDomainToEntity(user));
         return userMapper.fromEntityToDomain(userData);
     }
     
