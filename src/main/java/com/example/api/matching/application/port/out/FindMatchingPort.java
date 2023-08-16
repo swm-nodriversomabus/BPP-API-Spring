@@ -10,4 +10,5 @@ import java.util.Optional;
 public interface FindMatchingPort {
     List<MatchingEntity> getAllBy();
     Optional<MatchingEntity> getMatchingByMatchingId(Long matchingId);
+    List<MatchingEntity> getMatchingByIsActive(Boolean isActive);
 }

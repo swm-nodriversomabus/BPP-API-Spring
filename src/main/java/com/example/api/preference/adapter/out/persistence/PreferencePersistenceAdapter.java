@@ -1,9 +1,6 @@
 package com.example.api.preference.adapter.out.persistence;
 
-import com.example.api.preference.application.port.out.CreateMatchingPreferencePort;
-import com.example.api.preference.application.port.out.CreateUserPreferencePort;
-import com.example.api.preference.application.port.out.FindPreferencePort;
-import com.example.api.preference.application.port.out.SavePreferencePort;
+import com.example.api.preference.application.port.out.*;
 import com.example.api.preference.domain.Preference;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -13,7 +10,7 @@ import java.util.Optional;
 @Component
 @RequiredArgsConstructor
 public class PreferencePersistenceAdapter implements
-        SavePreferencePort, FindPreferencePort, CreateUserPreferencePort, CreateMatchingPreferencePort {
+        SavePreferencePort, FindPreferencePort, ComparePreferencePort, CreateUserPreferencePort, CreateMatchingPreferencePort {
     private final PreferenceMapper preferenceMapper;
     private final PreferenceRepository preferenceRepository;
     private final UserPreferenceRepository userPreferenceRepository;
@@ -46,10 +43,22 @@ public class PreferencePersistenceAdapter implements
         return userPreferenceRepository.save(userPreferenceEntity);
     }
     
+    @Override
+    public Long getUserPreferenceId(Long userId) {
+        UserPreferenceEntity userPreferenceData = userPreferenceRepository.getUserPreferenceId(userId);
+        return userPreferenceData.getPreferenceId();
+    }
+    
     // MatchingPreference
     
     @Override
     public MatchingPreferenceEntity createMatchingPreference(MatchingPreferenceEntity matchingPreferenceEntity) {
         return matchingPreferenceRepository.save(matchingPreferenceEntity);
+    }
+    
+    @Override
+    public  Long getMatchingPreferenceId(Long matchingId) {
+        MatchingPreferenceEntity matchingPreferenceData = matchingPreferenceRepository.getMatchingPreferenceId(matchingId);
+        return matchingPreferenceData.getPreferenceId();
     }
 }

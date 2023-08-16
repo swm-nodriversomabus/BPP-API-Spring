@@ -30,7 +30,12 @@ public class MatchingPersistenceAdapter implements SaveMatchingPort, FindMatchin
     
     @Override
     public Optional<MatchingEntity> getMatchingByMatchingId(Long matchingId) {
-        return matchingRepository.getMatchingByMatchingId(matchingId);
+        return matchingRepository.getMatchingEntityByMatchingId(matchingId);
+    }
+    
+    @Override
+    public List<MatchingEntity> getMatchingByIsActive(Boolean isActive) {
+        return matchingRepository.getMatchingEntitiesByIsActive(isActive);
     }
     
     @Override

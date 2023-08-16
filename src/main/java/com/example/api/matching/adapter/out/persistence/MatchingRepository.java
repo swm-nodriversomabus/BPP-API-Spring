@@ -9,7 +9,8 @@ import java.util.Optional;
 @Repository
 public interface MatchingRepository extends JpaRepository<MatchingEntity, Long> {
     List<MatchingEntity> getAllBy();
-    Optional<MatchingEntity> getMatchingByMatchingId(Long matchingId);
+    Optional<MatchingEntity> getMatchingEntityByMatchingId(Long matchingId);
+    List<MatchingEntity> getMatchingEntitiesByIsActive(Boolean isActive);
     void deleteAllBy();
     void deleteByMatchingId(Long matchingId);
 }
