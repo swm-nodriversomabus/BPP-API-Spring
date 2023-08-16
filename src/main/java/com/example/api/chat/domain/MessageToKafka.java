@@ -10,6 +10,7 @@ import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Date;
+import java.util.UUID;
 
 /**
  * kafka에서 메시지 던달을 위해 사용할 도메인 모델
@@ -23,7 +24,7 @@ public class MessageToKafka implements Serializable {
     private Long chatId;
     private Long senderId;
     private long createdAt;
-    private Long roomId;
+    private UUID roomId;
     @NotNull
     private String content;
     private Integer readCount;
@@ -34,15 +35,15 @@ public class MessageToKafka implements Serializable {
         this.createdAt = createdAt.atZone(ZoneId.of("Asia/Seoul")).toInstant().toEpochMilli();
         this.readCount = readCount;
     }
-    public ChatEntity toChatEntity(){
-        return ChatEntity.builder()
-                .senderId(senderId)
-                .roomId(roomId)
-                .readCount(readCount)
-                .image(image)
-                .content(content)
-                .build();
-    }
+//    public ChatEntity toChatEntity(){
+//        return ChatEntity.builder()
+//                .senderId(senderId)
+//                .roomId(roomId)
+//                .readCount(readCount)
+//                .image(image)
+//                .content(content)
+//                .build();
+//    }
     public void setId(Long chatId){
         this.chatId = chatId;
     }

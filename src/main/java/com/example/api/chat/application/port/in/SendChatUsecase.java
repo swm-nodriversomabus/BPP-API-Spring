@@ -8,5 +8,5 @@ public interface SendChatUsecase {
      * @param topic topic Name
      * @param message Message
      */
-    void send(String topic, Message message);
+    void send(String roomNumber, Message message);
 }

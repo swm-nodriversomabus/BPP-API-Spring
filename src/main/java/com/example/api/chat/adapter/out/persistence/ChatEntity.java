@@ -1,9 +1,12 @@
 package com.example.api.chat.adapter.out.persistence;
 
+import com.example.api.chatroom.adapter.out.persistence.ChatRoomEntity;
 import com.example.api.common.entity.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+
+import java.util.UUID;
 
 @Entity
 @EntityListeners(AuditingEntityListener.class)
@@ -19,8 +22,13 @@ public class ChatEntity extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long chatId;
 
-    @Column(nullable = false)
-    private Long roomId;
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(nullable = false, name="room_id", foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
+//    @Column(nullable = false)
+    private ChatRoomEntity roomId;
+//    @OneToMany(mappedBy = "chat",fetch = FetchType.LAZY)
+//    @Column(nullable = false)
+//    private List<ChatRoomEntity> roomId;
 
     @Column(nullable = false)
     private Long senderId;
@@ -33,4 +41,6 @@ public class ChatEntity extends BaseEntity {
 
     @Column(nullable = false)
     private Integer readCount;
+
+
 }

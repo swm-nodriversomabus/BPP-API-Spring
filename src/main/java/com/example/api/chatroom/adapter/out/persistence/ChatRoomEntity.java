@@ -33,14 +33,13 @@ public class ChatRoomEntity extends BaseEntity {
     private String chatroomName;
 
     @Column(nullable = false)
-    @Enumerated(EnumType.STRING)
-    
     private Long masterId;
 
     @Column(nullable = false)
     private Boolean isActive;
 
     @OneToMany(mappedBy = "chatroom",fetch = FetchType.LAZY)
+    @ToString.Exclude
     private List<MemberEntity> members;
 
     // 멤버 추가
