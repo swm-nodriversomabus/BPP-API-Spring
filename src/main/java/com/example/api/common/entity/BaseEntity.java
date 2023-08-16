@@ -24,6 +24,7 @@ public class BaseEntity {
     private LocalDateTime createdAt;
 
     @LastModifiedDate
+    @Column(nullable = false)
     @Temporal(TemporalType.TIMESTAMP)
     private LocalDateTime updatedAt;
 }

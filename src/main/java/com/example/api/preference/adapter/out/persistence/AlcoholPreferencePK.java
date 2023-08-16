@@ -5,7 +5,7 @@ import lombok.Data;
 import java.io.Serializable;
 
 @Data
-public class UserToPurposePK implements Serializable {
-    private Long userId;
-    private Long purposeId;
+public class AlcoholPreferencePK implements Serializable {
+    private Long alcoholId;
+    private Long preferenceId;
 }

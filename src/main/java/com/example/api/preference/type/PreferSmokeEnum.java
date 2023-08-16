@@ -8,9 +8,10 @@ import lombok.ToString;
 @AllArgsConstructor
 @Getter
 public enum PreferSmokeEnum {
-    None("선호 없음"),
-    Nonsmoke("비흡연"),
-    Smoke("흡연");
+    None("선호 없음", 0),
+    Nonsmoke("비흡연", 1),
+    Smoke("흡연", 2);
     
     private final String preferSmoke;
+    private final Integer smokeCode;
 }

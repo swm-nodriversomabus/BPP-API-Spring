@@ -33,8 +33,6 @@ public class ChatRoomEntity extends BaseEntity {
     private String chatroomName;
 
     @Column(nullable = false)
-    @Enumerated(EnumType.STRING)
-    
     private Long masterId;
 
     @Column(nullable = false)

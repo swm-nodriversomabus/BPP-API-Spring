@@ -1,4 +1,4 @@
-package com.example.api.user.application;
+package com.example.api.user.application.port;
 
 import com.example.api.user.adapter.out.persistence.UserEntity;
 import com.example.api.user.adapter.out.persistence.UserMapper;

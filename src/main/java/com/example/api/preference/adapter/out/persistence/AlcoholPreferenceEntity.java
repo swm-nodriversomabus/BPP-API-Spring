@@ -10,12 +10,12 @@ import lombok.*;
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor
-@IdClass(UserToAlcoholPK.class)
+@IdClass(AlcoholPreferencePK.class)
 @Table(name="userToAlcohol")
-public class UserToAlcoholEntity {
-    @Id
-    private Long userId;
-    
+public class AlcoholPreferenceEntity {
     @Id
     private Long alcoholId;
+    
+    @Id
+    private Long preferenceId;
 }
