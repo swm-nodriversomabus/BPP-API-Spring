@@ -29,9 +29,7 @@ public class MemberService implements AddMemberChatRoomUsecase {
     @Transactional
     public void addMember(AddMemberDto addMemberDto) {
         List<Member> members = new ArrayList<>();
-        log.info("asd");
         ChatRoom chatRoom = retrieveChatRoomPort.retrieveChatRoom(addMemberDto.getChatroomId());
-        log.info("chatroom = {}", chatRoom);
         for(Long userId: addMemberDto.getMemberIds()){
             Member member = Member.builder()
                     .chatroomId(chatRoom.getChatroomId())

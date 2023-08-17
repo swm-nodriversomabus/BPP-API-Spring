@@ -17,6 +17,7 @@ import java.time.LocalDateTime;
 @Getter
 @EntityListeners(AuditingEntityListener.class)
 @MappedSuperclass // 공통 매핑 정보 필요시 부모 클래스에서 선언된 필드를 상속 받는 클래스에서 그대로 사용
+
 public class BaseEntity {
     @CreatedDate
     @Column(updatable = false, nullable = false)

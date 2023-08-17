@@ -21,7 +21,6 @@ public class MemberPersistentAdapter implements AddMemberChaatRoomPort {
 
     @Override
     public void addMember(List<Member> members, ChatRoom chatRoom) {
-        log.info("chatentity 123456789= {}", chatRoomMapper.fromDomainToEntity(chatRoom));
         memberRepository.saveAll(memberMapper.fromListDomainToEntity(members, chatRoomMapper.fromDomainToEntity(chatRoom)));
     }
 }

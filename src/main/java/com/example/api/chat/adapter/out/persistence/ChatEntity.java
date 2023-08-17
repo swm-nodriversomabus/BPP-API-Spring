@@ -6,7 +6,6 @@ import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import java.util.UUID;
 
 @Entity
 @EntityListeners(AuditingEntityListener.class)
@@ -14,7 +13,7 @@ import java.util.UUID;
 @Setter
 @Builder
 @ToString
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @Table(name="chat")
 public class ChatEntity extends BaseEntity {
@@ -24,11 +23,8 @@ public class ChatEntity extends BaseEntity {
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(nullable = false, name="room_id", foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
-//    @Column(nullable = false)
+    @ToString.Exclude
     private ChatRoomEntity roomId;
-//    @OneToMany(mappedBy = "chat",fetch = FetchType.LAZY)
-//    @Column(nullable = false)
-//    private List<ChatRoomEntity> roomId;
 
     @Column(nullable = false)
     private Long senderId;

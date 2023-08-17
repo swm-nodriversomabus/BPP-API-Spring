@@ -1,12 +1,10 @@
 package com.example.api.chat.config;
 
-import com.example.api.chat.domain.Message;
-import com.example.api.chat.domain.MessageToKafka;
+import com.example.api.chat.domain.Chat;
 import com.google.common.collect.ImmutableMap;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
-import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.kafka.common.serialization.StringDeserializer;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -20,11 +18,8 @@ import org.springframework.kafka.listener.ContainerProperties;
 import org.springframework.kafka.listener.MessageListener;
 import org.springframework.kafka.support.serializer.JsonDeserializer;
 
-import java.net.InetAddress;
-import java.net.UnknownHostException;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.UUID;
 
 @EnableKafka
 @Configuration
@@ -34,15 +29,15 @@ public class KafkaConsumerConfig {
     @Value("${kafka.bootstrapAddress}")
     private String bootstrapAddress;
 
-    private final Map<String, ConcurrentMessageListenerContainer<String, Message>> listenerContainers = new HashMap<>();
+    private final Map<String, ConcurrentMessageListenerContainer<String, Chat>> listenerContainers = new HashMap<>();
     private final Map<String,Integer> listenerContainerCount = new HashMap<>();
     private final UniqueGroupIdProvider uniqueGroupIdProvider;
     private final KafkaListenerManager kafkaListenerManager;
 
     // 컨슈머 생산 팩토리
     @Bean
-    public ConsumerFactory<String, Message> consumerFactory() {
-        JsonDeserializer<Message> deserializer = new JsonDeserializer<>();
+    public ConsumerFactory<String, Chat> consumerFactory() {
+        JsonDeserializer<Chat> deserializer = new JsonDeserializer<>();
         deserializer.addTrustedPackages("*"); // 패키지 신뢰 오류 해결
         Map<String, Object> config = ImmutableMap.<String, Object>builder()
                 .put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapAddress)
@@ -55,8 +50,8 @@ public class KafkaConsumerConfig {
     }
     // 멀티 스레드 대비 동기화를 제공하는 컨슈머 생산
     @Bean
-    public ConcurrentKafkaListenerContainerFactory<String, Message> kafkaListenerContainerFactory(){
-        ConcurrentKafkaListenerContainerFactory<String, Message> factory = new ConcurrentKafkaListenerContainerFactory<>();
+    public ConcurrentKafkaListenerContainerFactory<String, Chat> kafkaListenerContainerFactory(){
+        ConcurrentKafkaListenerContainerFactory<String, Chat> factory = new ConcurrentKafkaListenerContainerFactory<>();
         factory.setConsumerFactory(consumerFactory());
         return factory;
     }
@@ -66,8 +61,8 @@ public class KafkaConsumerConfig {
             listenerContainerCount.put(room,listenerContainerCount.get(room) + 1);
         }else{
             ContainerProperties containerProperties = new ContainerProperties(room);
-            containerProperties.setMessageListener((MessageListener<String, Message>) record -> kafkaListenerManager.handleMessageForRoom(room, record.value()));
-            ConcurrentMessageListenerContainer<String, Message> listenerContainer = new ConcurrentMessageListenerContainer<>(consumerFactory(), containerProperties);
+            containerProperties.setMessageListener((MessageListener<String, Chat>) record -> kafkaListenerManager.handleMessageForRoom(room, record.value()));
+            ConcurrentMessageListenerContainer<String, Chat> listenerContainer = new ConcurrentMessageListenerContainer<>(consumerFactory(), containerProperties);
             listenerContainer.start();
             listenerContainers.put(room, listenerContainer);
             listenerContainerCount.put(room, 1);
@@ -76,7 +71,7 @@ public class KafkaConsumerConfig {
     }
 
     public void removeListenerContainerForRoom(String room){
-        ConcurrentMessageListenerContainer<String, Message> listenerContainer = listenerContainers.get(room);
+        ConcurrentMessageListenerContainer<String, Chat> listenerContainer = listenerContainers.get(room);
         if(listenerContainer != null){
             listenerContainer.stop();
             listenerContainers.remove(room);
