@@ -7,6 +7,7 @@ import com.example.api.chat.domain.Chat;
 import com.example.api.chat.dto.AddChatDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Pageable;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
@@ -21,8 +22,8 @@ public class ChatService implements GetChatListUsecase {
     private final GetChatListPort getChatListPort;
 
     @Override
-    public List<Chat> getChatList(UUID roomId) {
-        return getChatListPort.getChatList(roomId);
+    public List<Chat> getChatList(UUID roomId, Pageable pageable) {
+        return getChatListPort.getChatList(roomId, pageable);
     }
 
 
