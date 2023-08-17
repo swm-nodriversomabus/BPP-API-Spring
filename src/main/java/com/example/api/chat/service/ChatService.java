@@ -1,6 +1,8 @@
 package com.example.api.chat.service;
 
+import com.example.api.chat.application.port.in.GetChatListUsecase;
 import com.example.api.chat.application.port.out.AddChatPort;
+import com.example.api.chat.application.port.out.GetChatListPort;
 import com.example.api.chat.domain.Chat;
 import com.example.api.chat.dto.AddChatDto;
 import lombok.RequiredArgsConstructor;
@@ -8,21 +10,20 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 
 @Service
 @Slf4j
 @RequiredArgsConstructor
-public class ChatService {
-    private final AddChatPort addChatPort;
-    @Async
-    public CompletableFuture<Void> saveChat(AddChatDto addChatDto){
-        try {
-            addChatPort.addChat(addChatDto);
-        }catch (Exception e){ //혹시라도 문제 생겼을 경우
-            log.error(e.getMessage());
-            Thread.currentThread().interrupt();
-        }
-        return CompletableFuture.completedFuture(null);
+public class ChatService implements GetChatListUsecase {
+    private final GetChatListPort getChatListPort;
+
+    @Override
+    public List<Chat> getChatList(UUID roomId) {
+        return getChatListPort.getChatList(roomId);
     }
+
+
 }
