@@ -15,7 +15,6 @@ public class KafkaSubscribeService implements SubscribeRoomUsecase {
 
     @Override
     public void subscribe(String roomId) {
-
         kafkaConsumerConfig.createListenerContainerForRoom(roomId);
     }
 }
