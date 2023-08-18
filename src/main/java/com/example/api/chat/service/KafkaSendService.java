@@ -28,13 +28,14 @@ public class KafkaSendService implements SendChatUsecase {
     public void send(String roomId, AddChatDto message) {
         Chat sendChat = chatMapper.toDomain(message);
         final CompletableFuture<Void> chatResult = chatService.saveChat(message);
+        // 비동기 작업으로 디비 저장
         chatResult.thenAccept(
                 result -> {
                     log.info("끝");
                 }
         );
         log.info("kafka send");
-        kafkaConsumerConfig.createListenerContainerForRoom(roomId);
+        kafkaConsumerConfig.createListenerContainerForRoom(roomId); // 혹시 몰라 컨슈머가 없을 수도 있어 추가
         kafkaTemplate.send(roomId, sendChat);
         log.info("kafka send FINISH");
 

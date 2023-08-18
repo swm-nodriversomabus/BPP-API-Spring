@@ -16,6 +16,11 @@ import java.util.concurrent.CompletableFuture;
 public class ChatAsyncService {
     private final AddChatPort addChatPort;
 
+    /**
+     * 비동기 작업 처리 -> 디비 저장
+     * @param addChatDto
+     * @return
+     */
     @Async
     public CompletableFuture<Void> saveChat(AddChatDto addChatDto){
         try {

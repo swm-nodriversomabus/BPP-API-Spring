@@ -56,6 +56,11 @@ public class KafkaConsumerConfig {
         return factory;
     }
 
+    /**
+     * 컨슈머 등록 -> 이미 map안에 있을시에는 추가하지 않겠다
+     * 컨슈머 만든 후 리스너도 같이 추가해서 넣어준다.
+     * @param room
+     */
     public void createListenerContainerForRoom(String room){
         if(listenerContainers.containsKey(room)){
             listenerContainerCount.put(room,listenerContainerCount.get(room) + 1);

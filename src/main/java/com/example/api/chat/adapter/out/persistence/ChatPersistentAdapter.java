@@ -31,7 +31,6 @@ public class ChatPersistentAdapter implements AddChatPort, GetChatListPort {
     @Override
     public List<Chat> getChatList(UUID roomId, Pageable pageable) {
         Page<ChatEntity> ret = chatRepository.findAllByRoomId_ChatroomId(roomId, pageable);
-        log.info("data : {}", ret.getContent());
         if(ret != null && ret.hasContent()){
             return chatMapper.toDomainList(ret.getContent());
         }

@@ -12,6 +12,7 @@ import java.util.UUID;
 
 public interface ChatRepository extends JpaRepository<ChatEntity, Long> {
 
+    // entity graph를 활용해 user랑 join
     @EntityGraph(attributePaths = {"senderId"})
     Page<ChatEntity> findAllByRoomId_ChatroomId(@Param("roomId") UUID roomId, Pageable pageable);
 }

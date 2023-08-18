@@ -23,6 +23,12 @@ import java.util.concurrent.CompletableFuture;
 public class ChatService implements GetChatListUsecase {
     private final GetChatListPort getChatListPort;
 
+    /**
+     * 채팅 내역 가져오기 -> roomId랑 페이징 네이션추가
+     * @param roomId
+     * @param pageable
+     * @return
+     */
     @Override
     public List<Chat> getChatList(UUID roomId, Pageable pageable) {
         return getChatListPort.getChatList(roomId, pageable);
