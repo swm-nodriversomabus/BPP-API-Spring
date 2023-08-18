@@ -29,6 +29,7 @@ public class PreferenceService implements SavePreferenceUsecase, FindPreferenceU
     // CRUD
     
     @Override
+    @Transactional
     public SavePreferenceDto createPreference(SavePreferenceDto preferenceDto) {
         Preference preference = savePreferencePort.createPreference(preferenceMapper.fromDtoToDomain(preferenceDto));
         return preferenceMapper.fromDomainToSaveDto(preference);
@@ -41,6 +42,7 @@ public class PreferenceService implements SavePreferenceUsecase, FindPreferenceU
     }
     
     @Override
+    @Transactional
     public SavePreferenceDto updatePreference(Long preferenceId, SavePreferenceDto preferenceDto) {
         Preference preference = savePreferencePort.updatePreference(preferenceId, preferenceMapper.fromDtoToDomain(preferenceDto));
         return preferenceMapper.fromDomainToSaveDto(preference);
