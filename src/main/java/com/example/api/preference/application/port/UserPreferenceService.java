@@ -6,9 +6,11 @@ import com.example.api.preference.application.port.out.CreateUserPreferencePort;
 import com.example.api.preference.dto.UserPreferenceDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class UserPreferenceService implements UserPreferenceUsecase {
     private final CreateUserPreferencePort createUserPreferencePort;
     

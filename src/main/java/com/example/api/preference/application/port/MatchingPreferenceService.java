@@ -6,9 +6,11 @@ import com.example.api.preference.application.port.out.CreateMatchingPreferenceP
 import com.example.api.preference.dto.MatchingPreferenceDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class MatchingPreferenceService implements MatchingPreferenceUsecase {
     private CreateMatchingPreferencePort createMatchingPreferencePort;
     
