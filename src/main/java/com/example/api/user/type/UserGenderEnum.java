@@ -8,9 +8,10 @@ import lombok.ToString;
 @AllArgsConstructor
 @Getter
 public enum UserGenderEnum {
-    None("없음"),
-    Female("여자"),
-    Male("남자");
+    None("없음", 0),
+    Female("여자", 1),
+    Male("남자", 2);
 
     private final String gender;
+    private final Integer genderCode;
 }

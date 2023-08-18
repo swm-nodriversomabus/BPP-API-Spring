@@ -8,26 +8,8 @@ import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor
 public class MatchingMapper {
-    public Matching fromDtoToCreateDomain(MatchingDto matchingDto) {
+    public Matching fromDtoToDomain(MatchingDto matchingDto) {
         return Matching.builder()
-                .writerId(matchingDto.getWriterId())
-                .type(matchingDto.getType())
-                .title(matchingDto.getTitle())
-                .content(matchingDto.getContent())
-                .place(matchingDto.getPlace())
-                .startDate(matchingDto.getStartDate())
-                .endDate(matchingDto.getEndDate())
-                .maxMember(matchingDto.getMaxMember())
-                .minusAge(matchingDto.getMinusAge())
-                .plusAge(matchingDto.getPlusAge())
-                .readCount(matchingDto.getReadCount())
-                .isActive(matchingDto.getIsActive())
-                .build();
-    }
-
-    public Matching fromDtoToUpdateDomain(MatchingDto matchingDto) {
-        return Matching.builder()
-                .matchingId(matchingDto.getMatchingId())
                 .writerId(matchingDto.getWriterId())
                 .type(matchingDto.getType())
                 .title(matchingDto.getTitle())

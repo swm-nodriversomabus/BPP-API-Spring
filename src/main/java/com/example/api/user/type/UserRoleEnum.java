@@ -8,8 +8,9 @@ import lombok.ToString;
 @AllArgsConstructor
 @Getter
 public enum UserRoleEnum {
-    User("일반 유저"),
-    Admin("관리자");
+    Admin("관리자", 1),
+    User("일반 사용자", 2);
 
     private final String role;
+    private final Integer roleCode;
 }

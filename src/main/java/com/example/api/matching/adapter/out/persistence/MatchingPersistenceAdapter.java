@@ -30,7 +30,12 @@ public class MatchingPersistenceAdapter implements SaveMatchingPort, FindMatchin
     
     @Override
     public Optional<MatchingEntity> getMatchingByMatchingId(Long matchingId) {
-        return matchingRepository.getMatchingByMatchingId(matchingId);
+        return matchingRepository.getMatchingEntityByMatchingId(matchingId);
+    }
+    
+    @Override
+    public List<MatchingEntity> getMatchingByIsActive(Boolean isActive) {
+        return matchingRepository.getMatchingEntitiesByIsActive(isActive);
     }
     
     @Override
@@ -39,7 +44,8 @@ public class MatchingPersistenceAdapter implements SaveMatchingPort, FindMatchin
     }
     
     @Override
-    public Matching updateMatching(Matching matching) {
+    public Matching updateMatching(Long matchingId, Matching matching) {
+        matching.setMatchingId(matchingId);
         MatchingEntity matchingData = matchingRepository.save(matchingMapper.fromDomainToEntity(matching));
         return matchingMapper.fromEntityToDomain(matchingData);
     }

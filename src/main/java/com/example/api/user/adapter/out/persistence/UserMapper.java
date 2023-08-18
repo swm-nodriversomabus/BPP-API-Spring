@@ -13,31 +13,8 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 
 public class UserMapper {
-
-
-    public User fromDtoToCreateDomain(UserDto userDto) {
+    public User fromDtoToDomain(UserDto userDto) {
         return User.builder()
-                .username(userDto.getUsername())
-                .nickname(userDto.getNickname())
-                .gender(userDto.getGender())
-                .age(userDto.getAge())
-                .phone(userDto.getPhone())
-                .email(userDto.getEmail())
-                .address(userDto.getAddress())
-                .role(userDto.getRole())
-                .blacklist(userDto.getBlacklist())
-                .personality(userDto.getPersonality())
-                .stateMessage(userDto.getStateMessage())
-                .mannerScore(userDto.getMannerScore())
-                .createdUserId(userDto.getCreatedUserId())
-                .updatedUserId(userDto.getUpdatedUserId())
-                .isActive(userDto.getIsActive())
-                .build();
-    }
-
-    public User fromDtoToUpdateDomain(UserDto userDto) {
-        return User.builder()
-                .userId(userDto.getUserId())
                 .username(userDto.getUsername())
                 .nickname(userDto.getNickname())
                 .gender(userDto.getGender())

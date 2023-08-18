@@ -1,11 +1,10 @@
 package com.example.api.matching.adapter.out.persistence;
 
+import com.example.api.common.entity.BaseEntity;
 import com.example.api.matching.dto.MatchingDto;
 import com.example.api.matching.type.MatchingTypeEnum;
 import jakarta.persistence.*;
 import lombok.*;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
@@ -18,7 +17,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name="matching")
-public class MatchingEntity {
+public class MatchingEntity extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long matchingId;
@@ -57,14 +56,6 @@ public class MatchingEntity {
     @Column(nullable = false)
     private Integer readCount;
     
-    @CreatedDate
-    @Temporal(TemporalType.TIMESTAMP)
-    private LocalDateTime createdAt;
-    
-    @LastModifiedDate
-    @Temporal(TemporalType.TIMESTAMP)
-    private LocalDateTime updatedAt;
-    
     @Column(nullable = false)
     private Boolean isActive;
     
@@ -82,8 +73,8 @@ public class MatchingEntity {
                 .minusAge(minusAge)
                 .plusAge(plusAge)
                 .readCount(readCount)
-                .createdAt(createdAt)
-                .updatedAt(updatedAt)
+                .createdAt(getCreatedAt())
+                .updatedAt(getUpdatedAt())
                 .isActive(isActive)
                 .build();
     }

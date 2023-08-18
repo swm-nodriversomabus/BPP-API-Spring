@@ -1,12 +1,14 @@
-package com.example.api.user.application;
+package com.example.api.user.application.port;
 
 import com.example.api.user.adapter.out.persistence.UserEntity;
 import com.example.api.user.adapter.out.persistence.UserMapper;
+import com.example.api.user.application.port.in.DeleteUserUsecase;
+import com.example.api.user.application.port.in.FindUserUsecase;
 import com.example.api.user.application.port.out.DeleteUserPort;
 import com.example.api.user.application.port.out.FindUserPort;
 import com.example.api.user.application.port.out.SaveUserPort;
 import com.example.api.user.domain.User;
-import com.example.api.user.application.port.in.UserUsecase;
+import com.example.api.user.application.port.in.SaveUserUsecase;
 import com.example.api.user.dto.UserDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -19,7 +21,7 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
-public class UserService implements UserUsecase {
+public class UserService implements SaveUserUsecase, FindUserUsecase, DeleteUserUsecase {
     private final UserMapper userMapper;
     private final SaveUserPort saveUserPort;
     private final FindUserPort findUserPort;
@@ -28,7 +30,7 @@ public class UserService implements UserUsecase {
     @Override
     @Transactional
     public UserDto createUser(UserDto userDto) {
-        User user = saveUserPort.createUser(userMapper.fromDtoToCreateDomain(userDto));
+        User user = saveUserPort.createUser(userMapper.fromDtoToDomain(userDto));
         return userMapper.fromDomainToDto(user);
     }
     
@@ -44,11 +46,11 @@ public class UserService implements UserUsecase {
         return findUserPort.getUserByUserId(userId)
                 .map(UserEntity::toDto);
     }
-    
+
     @Override
     @Transactional
-    public UserDto updateUser(UserDto userDto) {
-        User user = saveUserPort.updateUser(userMapper.fromDtoToUpdateDomain(userDto));
+    public UserDto updateUser(Long userId,UserDto userDto) {
+        User user = saveUserPort.updateUser(userId, userMapper.fromDtoToDomain(userDto));
         return userMapper.fromDomainToDto(user);
     }
     

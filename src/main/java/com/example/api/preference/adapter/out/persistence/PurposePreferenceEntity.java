@@ -10,12 +10,12 @@ import lombok.*;
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor
-@IdClass(UserToPurposePK.class)
+@IdClass(PurposePreferencePK.class)
 @Table(name="userToPurpose")
-public class UserToPurposeEntity {
-    @Id
-    private Long userId;
-    
+public class PurposePreferenceEntity {
     @Id
     private Long purposeId;
+    
+    @Id
+    private Long preferenceId;
 }

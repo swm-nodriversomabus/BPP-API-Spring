@@ -5,7 +5,7 @@ import lombok.Data;
 import java.io.Serializable;
 
 @Data
-public class UserToMovePK implements Serializable {
-    private Long userId;
+public class MovePreferencePK implements Serializable {
     private Long moveId;
+    private Long preferenceId;
 }
