@@ -20,15 +20,20 @@ public class MemberEntity extends BaseEntity {
     @Id
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(nullable = false, name="chatroom_id", foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
+    @ToString.Exclude
     private ChatRoomEntity chatroom;
 
-    @Id
 //    @ManyToOne(fetch = FetchType.LAZY)
 //    @JoinColumn(nullable = false, name="user_id", foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
+    @Id
     private Long userId;
 
     @Temporal(TemporalType.TIMESTAMP)
     private LocalDateTime outAt;
+
+    public void setChatroom(ChatRoomEntity chatroom) {
+        this.chatroom = chatroom;
+    }
 
     public void addChatRoom(ChatRoomEntity chatRoom){
         this.chatroom = chatRoom;

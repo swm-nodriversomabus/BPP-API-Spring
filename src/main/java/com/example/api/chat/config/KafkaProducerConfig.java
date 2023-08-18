@@ -1,6 +1,6 @@
 package com.example.api.chat.config;
 
-import com.example.api.chat.domain.Message;
+import com.example.api.chat.domain.Chat;
 import com.google.common.collect.ImmutableMap;
 import nonapi.io.github.classgraph.json.JSONSerializer;
 import org.apache.kafka.clients.producer.ProducerConfig;
@@ -24,7 +24,7 @@ public class KafkaProducerConfig {
     // Producer 생산을 위한 빈 설정
     // Factory에서 Producer 생산시 필요한 정보를 Map 형태로 전달
     @Bean
-    public ProducerFactory<String, Message> producerFactory(){
+    public ProducerFactory<String, Chat> producerFactory(){
         return new DefaultKafkaProducerFactory<>(producerConfigurations(), new StringSerializer(), new JsonSerializer<>());
     }
 
@@ -39,7 +39,7 @@ public class KafkaProducerConfig {
     }
     // 이벤트 생산을 돕는 Template
     @Bean
-    public KafkaTemplate<String, Message> kafkaTemplate(){
+    public KafkaTemplate<String, Chat> kafkaTemplate(){
         return new KafkaTemplate<>(producerFactory());
     }
 }

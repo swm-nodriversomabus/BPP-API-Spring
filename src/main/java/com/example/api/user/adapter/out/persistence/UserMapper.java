@@ -1,12 +1,17 @@
 package com.example.api.user.adapter.out.persistence;
 
+import com.example.api.user.domain.ChatUser;
 import com.example.api.user.domain.User;
 import com.example.api.user.dto.UserDto;
 import lombok.RequiredArgsConstructor;
+import org.mapstruct.InjectionStrategy;
+import org.mapstruct.Mapper;
+import org.mapstruct.ReportingPolicy;
 import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
+
 public class UserMapper {
     public User fromDtoToDomain(UserDto userDto) {
         return User.builder()
