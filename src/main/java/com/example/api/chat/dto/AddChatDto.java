@@ -18,15 +18,4 @@ public class AddChatDto {
     private Boolean image;
     @NotNull
     private Integer readCount;
-
-    public Chat toMessage(){
-        return Chat.builder()
-                .readCount(readCount)
-                .content(content)
-                .image(image)
-                .senderId(senderId)
-                .roomId(roomId)
-                .build();
-    }
-
 }
