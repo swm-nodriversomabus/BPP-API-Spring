@@ -20,7 +20,7 @@ public class MatchingController {
     private final LikeUsecase likeUsecase;
     
     @PostMapping("/matching")
-    public MatchingDto createMatching(MatchingDto matchingDto) {
+    public MatchingDto createMatching(@RequestBody MatchingDto matchingDto) {
         return saveMatchingUsecase.createMatching(matchingDto);
     }
     
@@ -40,7 +40,7 @@ public class MatchingController {
     }
     
     @PatchMapping("/matching/{matchingId}")
-    public MatchingDto updateMatching(@PathVariable Long matchingId, MatchingDto matchingDto) {
+    public MatchingDto updateMatching(@PathVariable Long matchingId,@RequestBody MatchingDto matchingDto) {
         return saveMatchingUsecase.updateMatching(matchingId, matchingDto);
     }
     

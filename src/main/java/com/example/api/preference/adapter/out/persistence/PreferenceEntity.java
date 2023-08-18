@@ -1,5 +1,7 @@
 package com.example.api.preference.adapter.out.persistence;
 
+import com.example.api.common.entity.BaseEntity;
+import com.example.api.preference.dto.ComparePreferenceDto;
 import com.example.api.preference.type.PreferSmokeEnum;
 import com.example.api.preference.type.TasteEnum;
 import com.example.api.user.type.UserGenderEnum;
@@ -16,9 +18,10 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name="preference")
-public class PreferenceEntity {
+public class PreferenceEntity extends BaseEntity {
     @Id
-    private Long userId;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long preferenceId;
     
     @Column(nullable = false)
     private Integer alcoholAmount;
@@ -49,4 +52,18 @@ public class PreferenceEntity {
     
     @Column(nullable = false)
     private Integer slang;
+    
+    public ComparePreferenceDto toCompareDto() {
+        return ComparePreferenceDto.builder()
+                .alcoholAmount(alcoholAmount)
+                .mateAllowedAlcohol(mateAllowedAlcohol)
+                .taste(taste.getTasteCode())
+                .allowedMoveTime(allowedMoveTime)
+                .allowedPeople(allowedPeople)
+                .preferGender(preferGender.getGenderCode())
+                .smoke(smoke)
+                .preferSmoke(preferSmoke.getSmokeCode())
+                .slang(slang)
+                .build();
+    }
 }
