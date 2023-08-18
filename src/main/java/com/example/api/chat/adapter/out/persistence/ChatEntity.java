@@ -1,9 +1,14 @@
 package com.example.api.chat.adapter.out.persistence;
 
+import com.example.api.chatroom.adapter.out.persistence.ChatRoomEntity;
 import com.example.api.common.entity.BaseEntity;
+import com.example.api.user.adapter.out.persistence.UserEntity;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+
+import java.time.LocalDateTime;
+
 
 @Entity
 @EntityListeners(AuditingEntityListener.class)
@@ -11,7 +16,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 @Setter
 @Builder
 @ToString
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @Table(name="chat")
 public class ChatEntity extends BaseEntity {
@@ -19,11 +24,15 @@ public class ChatEntity extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long chatId;
 
-    @Column(nullable = false)
-    private Long roomId;
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(nullable = false, name="room_id", foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
+    @ToString.Exclude
+    private ChatRoomEntity roomId;
 
-    @Column(nullable = false)
-    private Long senderId;
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(nullable = false, name="sender_id", foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
+    @ToString.Exclude
+    private UserEntity senderId;
 
     @Column(nullable = false, length = 6000)
     private String content;
@@ -33,4 +42,8 @@ public class ChatEntity extends BaseEntity {
 
     @Column(nullable = false)
     private Integer readCount;
+
+
+
+
 }
