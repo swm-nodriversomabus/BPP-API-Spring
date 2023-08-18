@@ -9,12 +9,14 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.concurrent.CompletableFuture;
 
 @Slf4j
 @Service
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class KafkaSendService implements SendChatUsecase {
     private final KafkaTemplate<String, Chat> kafkaTemplate;
     private final ChatMapper chatMapper;
@@ -22,6 +24,7 @@ public class KafkaSendService implements SendChatUsecase {
     private final KafkaConsumerConfig kafkaConsumerConfig;
 
     @Override
+    @Transactional
     public void send(String roomId, AddChatDto message) {
         Chat sendChat = chatMapper.toDomain(message);
         final CompletableFuture<Void> chatResult = chatService.saveChat(message);
