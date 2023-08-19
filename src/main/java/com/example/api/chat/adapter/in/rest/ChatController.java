@@ -58,10 +58,8 @@ public class ChatController {
      * @param pageable
      * @return List<Chat>
      */
-
     @GetMapping("/chat")
     public List<Chat> getChatList(@RequestParam UUID roomId,@PageableDefault(sort = "createdAt",direction = Sort.Direction.DESC, page = 0, size = 30) Pageable pageable) {
         return getChatListUsecase.getChatList(roomId, pageable);
     }
-
 }

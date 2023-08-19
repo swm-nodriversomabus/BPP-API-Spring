@@ -33,7 +33,7 @@ public class ChatRoomController {
     }
 
     /**
-     * TODO 추후에 로그인한 jwt 값으로 회원 정보를 확인할려고함
+     * TODO: 추후에 로그인한 jwt 값으로 회원 정보를 확인하려고 함
      * 지금은 임시로 유저 id값을 받자
      * @return
      */
