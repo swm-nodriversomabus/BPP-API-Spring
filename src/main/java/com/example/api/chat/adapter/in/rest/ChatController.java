@@ -5,6 +5,8 @@ import com.example.api.chat.application.port.in.SendChatUsecase;
 import com.example.api.chat.application.port.in.SubscribeRoomUsecase;
 import com.example.api.chat.domain.Chat;
 import com.example.api.chat.dto.AddChatDto;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
@@ -23,6 +25,7 @@ import java.util.UUID;
 @Slf4j
 @RestController
 @RequiredArgsConstructor
+@Tag(name = "Chat", description = "Chat API")
 public class ChatController {
     //임시용
     private final SendChatUsecase sendChatUsecase;
@@ -36,6 +39,7 @@ public class ChatController {
      * @param roomNumber
      * @param message
      */
+    @Operation(summary = "Send message", description = "채팅방에 메시지를 보낸다.")
     @MessageMapping("/chat/{roomNumber}")
     public void message(@DestinationVariable String roomNumber, AddChatDto message){
         log.info("roomNumber : {}", roomNumber);
@@ -47,6 +51,7 @@ public class ChatController {
      * 컨슈머가 없을 시 등록 + 추후에 유저 추가 알림 같은 것을 전달 가능해 보임
      * @param roomId
      */
+    @Operation(summary = "Enter chatroom", description = "채팅방에 입장한다.")
     @MessageMapping("/subscribe/{roomId}")
     public void subscribe(@DestinationVariable String roomId){
         subscribeRoomUsecase.subscribe(roomId);
@@ -58,10 +63,9 @@ public class ChatController {
      * @param pageable
      * @return List<Chat>
      */
-
+    @Operation(summary = "Get chat list", description = "채팅 목록을 불러온다.")
     @GetMapping("/chat")
     public List<Chat> getChatList(@RequestParam UUID roomId,@PageableDefault(sort = "createdAt",direction = Sort.Direction.DESC, page = 0, size = 30) Pageable pageable) {
         return getChatListUsecase.getChatList(roomId, pageable);
     }
-
 }
