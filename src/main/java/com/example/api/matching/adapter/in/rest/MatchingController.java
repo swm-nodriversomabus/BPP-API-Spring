@@ -71,7 +71,7 @@ public class MatchingController {
      * @param matchingId (ID)
      * @return List<UserDto>
      */
-    @Operation(summary = "Get pending user list of matching", description = "ID가 matchingId인 매칭의 대기자 목록을 조회한다.")
+    @Operation(summary = "Get pending user list of matching", description = "매칭의 대기자 목록을 조회한다.")
     @GetMapping("/matching/{matchingId}/pending")
     public List<UserDto> getPendingUserList(@PathVariable Long matchingId) {
         return matchingApplicationUsecase.getByMatchingIdIsAndStateEquals(matchingId, ApplicationStateEnum.Pending);
@@ -82,7 +82,7 @@ public class MatchingController {
      * @param matchingId (ID)
      * @return List<UserDto>
      */
-    @Operation(summary = "Get approved user list of matching", description = "ID가 matchingId인 매칭의 참가자 목록을 조회한다.")
+    @Operation(summary = "Get approved user list of matching", description = "매칭의 참가자 목록을 조회한다.")
     @GetMapping("/matching/{matchingId}/approved")
     public List<UserDto> getApprovedUserList(@PathVariable Long matchingId) {
         return matchingApplicationUsecase.getByMatchingIdIsAndStateEquals(matchingId, ApplicationStateEnum.Approved);

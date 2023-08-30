@@ -1,5 +1,7 @@
 package com.example.api.user.adapter.in.rest;
 
+import com.example.api.common.type.ApplicationStateEnum;
+import com.example.api.matching.application.port.in.MatchingApplicationUsecase;
 import com.example.api.matching.dto.MatchingDto;
 import com.example.api.user.application.port.in.DeleteUserUsecase;
 import com.example.api.user.application.port.in.FindUserUsecase;
@@ -22,6 +24,7 @@ public class UserController {
     private final FindUserUsecase findUserUsecase;
     private final DeleteUserUsecase deleteUserUsecase;
     private final RecommendedMatchingUsecase recommendedMatchingUsecase;
+    private final MatchingApplicationUsecase matchingApplicationUsecase;
 
     /**
      * 
@@ -56,14 +59,36 @@ public class UserController {
     }
 
     /**
-     * ID가 userId인 사용자의 추천 매칭 리스트 조회
+     * ID가 userId인 사용자의 추천 매칭 목록 조회
      * @param userId (ID)
      * @return List<MatchingDto>
      */
-    @Operation(summary = "Get recommended matching list of a user", description = "사용자의 추천 매칭 리스트를 불러온다.")
+    @Operation(summary = "Get recommended matching list of a user", description = "사용자의 추천 매칭 목록을 조회한다..")
     @GetMapping("/user/{userId}/recommendedmatching")
     public List<MatchingDto> getRecommendedMatchingList(@PathVariable Long userId) {
         return recommendedMatchingUsecase.getRecommendedMatchingList(userId);
+    }
+
+    /**
+     * ID가 userId인 사용자가 대기 중인 매칭 목록 조회
+     * @param userId (ID)
+     * @return List<MatchingDto>
+     */
+    @Operation(summary = "Get pending matching list of user", description = "사용자가 대기 중인 매칭 목록을 조회한다.")
+    @GetMapping("/user/{userId}/pending")
+    public List<MatchingDto> getPendingMatchingList(@PathVariable Long userId) {
+        return matchingApplicationUsecase.getByUserIdIsAndStateEquals(userId, ApplicationStateEnum.Pending);
+    }
+
+    /**
+     * ID가 userId인 사용자가 참가한 매칭 목록 조회
+     * @param userId (ID)
+     * @return List<MatchingDto>
+     */
+    @Operation(summary = "Get approved matching list of user", description = "사용자가 참가한 매칭 목록을 조회한다.")
+    @GetMapping("/user/{userId}/approved")
+    public List<MatchingDto> getApprovedMatchingList(@PathVariable Long userId) {
+        return matchingApplicationUsecase.getByUserIdIsAndStateEquals(userId, ApplicationStateEnum.Approved);
     }
 
     /**
