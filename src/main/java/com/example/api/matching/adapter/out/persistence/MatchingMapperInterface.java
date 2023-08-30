@@ -20,4 +20,5 @@ public interface MatchingMapperInterface {
     MatchingApplication toDomain(MatchingApplicationEntity matchingApplicationEntity);
     MatchingDto toDto(Matching matching);
     MatchingApplicationDto toDto(MatchingApplication matchingApplication);
+    MatchingDto toDto(MatchingEntity matchingEntity);
 }

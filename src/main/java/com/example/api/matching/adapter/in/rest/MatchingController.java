@@ -1,10 +1,10 @@
 package com.example.api.matching.adapter.in.rest;
 
-import com.example.api.matching.application.port.in.DeleteMatchingUsecase;
-import com.example.api.matching.application.port.in.FindMatchingUsecase;
-import com.example.api.matching.application.port.in.LikeUsecase;
-import com.example.api.matching.application.port.in.SaveMatchingUsecase;
+import com.example.api.common.type.ApplicationStateEnum;
+import com.example.api.matching.application.port.in.*;
+import com.example.api.matching.dto.MatchingApplicationDto;
 import com.example.api.matching.dto.MatchingDto;
+import com.example.api.user.dto.UserDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -20,11 +20,12 @@ public class MatchingController {
     private final SaveMatchingUsecase saveMatchingUsecase;
     private final FindMatchingUsecase findMatchingUsecase;
     private final DeleteMatchingUsecase deleteMatchingUsecase;
+    private final MatchingApplicationUsecase matchingApplicationUsecase;
     private final LikeUsecase likeUsecase;
 
     /**
      * 새 매칭 생성
-     * @param matchingDto
+     * @param matchingDto (데이터)
      * @return MatchingDto
      */
     @Operation(summary = "Create matching", description = "새로운 매칭을 생성한다.")
@@ -34,6 +35,17 @@ public class MatchingController {
     }
 
     /**
+     * 새 매칭 신청 생성
+     * @param matchingApplicationDto (데이터)
+     * @return matchingApplicationDto
+     */
+    @Operation(summary = "Create matching application", description = "새로운 매칭 신청을 생성한다.")
+    @PostMapping("/matching/application")
+    public MatchingApplicationDto createMatchingApplication(@RequestBody MatchingApplicationDto matchingApplicationDto) {
+        return matchingApplicationUsecase.createMatchingApplication(matchingApplicationDto);
+    }
+    
+    /**
      * 전체 매칭 목록 조회
      * @return List<MatchingDto>
      */
@@ -42,10 +54,10 @@ public class MatchingController {
     public List<MatchingDto> getAll() {
         return findMatchingUsecase.getAll();
     }
-
+    
     /**
-     * ID가 matchingID인 매칭 조회
-     * @param matchingId
+     * ID가 matchingId인 매칭 조회
+     * @param matchingId (데이터)
      * @return Optional<MatchingDto>
      */
     @Operation(summary = "Get matching", description = "ID가 matchingId인 매칭을 조회한다.")
@@ -55,8 +67,30 @@ public class MatchingController {
     }
 
     /**
-     * ID가 matchingID인 매칭의 좋아요 수 조회 (미구현)
-     * @param matchingId
+     * ID가 matchingId인 매칭의 대기자 목록 조회
+     * @param matchingId (ID)
+     * @return List<UserDto>
+     */
+    @Operation(summary = "Get pending user list of matching", description = "ID가 matchingId인 매칭의 대기자 목록을 조회한다.")
+    @GetMapping("/matching/{matchingId}/pending")
+    public List<UserDto> getPendingUserList(@PathVariable Long matchingId) {
+        return matchingApplicationUsecase.getByMatchingIdIsAndStateEquals(matchingId, ApplicationStateEnum.Pending);
+    }
+
+    /**
+     * ID가 matchingId인 매칭의 참가자 목록 조회
+     * @param matchingId (ID)
+     * @return List<UserDto>
+     */
+    @Operation(summary = "Get approved user list of matching", description = "ID가 matchingId인 매칭의 참가자 목록을 조회한다.")
+    @GetMapping("/matching/{matchingId}/approved")
+    public List<UserDto> getApprovedUserList(@PathVariable Long matchingId) {
+        return matchingApplicationUsecase.getByMatchingIdIsAndStateEquals(matchingId, ApplicationStateEnum.Approved);
+    }
+
+    /**
+     * ID가 matchingId인 매칭의 좋아요 수 조회 (미구현)
+     * @param matchingId (ID)
      * @return int
      */
     @Operation(summary = "Get like count of a matching", description = "매칭글의 좋아요 수를 반환한다.")
@@ -67,8 +101,8 @@ public class MatchingController {
 
     /**
      * ID가 matchingId인 매칭 정보 수정
-     * @param matchingId
-     * @param matchingDto
+     * @param matchingId (ID)
+     * @param matchingDto (데이터)
      * @return MatchingDto
      */
     @Operation(summary = "Update matching", description = "매칭 정보를 수정한다.")
@@ -97,7 +131,7 @@ public class MatchingController {
 
     /**
      * ID가 matchingId인 매칭 삭제
-     * @param matchingId
+     * @param matchingId (ID)
      */
     @Operation(summary = "Delete matching", description = "ID가 matchingId인 매칭을 삭제한다.")
     @DeleteMapping("/matching/{matchingId}")

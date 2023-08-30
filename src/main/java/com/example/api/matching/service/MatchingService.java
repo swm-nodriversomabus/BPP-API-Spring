@@ -94,7 +94,8 @@ public class MatchingService implements
     @Override
     @Transactional
     public MatchingDto updateMatching(Long matchingId, MatchingDto matchingDto) {
-        Matching matching = saveMatchingPort.updateMatching(matchingId, matchingMapper.toDomain(matchingDto));
+        matchingDto.setMatchingId(matchingId);
+        Matching matching = saveMatchingPort.updateMatching(matchingMapper.toDomain(matchingDto));
         return matchingMapper.toDto(matching);
     }
     

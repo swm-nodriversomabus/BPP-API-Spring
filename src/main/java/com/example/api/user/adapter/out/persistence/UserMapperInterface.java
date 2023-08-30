@@ -16,4 +16,5 @@ public interface UserMapperInterface {
     User toDomain(UserEntity userEntity);
     ChatUser toChatDomain(UserEntity userEntity);
     UserDto toDto(User user);
+    UserDto toDto(UserEntity userEntity);
 }

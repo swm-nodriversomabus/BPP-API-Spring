@@ -25,7 +25,7 @@ public class UserController {
 
     /**
      * 
-     * @param userDto
+     * @param userDto (데이터)
      * @return UserDto
      */
     @Operation(summary = "Create user", description = "새로운 사용자를 추가한다.")
@@ -46,7 +46,7 @@ public class UserController {
 
     /**
      * ID가 userId인 사용자 조회
-     * @param userId
+     * @param userId (ID)
      * @return Optional<UserDto>
      */
     @Operation(summary = "Get user", description = "ID가 userId인 사용자를 조회한다.")
@@ -57,7 +57,7 @@ public class UserController {
 
     /**
      * ID가 userId인 사용자의 추천 매칭 리스트 조회
-     * @param userId
+     * @param userId (ID)
      * @return List<MatchingDto>
      */
     @Operation(summary = "Get recommended matching list of a user", description = "사용자의 추천 매칭 리스트를 불러온다.")
@@ -68,8 +68,8 @@ public class UserController {
 
     /**
      * ID가 userId인 사용자 정보 수정
-     * @param userId
-     * @param userDto
+     * @param userId (ID)
+     * @param userDto (데이터)
      * @return UserDto
      */
     @Operation(summary = "Update user information", description = "사용자 정보를 변경한다.")
@@ -89,7 +89,7 @@ public class UserController {
 
     /**
      * ID가 userId인 사용자 삭제
-     * @param userId
+     * @param userId (ID)
      */
     @Operation(summary = "Delete user", description = "ID가 userId인 사용자를 삭제한다.")
     @DeleteMapping("/user/{userId}")
