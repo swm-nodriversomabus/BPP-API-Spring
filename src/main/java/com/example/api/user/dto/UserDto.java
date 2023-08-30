@@ -65,24 +65,4 @@ public class UserDto {
     
     @NotEmpty
     private Boolean isActive;
-    
-    public UserEntity toEntity() {
-        return UserEntity.builder()
-                .username(username)
-                .nickname(nickname)
-                .gender(gender)
-                .age(age)
-                .phone(phone)
-                .email(email)
-                .address(address)
-                .role(role)
-                .blacklist(blacklist)
-                .personality(personality)
-                .stateMessage(stateMessage)
-                .mannerScore(mannerScore)
-                .createdUserId(createdUserId)
-                .updatedUserId(updatedUserId)
-                .isActive(isActive)
-                .build();
-    }
 }

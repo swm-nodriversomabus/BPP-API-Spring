@@ -1,6 +1,7 @@
-package com.example.api.preference.application.port;
+package com.example.api.preference.service;
 
 import com.example.api.preference.adapter.out.persistence.MatchingPreferenceEntity;
+import com.example.api.preference.adapter.out.persistence.PreferenceMapperInterface;
 import com.example.api.preference.application.port.in.MatchingPreferenceUsecase;
 import com.example.api.preference.application.port.out.CreateMatchingPreferencePort;
 import com.example.api.preference.dto.MatchingPreferenceDto;
@@ -12,11 +13,12 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 @Transactional
 public class MatchingPreferenceService implements MatchingPreferenceUsecase {
+    private PreferenceMapperInterface preferenceMapper;
     private CreateMatchingPreferencePort createMatchingPreferencePort;
     
     @Override
     public MatchingPreferenceDto createMatchingPreference(MatchingPreferenceDto matchingPreferenceDto) {
-        MatchingPreferenceEntity matchingPreferenceEntity = createMatchingPreferencePort.createMatchingPreference(matchingPreferenceDto.toEntity());
-        return matchingPreferenceEntity.toDto();
+        MatchingPreferenceEntity matchingPreferenceEntity = createMatchingPreferencePort.createMatchingPreference(preferenceMapper.toEntity(matchingPreferenceDto));
+        return preferenceMapper.toDto(matchingPreferenceEntity);
     }
 }

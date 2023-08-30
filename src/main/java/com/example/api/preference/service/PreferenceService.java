@@ -1,7 +1,7 @@
-package com.example.api.preference.application.port;
+package com.example.api.preference.service;
 
 import com.example.api.preference.adapter.out.persistence.PreferenceEntity;
-import com.example.api.preference.adapter.out.persistence.PreferenceMapper;
+import com.example.api.preference.adapter.out.persistence.PreferenceMapperInterface;
 import com.example.api.preference.application.port.in.ComparePreferenceUsecase;
 import com.example.api.preference.application.port.in.FindPreferenceUsecase;
 import com.example.api.preference.application.port.in.SavePreferenceUsecase;
@@ -21,7 +21,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
 public class PreferenceService implements SavePreferenceUsecase, FindPreferenceUsecase, ComparePreferenceUsecase {
-    private final PreferenceMapper preferenceMapper;
+    private final PreferenceMapperInterface preferenceMapper;
     private final SavePreferencePort savePreferencePort;
     private final FindPreferencePort findPreferencePort;
     private final ComparePreferencePort comparePreferencePort;
@@ -31,8 +31,8 @@ public class PreferenceService implements SavePreferenceUsecase, FindPreferenceU
     @Override
     @Transactional
     public SavePreferenceDto createPreference(SavePreferenceDto preferenceDto) {
-        Preference preference = savePreferencePort.createPreference(preferenceMapper.fromDtoToDomain(preferenceDto));
-        return preferenceMapper.fromDomainToSaveDto(preference);
+        Preference preference = savePreferencePort.createPreference(preferenceMapper.toDomain(preferenceDto));
+        return preferenceMapper.toDto(preference);
     }
     
     @Override
@@ -44,8 +44,8 @@ public class PreferenceService implements SavePreferenceUsecase, FindPreferenceU
     @Override
     @Transactional
     public SavePreferenceDto updatePreference(Long preferenceId, SavePreferenceDto preferenceDto) {
-        Preference preference = savePreferencePort.updatePreference(preferenceId, preferenceMapper.fromDtoToDomain(preferenceDto));
-        return preferenceMapper.fromDomainToSaveDto(preference);
+        Preference preference = savePreferencePort.updatePreference(preferenceId, preferenceMapper.toDomain(preferenceDto));
+        return preferenceMapper.toDto(preference);
     }
     
     // ComparePreference

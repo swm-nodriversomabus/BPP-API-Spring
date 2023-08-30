@@ -1,7 +1,7 @@
-package com.example.api.user.application.port;
+package com.example.api.user.service;
 
 import com.example.api.user.adapter.out.persistence.UserEntity;
-import com.example.api.user.adapter.out.persistence.UserMapper;
+import com.example.api.user.adapter.out.persistence.UserMapperInterface;
 import com.example.api.user.application.port.in.DeleteUserUsecase;
 import com.example.api.user.application.port.in.FindUserUsecase;
 import com.example.api.user.application.port.out.DeleteUserPort;
@@ -22,7 +22,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
 public class UserService implements SaveUserUsecase, FindUserUsecase, DeleteUserUsecase {
-    private final UserMapper userMapper;
+    private final UserMapperInterface userMapper;
     private final SaveUserPort saveUserPort;
     private final FindUserPort findUserPort;
     private final DeleteUserPort deleteUserPort;
@@ -30,8 +30,8 @@ public class UserService implements SaveUserUsecase, FindUserUsecase, DeleteUser
     @Override
     @Transactional
     public UserDto createUser(UserDto userDto) {
-        User user = saveUserPort.createUser(userMapper.fromDtoToDomain(userDto));
-        return userMapper.fromDomainToDto(user);
+        User user = saveUserPort.createUser(userMapper.toDomain(userDto));
+        return userMapper.toDto(user);
     }
     
     @Override
@@ -50,8 +50,8 @@ public class UserService implements SaveUserUsecase, FindUserUsecase, DeleteUser
     @Override
     @Transactional
     public UserDto updateUser(Long userId,UserDto userDto) {
-        User user = saveUserPort.updateUser(userId, userMapper.fromDtoToDomain(userDto));
-        return userMapper.fromDomainToDto(user);
+        User user = saveUserPort.updateUser(userId, userMapper.toDomain(userDto));
+        return userMapper.toDto(user);
     }
     
     @Override

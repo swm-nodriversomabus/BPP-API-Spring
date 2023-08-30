@@ -1,7 +1,7 @@
-package com.example.api.matching.application.port;
+package com.example.api.matching.service;
 
 import com.example.api.common.type.Pair;
-import com.example.api.matching.adapter.out.persistence.MatchingMapper;
+import com.example.api.matching.adapter.out.persistence.MatchingMapperInterface;
 import com.example.api.matching.application.port.in.DeleteMatchingUsecase;
 import com.example.api.matching.application.port.in.FindMatchingUsecase;
 import com.example.api.matching.application.port.in.LikeUsecase;
@@ -13,7 +13,7 @@ import com.example.api.matching.application.port.out.FindMatchingPort;
 import com.example.api.matching.application.port.out.LikePort;
 import com.example.api.matching.application.port.out.SaveMatchingPort;
 import com.example.api.matching.dto.MatchingDto;
-import com.example.api.preference.application.port.PreferenceService;
+import com.example.api.preference.service.PreferenceService;
 import com.example.api.user.application.port.in.RecommendedMatchingUsecase;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -31,7 +31,7 @@ import java.util.stream.Collectors;
 public class MatchingService implements
         SaveMatchingUsecase, FindMatchingUsecase, DeleteMatchingUsecase, LikeUsecase, RecommendedMatchingUsecase {
     private final PreferenceService preferenceService;
-    private final MatchingMapper matchingMapper;
+    private final MatchingMapperInterface matchingMapper;
     private final SaveMatchingPort saveMatchingPort;
     private final FindMatchingPort findMatchingPort;
     private final DeleteMatchingPort deleteMatchingPort;
@@ -40,8 +40,8 @@ public class MatchingService implements
     @Override
     @Transactional
     public MatchingDto createMatching(MatchingDto matchingDto) {
-        Matching matching = saveMatchingPort.createMatching(matchingMapper.fromDtoToDomain(matchingDto));
-        return matchingMapper.fromDomainToDto(matching);
+        Matching matching = saveMatchingPort.createMatching(matchingMapper.toDomain(matchingDto));
+        return matchingMapper.toDto(matching);
     }
 
     @Override
@@ -94,8 +94,8 @@ public class MatchingService implements
     @Override
     @Transactional
     public MatchingDto updateMatching(Long matchingId, MatchingDto matchingDto) {
-        Matching matching = saveMatchingPort.updateMatching(matchingId, matchingMapper.fromDtoToDomain(matchingDto));
-        return matchingMapper.fromDomainToDto(matching);
+        Matching matching = saveMatchingPort.updateMatching(matchingId, matchingMapper.toDomain(matchingDto));
+        return matchingMapper.toDto(matching);
     }
     
     @Override
