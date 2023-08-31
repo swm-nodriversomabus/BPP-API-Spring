@@ -5,6 +5,7 @@ import com.example.api.matching.application.port.out.FindMatchingPort;
 import com.example.api.matching.application.port.out.LikePort;
 import com.example.api.matching.application.port.out.SaveMatchingPort;
 import com.example.api.matching.domain.Matching;
+import com.example.api.matching.repository.LikeRepository;
 import com.example.api.matching.repository.MatchingRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -17,6 +18,7 @@ import java.util.Optional;
 public class MatchingPersistenceAdapter implements SaveMatchingPort, FindMatchingPort, DeleteMatchingPort, LikePort {
     private final MatchingMapperInterface matchingMapper;
     private final MatchingRepository matchingRepository;
+    private final LikeRepository likeRepository;
     
     @Override
     public Matching createMatching(Matching matching) {
@@ -41,7 +43,7 @@ public class MatchingPersistenceAdapter implements SaveMatchingPort, FindMatchin
     
     @Override
     public int getLikeCount(Long matchingId) {
-        return 0;
+        return likeRepository.countByMatchingId(matchingId);
     }
     
     @Override
@@ -51,8 +53,15 @@ public class MatchingPersistenceAdapter implements SaveMatchingPort, FindMatchin
     }
     
     @Override
-    public void toggleLike(Long userId, Long matchingId) {
-        
+    public void toggleLike(LikeEntity likeEntity) {
+        LikePK likePK = new LikePK(likeEntity.getUserId(), likeEntity.getMatchingId());
+        Optional<LikeEntity> likeData = likeRepository.findById(likePK);
+        if (likeData.isEmpty()) {
+            likeRepository.save(likeEntity);
+        }
+        else {
+            likeRepository.delete(likeEntity);
+        }
     }
     
     @Override

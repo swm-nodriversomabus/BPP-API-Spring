@@ -12,6 +12,7 @@ import com.example.api.matching.application.port.out.DeleteMatchingPort;
 import com.example.api.matching.application.port.out.FindMatchingPort;
 import com.example.api.matching.application.port.out.LikePort;
 import com.example.api.matching.application.port.out.SaveMatchingPort;
+import com.example.api.matching.dto.LikeDto;
 import com.example.api.matching.dto.MatchingDto;
 import com.example.api.preference.service.PreferenceService;
 import com.example.api.user.application.port.in.RecommendedMatchingUsecase;
@@ -101,8 +102,8 @@ public class MatchingService implements
     
     @Override
     @Transactional
-    public void toggleLike(Long userId, Long matchingId) {
-        likePort.toggleLike(userId, matchingId);
+    public void toggleLike(LikeDto likeDto) {
+        likePort.toggleLike(likeDto.toEntity());
     }
 
     @Override

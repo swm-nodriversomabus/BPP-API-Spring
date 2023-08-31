@@ -2,6 +2,7 @@ package com.example.api.matching.adapter.in.rest;
 
 import com.example.api.common.type.ApplicationStateEnum;
 import com.example.api.matching.application.port.in.*;
+import com.example.api.matching.dto.LikeDto;
 import com.example.api.matching.dto.MatchingApplicationDto;
 import com.example.api.matching.dto.MatchingDto;
 import com.example.api.user.dto.UserDto;
@@ -112,12 +113,13 @@ public class MatchingController {
     }
 
     /**
-     * 매칭의 좋아요 토글 (미구현)
+     * 매칭의 좋아요 토글
+     * @param likeDto (Data)
      */
     @Operation(summary = "Toggle like state", description = "사용자가 매칭에 좋아요를 누른 상태를 변경한다.")
     @PatchMapping("/matching/like")
-    public void toggleLike() {
-        
+    public void toggleLike(@RequestBody LikeDto likeDto) {
+        likeUsecase.toggleLike(likeDto);
     }
 
     /**
