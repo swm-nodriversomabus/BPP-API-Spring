@@ -1,7 +1,8 @@
 package com.example.api.matching.dto;
 
 import com.example.api.matching.adapter.out.persistence.LikeEntity;
-import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
 import java.time.LocalDateTime;
@@ -13,10 +14,12 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 public class LikeDto {
-    @NotEmpty
+    @NotNull
+    @Min(1)
     private Long userid;
     
-    @NotEmpty
+    @NotNull
+    @Min(1)
     private Long matchingId;
     
     private LocalDateTime createdAt;

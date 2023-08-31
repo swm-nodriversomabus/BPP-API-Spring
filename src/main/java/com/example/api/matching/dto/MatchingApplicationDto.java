@@ -2,7 +2,8 @@ package com.example.api.matching.dto;
 
 
 import com.example.api.common.type.ApplicationStateEnum;
-import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
 import java.time.LocalDateTime;
@@ -14,19 +15,21 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 public class MatchingApplicationDto {
-    @NotEmpty
+    @NotNull
+    @Min(1)
     private Long userId;
     
-    @NotEmpty
+    @NotNull
+    @Min(1)
     private Long matchingId;
     
-    @NotEmpty
+    @NotNull
     private ApplicationStateEnum state;
     
     private LocalDateTime createdAt;
     
     private LocalDateTime updatedAt;
     
-    @NotEmpty
+    @NotNull
     private Boolean isActive;
 }

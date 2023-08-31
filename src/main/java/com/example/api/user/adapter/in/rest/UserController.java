@@ -27,7 +27,7 @@ public class UserController {
     private final MatchingApplicationUsecase matchingApplicationUsecase;
 
     /**
-     * 
+     * 사용자 추가
      * @param userDto (데이터)
      * @return UserDto
      */

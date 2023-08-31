@@ -1,11 +1,9 @@
 package com.example.api.friend.adapter.out.persistence;
 
+import com.example.api.common.entity.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
-import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
-
-import java.time.LocalDateTime;
 
 @Entity
 @EntityListeners(AuditingEntityListener.class)
@@ -15,19 +13,12 @@ import java.time.LocalDateTime;
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor
+@IdClass(FriendPK.class)
 @Table(name="friend")
-public class FriendEntity {
+public class FriendEntity extends BaseEntity {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long friendId;
-    
-    @Column(nullable = false)
     private Long userId;
     
-    @Column(nullable = false)
-    private Long targetUserId;
-    
-    @CreatedDate
-    @Temporal(TemporalType.TIMESTAMP)
-    private LocalDateTime createdAt;
+    @Id
+    private Long friendId;
 }
