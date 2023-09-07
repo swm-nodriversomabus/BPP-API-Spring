@@ -1,18 +1,22 @@
 package com.example.api.user.adapter.out.persistence;
 
 import com.example.api.user.application.port.out.DeleteUserPort;
+import com.example.api.user.application.port.out.FindSocialPort;
 import com.example.api.user.application.port.out.FindUserPort;
 import com.example.api.user.application.port.out.SaveUserPort;
 import com.example.api.user.domain.User;
+import com.example.api.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Optional;
 
 @Component
 @RequiredArgsConstructor
-public class UserPersistenceAdapter implements SaveUserPort, FindUserPort, DeleteUserPort {
+@Repository
+public class UserPersistenceAdapter implements SaveUserPort, FindUserPort, DeleteUserPort, FindSocialPort {
     private final UserMapper userMapper;
     private final UserRepository userRepository;
     
@@ -47,5 +51,18 @@ public class UserPersistenceAdapter implements SaveUserPort, FindUserPort, Delet
     @Override
     public void deleteByUserId(Long userId) {
         userRepository.deleteByUserId(userId);
+    }
+
+    @Override
+    public Optional<UserEntity> findSocialUser(String id, String provider) {
+        return switch (provider){
+            case "google" -> userRepository.getByGoogleId(id);
+            case "naver" -> userRepository.getByNaverId(id);
+            case "kakao" -> userRepository.getByKakaoId(id);
+            case "apple" -> userRepository.getByAppleId(id);
+            case "insta" -> userRepository.getByInstaId(id);
+            default -> Optional.empty();
+        };
+//        return Optional.empty();
     }
 }

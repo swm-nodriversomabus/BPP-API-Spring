@@ -6,6 +6,7 @@ import com.example.api.user.type.UserGenderEnum;
 import com.example.api.user.type.UserRoleEnum;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.ColumnDefault;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 @Entity
@@ -67,6 +68,26 @@ public class UserEntity extends BaseEntity {
 
     @Column(nullable = false)
     private Boolean isActive;
+
+    @Column(length = 100, nullable = false)
+    @ColumnDefault("")
+    private String naverId;
+
+    @Column(length = 100, nullable = false)
+    @ColumnDefault("")
+    private String kakaoId;
+
+    @Column(length = 100, nullable = false)
+    @ColumnDefault("")
+    private String googleId;
+
+    @Column(length = 100, nullable = false)
+    @ColumnDefault("")
+    private String instaId;
+
+    @Column(length = 100, nullable = false)
+    @ColumnDefault("")
+    private String appleId;
     
     public UserDto toDto() {
         return UserDto.builder()

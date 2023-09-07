@@ -3,8 +3,10 @@ package com.example.api.user.dto;
 import com.example.api.user.adapter.out.persistence.UserEntity;
 import com.example.api.user.type.UserGenderEnum;
 import com.example.api.user.type.UserRoleEnum;
+import jakarta.persistence.Column;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.*;
+import org.hibernate.annotations.ColumnDefault;
 
 import java.time.LocalDateTime;
 
@@ -65,7 +67,19 @@ public class UserDto {
     
     @NotEmpty
     private Boolean isActive;
-    
+
+    private String naverId;
+
+    private String kakaoId;
+
+    private String googleId;
+
+    private String instaId;
+
+    private String appleId;
+
+
+
     public UserEntity toEntity() {
         return UserEntity.builder()
                 .username(username)
