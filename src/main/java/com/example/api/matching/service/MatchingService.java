@@ -86,6 +86,8 @@ public class MatchingService implements
         }
         return sortedMatchingList;
     }
+    // 특성별로 가중치 추가하기
+    // 이전의 여행 히스토리 참고하기
     
     @Override
     public int getLikeCount(Long matchingId) {

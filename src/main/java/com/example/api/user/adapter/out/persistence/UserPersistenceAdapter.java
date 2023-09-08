@@ -6,13 +6,15 @@ import com.example.api.user.application.port.out.SaveUserPort;
 import com.example.api.user.domain.User;
 import com.example.api.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Component;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Optional;
 
-@Component
+@Repository
 @RequiredArgsConstructor
+@ComponentScan
 public class UserPersistenceAdapter implements SaveUserPort, FindUserPort, DeleteUserPort {
     private final UserMapperInterface userMapper;
     private final UserRepository userRepository;

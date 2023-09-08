@@ -15,7 +15,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name="user")
+@Table(name="users")
 public class UserEntity extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

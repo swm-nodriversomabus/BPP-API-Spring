@@ -8,12 +8,12 @@ import com.example.api.matching.domain.Matching;
 import com.example.api.matching.repository.LikeRepository;
 import com.example.api.matching.repository.MatchingRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Optional;
 
-@Component
+@Repository
 @RequiredArgsConstructor
 public class MatchingPersistenceAdapter implements SaveMatchingPort, FindMatchingPort, DeleteMatchingPort, LikePort {
     private final MatchingMapperInterface matchingMapper;

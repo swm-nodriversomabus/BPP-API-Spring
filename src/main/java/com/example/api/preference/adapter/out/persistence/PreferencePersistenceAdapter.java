@@ -6,11 +6,11 @@ import com.example.api.preference.repository.MatchingPreferenceRepository;
 import com.example.api.preference.repository.PreferenceRepository;
 import com.example.api.preference.repository.UserPreferenceRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
 
-@Component
+@Repository
 @RequiredArgsConstructor
 public class PreferencePersistenceAdapter implements
         SavePreferencePort, FindPreferencePort, ComparePreferencePort, CreateUserPreferencePort, CreateMatchingPreferencePort {
