@@ -31,9 +31,14 @@ public class JwtUtilService {
         secretKey = Keys.hmacShaKeyFor(base64Encoded.getBytes());
     }
 
-    public GeneratedToken generatedToken(String id, String role) {
-        // token todtjd
+    public GeneratedToken generatedToken(String id, String role, String provider) {
+        // token
+        String refreshToken = genereateRefreshToken(id, role, provider);
+        String accessToken = generateAccessToken(id, role, provider);
 
+        // 저장
+        refreshTokenService.saveToken(id, accessToken, refreshToken);
+        return new GeneratedToken(accessToken, refreshToken);
     }
 
     public String genereateRefreshToken(String id, String role, String provider) {

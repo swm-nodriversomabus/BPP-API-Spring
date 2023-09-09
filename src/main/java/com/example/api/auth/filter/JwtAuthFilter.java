@@ -31,6 +31,17 @@ public class JwtAuthFilter extends OncePerRequestFilter {
     private final JwtUtilService jwtUtilService;
     private final UserPersistenceAdapter userPersistenceAdapter;
 
+    /**
+     * 필터를 거치지 않는 경우 추가
+     * @param request current HTTP request
+     * @return
+     * @throws ServletException
+     */
+    @Override
+    protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
+        return request.getRequestURI().contains("auth/");
+    }
+
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
 

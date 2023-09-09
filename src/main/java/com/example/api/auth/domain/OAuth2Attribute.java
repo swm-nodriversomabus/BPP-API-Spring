@@ -35,16 +35,12 @@ public class OAuth2Attribute {
 
     public static OAuth2Attribute of(String provider, String attributeKey,
                                      Map<String, Object> attributes) {
-        switch (provider) {
-            case "google":
-                return ofGoogle(provider, attributeKey, attributes);
-            case "kakao":
-                return ofKakao(provider,"email", attributes);
-            case "naver":
-                return ofNaver(provider, "id", attributes);
-            default:
-                throw new RuntimeException();
-        }
+        return switch (provider) {
+            case "google" -> ofGoogle(provider, attributeKey, attributes);
+            case "kakao" -> ofKakao(provider, "email", attributes);
+            case "naver" -> ofNaver(provider, "id", attributes);
+            default -> throw new RuntimeException();
+        };
     }
 
     /*

@@ -1,9 +1,9 @@
 package com.example.api.user.application.port.out;
 
-import com.example.api.user.adapter.out.persistence.SocialEntity;
+import com.example.api.user.adapter.out.persistence.UserEntity;
 
 import java.util.Optional;
 
 public interface FindSocialPort {
-    Optional<SocialEntity> findSocialUser(String id, String provider);
+    Optional<UserEntity> findSocialUser(String id, String provider);
 }
