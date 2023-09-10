@@ -27,6 +27,8 @@ public class JwtUtilService {
 
     @PostConstruct
     protected void init() {
+        log.info("asdasdasd");
+        log.info(jwtProperties.getSecret());
         String base64Encoded = Base64.getEncoder().encodeToString(jwtProperties.getSecret().getBytes());
         secretKey = Keys.hmacShaKeyFor(base64Encoded.getBytes());
     }
