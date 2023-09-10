@@ -70,23 +70,23 @@ public class UserEntity extends BaseEntity {
     private Boolean isActive;
 
     @Column(length = 100, nullable = false)
-    @ColumnDefault("")
+    @ColumnDefault("''")
     private String naverId;
 
     @Column(length = 100, nullable = false)
-    @ColumnDefault("")
+    @ColumnDefault("''")
     private String kakaoId;
 
     @Column(length = 100, nullable = false)
-    @ColumnDefault("")
+    @ColumnDefault("''")
     private String googleId;
 
     @Column(length = 100, nullable = false)
-    @ColumnDefault("")
+    @ColumnDefault("''")
     private String instaId;
 
     @Column(length = 100, nullable = false)
-    @ColumnDefault("")
+    @ColumnDefault("''")
     private String appleId;
     
     public UserDto toDto() {
