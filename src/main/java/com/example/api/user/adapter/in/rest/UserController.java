@@ -1,5 +1,7 @@
 package com.example.api.user.adapter.in.rest;
 
+import com.example.api.common.type.ApplicationStateEnum;
+import com.example.api.matching.application.port.in.MatchingApplicationUsecase;
 import com.example.api.matching.dto.MatchingDto;
 import com.example.api.user.application.port.in.DeleteUserUsecase;
 import com.example.api.user.application.port.in.FindUserUsecase;
@@ -22,10 +24,11 @@ public class UserController {
     private final FindUserUsecase findUserUsecase;
     private final DeleteUserUsecase deleteUserUsecase;
     private final RecommendedMatchingUsecase recommendedMatchingUsecase;
+    private final MatchingApplicationUsecase matchingApplicationUsecase;
 
     /**
-     * 
-     * @param userDto
+     * 사용자 추가
+     * @param userDto (데이터)
      * @return UserDto
      */
     @Operation(summary = "Create user", description = "새로운 사용자를 추가한다.")
@@ -46,7 +49,7 @@ public class UserController {
 
     /**
      * ID가 userId인 사용자 조회
-     * @param userId
+     * @param userId (ID)
      * @return Optional<UserDto>
      */
     @Operation(summary = "Get user", description = "ID가 userId인 사용자를 조회한다.")
@@ -56,20 +59,42 @@ public class UserController {
     }
 
     /**
-     * ID가 userId인 사용자의 추천 매칭 리스트 조회
-     * @param userId
+     * ID가 userId인 사용자의 추천 매칭 목록 조회
+     * @param userId (ID)
      * @return List<MatchingDto>
      */
-    @Operation(summary = "Get recommended matching list of a user", description = "사용자의 추천 매칭 리스트를 불러온다.")
+    @Operation(summary = "Get recommended matching list of a user", description = "사용자의 추천 매칭 목록을 조회한다..")
     @GetMapping("/user/{userId}/recommendedmatching")
     public List<MatchingDto> getRecommendedMatchingList(@PathVariable Long userId) {
         return recommendedMatchingUsecase.getRecommendedMatchingList(userId);
     }
 
     /**
+     * ID가 userId인 사용자가 대기 중인 매칭 목록 조회
+     * @param userId (ID)
+     * @return List<MatchingDto>
+     */
+    @Operation(summary = "Get pending matching list of user", description = "사용자가 대기 중인 매칭 목록을 조회한다.")
+    @GetMapping("/user/{userId}/pending")
+    public List<MatchingDto> getPendingMatchingList(@PathVariable Long userId) {
+        return matchingApplicationUsecase.getByUserIdIsAndStateEquals(userId, ApplicationStateEnum.Pending);
+    }
+
+    /**
+     * ID가 userId인 사용자가 참가한 매칭 목록 조회
+     * @param userId (ID)
+     * @return List<MatchingDto>
+     */
+    @Operation(summary = "Get approved matching list of user", description = "사용자가 참가한 매칭 목록을 조회한다.")
+    @GetMapping("/user/{userId}/approved")
+    public List<MatchingDto> getApprovedMatchingList(@PathVariable Long userId) {
+        return matchingApplicationUsecase.getByUserIdIsAndStateEquals(userId, ApplicationStateEnum.Approved);
+    }
+
+    /**
      * ID가 userId인 사용자 정보 수정
-     * @param userId
-     * @param userDto
+     * @param userId (ID)
+     * @param userDto (데이터)
      * @return UserDto
      */
     @Operation(summary = "Update user information", description = "사용자 정보를 변경한다.")
@@ -89,7 +114,7 @@ public class UserController {
 
     /**
      * ID가 userId인 사용자 삭제
-     * @param userId
+     * @param userId (ID)
      */
     @Operation(summary = "Delete user", description = "ID가 userId인 사용자를 삭제한다.")
     @DeleteMapping("/user/{userId}")

@@ -1,5 +1,6 @@
 package com.example.api.preference.dto;
 
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
@@ -16,18 +17,22 @@ public class ComparePreferenceDto {
     private Long preferenceId;
     
     @NotNull
+    @Min(0)
     private Integer alcoholAmount;
 
     @NotNull
+    @Min(0)
     private Integer mateAllowedAlcohol;
 
     @NotNull
     private Integer taste;
 
     @NotNull
+    @Min(0)
     private Integer allowedMoveTime;
 
     @NotNull
+    @Min(1)
     private Integer allowedPeople;
 
     @NotNull

@@ -1,9 +1,8 @@
 package com.example.api.user.dto;
 
-import com.example.api.user.adapter.out.persistence.UserEntity;
 import com.example.api.user.type.UserGenderEnum;
 import com.example.api.user.type.UserRoleEnum;
-import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.*;
 import lombok.*;
 
 import java.time.LocalDateTime;
@@ -17,31 +16,33 @@ import java.time.LocalDateTime;
 public class UserDto {
     private Long userId;
     
-    @NotEmpty
+    @NotBlank
     private String username;
     
-    @NotEmpty
+    @NotBlank
     private String nickname;
     
-    @NotEmpty
+    @NotNull
     private UserGenderEnum gender;
     
-    @NotEmpty
+    @NotNull
+    @Min(0)
     private Integer age;
     
-    @NotEmpty
+    @NotBlank
     private String phone;
     
-    @NotEmpty
+    @NotBlank
+    @Email
     private String email;
     
-    @NotEmpty
+    @NotBlank
     private String address;
     
-    @NotEmpty
+    @NotNull
     private UserRoleEnum role;
     
-    @NotEmpty
+    @NotNull
     private Boolean blacklist;
     
     @NotEmpty
@@ -50,39 +51,20 @@ public class UserDto {
     @NotEmpty
     private String stateMessage;
     
-    @NotEmpty
+    @NotNull
+    @Min(0)
     private Integer mannerScore;
     
-    @NotEmpty
+    @NotNull
     private Long createdUserId;
     
-    @NotEmpty
+    @NotNull
     private Long updatedUserId;
     
     private LocalDateTime createdAt;
     
     private LocalDateTime updatedAt;
     
-    @NotEmpty
+    @NotNull
     private Boolean isActive;
-    
-    public UserEntity toEntity() {
-        return UserEntity.builder()
-                .username(username)
-                .nickname(nickname)
-                .gender(gender)
-                .age(age)
-                .phone(phone)
-                .email(email)
-                .address(address)
-                .role(role)
-                .blacklist(blacklist)
-                .personality(personality)
-                .stateMessage(stateMessage)
-                .mannerScore(mannerScore)
-                .createdUserId(createdUserId)
-                .updatedUserId(updatedUserId)
-                .isActive(isActive)
-                .build();
-    }
 }

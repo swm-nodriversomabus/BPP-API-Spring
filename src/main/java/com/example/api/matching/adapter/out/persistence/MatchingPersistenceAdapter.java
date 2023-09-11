@@ -5,6 +5,8 @@ import com.example.api.matching.application.port.out.FindMatchingPort;
 import com.example.api.matching.application.port.out.LikePort;
 import com.example.api.matching.application.port.out.SaveMatchingPort;
 import com.example.api.matching.domain.Matching;
+import com.example.api.matching.repository.LikeRepository;
+import com.example.api.matching.repository.MatchingRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -14,13 +16,14 @@ import java.util.Optional;
 @Component
 @RequiredArgsConstructor
 public class MatchingPersistenceAdapter implements SaveMatchingPort, FindMatchingPort, DeleteMatchingPort, LikePort {
-    private final MatchingMapper matchingMapper;
+    private final MatchingMapperInterface matchingMapper;
     private final MatchingRepository matchingRepository;
+    private final LikeRepository likeRepository;
     
     @Override
     public Matching createMatching(Matching matching) {
-        MatchingEntity matchingData = matchingRepository.save(matchingMapper.fromDomainToEntity(matching));
-        return matchingMapper.fromEntityToDomain(matchingData);
+        MatchingEntity matchingData = matchingRepository.save(matchingMapper.toEntity(matching));
+        return matchingMapper.toDomain(matchingData);
     }
     
     @Override
@@ -40,19 +43,25 @@ public class MatchingPersistenceAdapter implements SaveMatchingPort, FindMatchin
     
     @Override
     public int getLikeCount(Long matchingId) {
-        return 0;
+        return likeRepository.countByMatchingId(matchingId);
     }
     
     @Override
-    public Matching updateMatching(Long matchingId, Matching matching) {
-        matching.setMatchingId(matchingId);
-        MatchingEntity matchingData = matchingRepository.save(matchingMapper.fromDomainToEntity(matching));
-        return matchingMapper.fromEntityToDomain(matchingData);
+    public Matching updateMatching(Matching matching) {
+        MatchingEntity matchingData = matchingRepository.save(matchingMapper.toEntity(matching));
+        return matchingMapper.toDomain(matchingData);
     }
     
     @Override
-    public void toggleLike(Long userId, Long matchingId) {
-        
+    public void toggleLike(LikeEntity likeEntity) {
+        LikePK likePK = new LikePK(likeEntity.getUserId(), likeEntity.getMatchingId());
+        Optional<LikeEntity> likeData = likeRepository.findById(likePK);
+        if (likeData.isEmpty()) {
+            likeRepository.save(likeEntity);
+        }
+        else {
+            likeRepository.delete(likeEntity);
+        }
     }
     
     @Override

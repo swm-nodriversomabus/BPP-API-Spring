@@ -1,6 +1,5 @@
 package com.example.api.preference.dto;
 
-import com.example.api.preference.adapter.out.persistence.UserPreferenceEntity;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
@@ -22,11 +21,4 @@ public class UserPreferenceDto {
     private LocalDateTime createdAt;
 
     private LocalDateTime updatedAt;
-    
-    public UserPreferenceEntity toEntity() {
-        return UserPreferenceEntity.builder()
-                .userId(userId)
-                .preferenceId(preferenceId)
-                .build();
-    }
 }

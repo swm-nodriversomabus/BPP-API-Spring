@@ -4,6 +4,7 @@ import com.example.api.user.application.port.out.DeleteUserPort;
 import com.example.api.user.application.port.out.FindUserPort;
 import com.example.api.user.application.port.out.SaveUserPort;
 import com.example.api.user.domain.User;
+import com.example.api.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -13,13 +14,13 @@ import java.util.Optional;
 @Component
 @RequiredArgsConstructor
 public class UserPersistenceAdapter implements SaveUserPort, FindUserPort, DeleteUserPort {
-    private final UserMapper userMapper;
+    private final UserMapperInterface userMapper;
     private final UserRepository userRepository;
     
     @Override
     public User createUser(User user) {
-        UserEntity userData = userRepository.save(userMapper.fromDomainToEntity(user));
-        return userMapper.fromEntityToDomain(userData);
+        UserEntity userData = userRepository.save(userMapper.toEntity(user));
+        return userMapper.toDomain(userData);
     }
     
     @Override
@@ -35,8 +36,8 @@ public class UserPersistenceAdapter implements SaveUserPort, FindUserPort, Delet
     @Override
     public User updateUser(Long userId, User user) {
         user.setUserId(userId);
-        UserEntity userData = userRepository.save(userMapper.fromDomainToEntity(user));
-        return userMapper.fromEntityToDomain(userData);
+        UserEntity userData = userRepository.save(userMapper.toEntity(user));
+        return userMapper.toDomain(userData);
     }
     
     @Override

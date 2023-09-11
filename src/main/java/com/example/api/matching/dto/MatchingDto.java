@@ -2,7 +2,9 @@ package com.example.api.matching.dto;
 
 import com.example.api.matching.adapter.out.persistence.MatchingEntity;
 import com.example.api.matching.type.MatchingTypeEnum;
-import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
 import java.time.LocalDateTime;
@@ -16,44 +18,49 @@ import java.time.LocalDateTime;
 public class MatchingDto {
     private Long matchingId;
     
-    @NotEmpty
+    @NotNull
+    @Min(1)
     private Long writerId;
     
-    @NotEmpty
+    @NotNull
     private MatchingTypeEnum type;
     
-    @NotEmpty
+    @NotBlank
     private String title;
     
-    @NotEmpty
+    @NotBlank
     private String place;
     
-    @NotEmpty
+    @NotBlank
     private String content;
     
-    @NotEmpty
+    @NotNull
     private LocalDateTime startDate;
     
-    @NotEmpty
+    @NotNull
     private LocalDateTime endDate;
     
-    @NotEmpty
+    @NotNull
+    @Min(1)
     private Integer maxMember;
     
-    @NotEmpty
+    @NotNull
+    @Min(0)
     private Integer minusAge;
     
-    @NotEmpty
+    @NotNull
+    @Min(0)
     private Integer plusAge;
     
-    @NotEmpty
+    @NotNull
+    @Min(0)
     private Integer readCount;
 
     private LocalDateTime createdAt;
 
     private LocalDateTime updatedAt;
     
-    @NotEmpty
+    @NotNull
     private Boolean isActive;
     
     public MatchingEntity toEntity() {

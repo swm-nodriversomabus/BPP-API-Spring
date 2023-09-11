@@ -1,5 +1,7 @@
-package com.example.api.preference.adapter.out.persistence;
+package com.example.api.preference.repository;
 
+import com.example.api.preference.adapter.out.persistence.UserPreferenceEntity;
+import com.example.api.preference.adapter.out.persistence.UserPreferencePK;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;

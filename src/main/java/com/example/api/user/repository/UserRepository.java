@@ -1,5 +1,6 @@
-package com.example.api.user.adapter.out.persistence;
+package com.example.api.user.repository;
 
+import com.example.api.user.adapter.out.persistence.UserEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
