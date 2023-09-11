@@ -36,8 +36,7 @@ public class UserController {
     @Operation(summary = "Create user", description = "새로운 사용자를 추가한다.")
     @PostMapping("/user")
     public UserDto createUser(@RequestBody UserDto userDto) {
-        UserDto user = saveUserUsecase.createUser(userDto);
-        return user;
+        return saveUserUsecase.createUser(userDto);
     }
 
     /**
