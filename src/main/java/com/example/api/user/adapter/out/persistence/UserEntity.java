@@ -1,6 +1,7 @@
 package com.example.api.user.adapter.out.persistence;
 
 import com.example.api.common.entity.BaseEntity;
+import com.example.api.social.adapter.out.persistence.SocialEntity;
 import com.example.api.user.dto.UserDto;
 import com.example.api.user.type.UserGenderEnum;
 import com.example.api.user.type.UserRoleEnum;
@@ -19,8 +20,10 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 @Table(name="user")
 public class UserEntity extends BaseEntity {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long userId;
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(nullable = false, name="user_id", foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
+    @ToString.Exclude
+    private SocialEntity userId;
 
     @Column(nullable = false, length = 30)
     private String username;
@@ -69,46 +72,31 @@ public class UserEntity extends BaseEntity {
     @Column(nullable = false)
     private Boolean isActive;
 
-    @Column(length = 100, nullable = false)
-    @ColumnDefault("''")
-    private String naverId;
-
-    @Column(length = 100, nullable = false)
-    @ColumnDefault("''")
-    private String kakaoId;
-
-    @Column(length = 100, nullable = false)
-    @ColumnDefault("''")
-    private String googleId;
-
-    @Column(length = 100, nullable = false)
-    @ColumnDefault("''")
-    private String instaId;
-
-    @Column(length = 100, nullable = false)
-    @ColumnDefault("''")
-    private String appleId;
-    
-    public UserDto toDto() {
-        return UserDto.builder()
-                .userId(userId)
-                .username(username)
-                .nickname(nickname)
-                .gender(gender)
-                .age(age)
-                .phone(phone)
-                .email(email)
-                .address(address)
-                .role(role)
-                .blacklist(blacklist)
-                .personality(personality)
-                .stateMessage(stateMessage)
-                .mannerScore(mannerScore)
-                .createdUserId(createdUserId)
-                .updatedUserId(updatedUserId)
-                .createdAt(getCreatedAt())
-                .updatedAt(getUpdatedAt())
-                .isActive(isActive)
-                .build();
+    public void setUserId(SocialEntity userId) {
+        this.userId = userId;
     }
+
+
+//    public UserDto toDto() {
+//        return UserDto.builder()
+//                .userId(userId)
+//                .username(username)
+//                .nickname(nickname)
+//                .gender(gender)
+//                .age(age)
+//                .phone(phone)
+//                .email(email)
+//                .address(address)
+//                .role(role)
+//                .blacklist(blacklist)
+//                .personality(personality)
+//                .stateMessage(stateMessage)
+//                .mannerScore(mannerScore)
+//                .createdUserId(createdUserId)
+//                .updatedUserId(updatedUserId)
+//                .createdAt(getCreatedAt())
+//                .updatedAt(getUpdatedAt())
+//                .isActive(isActive)
+//                .build();
+//    }
 }

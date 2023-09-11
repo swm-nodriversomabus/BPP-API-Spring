@@ -17,13 +17,13 @@ import java.util.Optional;
 @RequiredArgsConstructor
 @Repository
 public class UserPersistenceAdapter implements SaveUserPort, FindUserPort, DeleteUserPort, FindSocialPort {
-    private final UserMapper userMapper;
+    private final UserMapperInterface userMapper;
     private final UserRepository userRepository;
     
     @Override
     public User createUser(User user) {
-        UserEntity userData = userRepository.save(userMapper.fromDomainToEntity(user));
-        return userMapper.fromEntityToDomain(userData);
+        UserEntity userData = userRepository.save(userMapper.toEntity(user));
+        return userMapper.toDomain(userData);
     }
     
     @Override
@@ -39,8 +39,8 @@ public class UserPersistenceAdapter implements SaveUserPort, FindUserPort, Delet
     @Override
     public User updateUser(Long userId, User user) {
         user.setUserId(userId);
-        UserEntity userData = userRepository.save(userMapper.fromDomainToEntity(user));
-        return userMapper.fromEntityToDomain(userData);
+        UserEntity userData = userRepository.save(userMapper.toEntity(user));
+        return userMapper.toDomain(userData);
     }
     
     @Override
