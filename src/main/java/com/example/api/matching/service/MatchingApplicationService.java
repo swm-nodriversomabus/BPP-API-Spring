@@ -23,8 +23,8 @@ import java.util.List;
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
 public class MatchingApplicationService implements MatchingApplicationUsecase {
-    private UserMapperInterface userMapper;
-    private MatchingMapperInterface matchingMapper;
+    private final UserMapperInterface userMapper;
+    private final MatchingMapperInterface matchingMapper;
     private final FindUserPort findUserPort;
     private final FindMatchingPort findMatchingPort;
     private final MatchingApplicationPort matchingApplicationPort;

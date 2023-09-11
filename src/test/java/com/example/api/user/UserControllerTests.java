@@ -101,15 +101,27 @@ public class UserControllerTests {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(user1)))
                 .andExpect(status().isOk());
-
         mockMvc.perform(MockMvcRequestBuilders.post("/user")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(user2)))
                 .andExpect(status().isOk());
-
         mockMvc.perform(MockMvcRequestBuilders.post("/user")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(user3)))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    void getAllTest() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.get("/user")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    void getUserByIdTest() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.get("/user/{userId}",3)
+                        .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
     }
     
