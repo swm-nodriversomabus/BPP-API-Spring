@@ -74,18 +74,15 @@ public class MatchingService implements
             Integer matchingScore = preferenceService.getMatchingScore(userId, matchingId);
             matchingScoreList.add(new Pair<>(matchingId, matchingScore));
         }
-        matchingScoreList.sort(new Comparator<>() {
-            @Override
-            public int compare(Pair<Long, Integer> o1, Pair<Long, Integer> o2) {
-                return o1.getSecond().compareTo(o2.getSecond());
-            }
-        });
+        matchingScoreList.sort(Comparator.comparing(Pair::getSecond));
         List<MatchingDto> sortedMatchingList = new ArrayList<>();
         for (Pair<Long, Integer> matchingData: matchingScoreList) {
             sortedMatchingList.add(this.getMatchingById(matchingData.getFirst()).orElseThrow());
         }
         return sortedMatchingList;
     }
+    // 특성별로 가중치 추가하기
+    // 이전의 여행 히스토리 참고하기
     
     @Override
     public int getLikeCount(Long matchingId) {

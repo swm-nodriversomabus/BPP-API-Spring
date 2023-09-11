@@ -5,12 +5,14 @@ import com.example.api.matching.application.port.out.MatchingApplicationPort;
 import com.example.api.matching.domain.MatchingApplication;
 import com.example.api.matching.repository.MatchingApplicationRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Component;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
-@Component
+@Repository
 @RequiredArgsConstructor
+@ComponentScan
 public class MatchingApplicationPersistenceAdapter implements MatchingApplicationPort {
     private final MatchingMapperInterface matchingMapper;
     private final MatchingApplicationRepository matchingApplicationRepository;

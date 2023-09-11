@@ -19,7 +19,7 @@ public class MatchingDto {
     private Long matchingId;
     
     @NotNull
-    @Min(1)
+    @Min(1L)
     private Long writerId;
     
     @NotNull
