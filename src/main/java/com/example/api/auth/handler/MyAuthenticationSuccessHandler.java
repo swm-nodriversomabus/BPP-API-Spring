@@ -2,6 +2,8 @@ package com.example.api.auth.handler;
 
 import com.example.api.auth.service.JwtUtilService;
 import com.example.api.auth.utils.GeneratedToken;
+import com.example.api.social.dto.AddSocialDto;
+import com.example.api.social.service.SocialService;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -22,6 +24,7 @@ import java.nio.charset.StandardCharsets;
 @Slf4j
 public class MyAuthenticationSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
     private final JwtUtilService jwtUtilService;
+    private final SocialService socialService;
 
     @Value("${main.url}")
     String url;
@@ -53,6 +56,15 @@ public class MyAuthenticationSuccessHandler extends SimpleUrlAuthenticationSucce
             getRedirectStrategy().sendRedirect(request, response, targetUrl);
         }else{
             log.info("회원가입 안되어 있네");
+            log.info(provider);
+            log.info(id);
+            log.info(role);
+            AddSocialDto addSocialDto = AddSocialDto.builder()
+                    .id(id)
+                    .provider(provider)
+                    .build();
+            socialService.saveSocialInfo(addSocialDto);
+
         }
 
     }
