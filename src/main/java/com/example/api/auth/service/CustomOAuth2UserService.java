@@ -1,6 +1,7 @@
 package com.example.api.auth.service;
 
 import com.example.api.auth.domain.OAuth2Attribute;
+import com.example.api.social.service.SocialService;
 import com.example.api.user.adapter.out.persistence.UserEntity;
 import com.example.api.user.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -22,7 +23,7 @@ import java.util.Optional;
 @Slf4j
 @RequiredArgsConstructor
 public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequest, OAuth2User> {
-    private final UserService userService;
+    private final SocialService socialService;
     @Override
     public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
         // 기본 OAUth2UserService 생성
@@ -45,7 +46,7 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
         String email = (String) userAttribute.get("email");
         // 이메일로 가입되어 있는지를 체크한다
         // TODO 타입은 수정 예정
-        Optional<UserEntity> findUser = userService.findUserSigned(email, registrationId);
+        Optional<UserEntity> findUser = socialService.findUserSigned(email, registrationId);
 
         if (findUser.isEmpty()){
             userAttribute.put("exist", false);

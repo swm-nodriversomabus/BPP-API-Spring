@@ -11,17 +11,18 @@ import java.util.List;
         unmappedTargetPolicy = ReportingPolicy.IGNORE) // 스프링과 사용할 때는 필수적으로 붙여주자, 일치하지 않는 필드는 무ㅡ
 public interface ChatMapper {
     @Mapping(source = "roomId", target = "roomId.chatroomId")
-    @Mapping(source = "senderId",target = "senderId.userId.userId")
+    @Mapping(source = "senderId",target = "senderId.userId")
     ChatEntity toEntity(AddChatDto addChatDto);
 
     @Mapping(source = "createdAt", target = "createdAt")
     List<Chat> toDomainList(List<ChatEntity> chatEntityList);
 
     @Mapping(source = "roomId.chatroomId", target = "roomId")
-    @Mapping(source = "senderId.userId.userId", target = "senderId")
+    @Mapping(source = "senderId.userId", target = "senderId")
     AddChatDto toDto(ChatEntity chatEntity);
 
     @Mapping(source = "roomId.chatroomId", target = "roomId")
+//    @Mapping(source = "senderId.userId.userId", target = "senderId.userId")
     Chat toDomain(ChatEntity chatEntity);
 
     @Mapping(source = "senderId",target = "senderId.userId")

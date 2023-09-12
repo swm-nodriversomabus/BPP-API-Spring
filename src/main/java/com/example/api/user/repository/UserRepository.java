@@ -15,26 +15,27 @@ public interface UserRepository extends JpaRepository<UserEntity, Long> {
     List<UserEntity> getAllBy();
 
 
-    Optional<UserEntity> getUserEntityByUserId_UserId(Long userId);
+    Optional<UserEntity> getUserEntityByUserId(Long userId);
 //    Optional<UserEntity> getUserByUserId(Long userId);
     void deleteAllBy();
 
-    void deleteByUserId_UserId(Long userId);
+    void deleteByUserId(Long userId);
 
 
     @EntityGraph(attributePaths = {"userId"})
-    Optional<UserEntity> getUserEntityByUserId_KakaoId(String kakaoId);
+    Optional<UserEntity> getUserEntityBySocialId_KakaoId(String kakaoId);
 
     @EntityGraph(attributePaths = {"userId"})
-    Optional<UserEntity> getUserEntityByUserId_AppleId(String appleId);
-    @EntityGraph(attributePaths = {"userId"})
-    Optional<UserEntity> getUserEntityByUserId_NaverId(String naverId);
+    Optional<UserEntity> getUserEntityBySocialId_AppleId(String appleId);
 
     @EntityGraph(attributePaths = {"userId"})
-    Optional<UserEntity> getUserEntityByUserId_InstaId(String instaId);
+    Optional<UserEntity> getUserEntityBySocialId_NaverId(String naverId);
 
     @EntityGraph(attributePaths = {"userId"})
-    Optional<UserEntity> getUserEntityByUserId_GoogleId(String googleId);
+    Optional<UserEntity> getUserEntityBySocialId_InstaId(String instaId);
+
+    @EntityGraph(attributePaths = {"userId"})
+    Optional<UserEntity> getUserEntityBySocialId_GoogleId(String googleId);
 
 
 }

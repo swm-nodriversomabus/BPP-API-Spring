@@ -1,7 +1,7 @@
 package com.example.api.user.adapter.out.persistence;
 
 import com.example.api.user.application.port.out.DeleteUserPort;
-import com.example.api.user.application.port.out.FindSocialPort;
+import com.example.api.social.application.port.out.FindSocialPort;
 import com.example.api.user.application.port.out.FindUserPort;
 import com.example.api.user.application.port.out.SaveUserPort;
 import com.example.api.user.domain.User;
@@ -33,7 +33,7 @@ public class UserPersistenceAdapter implements SaveUserPort, FindUserPort, Delet
     
     @Override
     public Optional<UserEntity> getUserByUserId(Long userId) {
-        return userRepository.getUserByUserId(userId);
+        return userRepository.getUserEntityByUserId(userId);
     }
     
     @Override
@@ -56,11 +56,11 @@ public class UserPersistenceAdapter implements SaveUserPort, FindUserPort, Delet
     @Override
     public Optional<UserEntity> findSocialUser(String id, String provider) {
         return switch (provider){
-            case "google" -> userRepository.getByGoogleId(id);
-            case "naver" -> userRepository.getByNaverId(id);
-            case "kakao" -> userRepository.getByKakaoId(id);
-            case "apple" -> userRepository.getByAppleId(id);
-            case "insta" -> userRepository.getByInstaId(id);
+            case "google" -> userRepository.getUserEntityBySocialId_GoogleId(id);
+            case "naver" -> userRepository.getUserEntityBySocialId_NaverId(id);
+            case "kakao" -> userRepository.getUserEntityBySocialId_KakaoId(id);
+            case "apple" -> userRepository.getUserEntityBySocialId_AppleId(id);
+            case "insta" -> userRepository.getUserEntityBySocialId_InstaId(id);
             default -> Optional.empty();
         };
 //        return Optional.empty();

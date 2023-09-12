@@ -1,4 +1,4 @@
-package com.example.api.user.application.port.out;
+package com.example.api.social.application.port.out;
 
 import com.example.api.user.adapter.out.persistence.UserEntity;
 

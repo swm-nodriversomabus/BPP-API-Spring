@@ -14,10 +14,14 @@ import org.mapstruct.ReportingPolicy;
 public interface UserMapperInterface {
 
     User toDomain(UserDto userDto);
-    @Mapping(source = "userId",target = "userId.userId")
+//    @Mapping(source = "userId",target = "userId.userId")
     UserEntity toEntity(User user);
+
+//    @Mapping(source = "userId.userId", target = "userId")
     User toDomain(UserEntity userEntity);
+//    @Mapping(source = "userId.userId", target = "userId")
     ChatUser toChatDomain(UserEntity userEntity);
     UserDto toDto(User user);
+//    @Mapping(source = "userId.userId", target = "userId")
     UserDto toDto(UserEntity userEntity);
 }

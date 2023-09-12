@@ -17,13 +17,17 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name="user")
+@Table(name="users")
 public class UserEntity extends BaseEntity {
+
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long userId;
+
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(nullable = false, name="user_id", foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
+    @JoinColumn(nullable = false, name="social_id", foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
     @ToString.Exclude
-    private SocialEntity userId;
+    private SocialEntity socialId;
 
     @Column(nullable = false, length = 30)
     private String username;
@@ -72,9 +76,9 @@ public class UserEntity extends BaseEntity {
     @Column(nullable = false)
     private Boolean isActive;
 
-    public void setUserId(SocialEntity userId) {
-        this.userId = userId;
-    }
+//    public void setUserId(SocialEntity userId) {
+//        this.userId = userId;
+//    }
 
 
 //    public UserDto toDto() {

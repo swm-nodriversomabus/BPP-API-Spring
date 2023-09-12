@@ -23,12 +23,12 @@ import java.nio.charset.StandardCharsets;
 public class MyAuthenticationSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
     private final JwtUtilService jwtUtilService;
 
-    @Value("{main.url}")
+    @Value("${main.url}")
     String url;
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
         OAuth2User oAuth2User = (OAuth2User) authentication.getPrincipal();
-
+        log.info("succccceeeeeesssss");
         String id = oAuth2User.getAttribute("email");
         String provider = oAuth2User.getAttribute("provider");
 
@@ -51,8 +51,8 @@ public class MyAuthenticationSuccessHandler extends SimpleUrlAuthenticationSucce
             log.info("success redirecting");
 
             getRedirectStrategy().sendRedirect(request, response, targetUrl);
-
-
+        }else{
+            log.info("회원가입 안되어 있네");
         }
 
     }

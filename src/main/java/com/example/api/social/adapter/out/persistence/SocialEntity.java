@@ -1,21 +1,26 @@
 package com.example.api.social.adapter.out.persistence;
 
 
+import com.example.api.user.adapter.out.persistence.UserEntity;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+
+import java.util.List;
 
 @Entity
+@EntityListeners(AuditingEntityListener.class)
+@Getter
+@Builder
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name="social")
+@Table(name = "social")
 public class SocialEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long userId;
+    private Long socialId;
 
     @Column(length = 100, nullable = false)
     @ColumnDefault("''")
@@ -38,5 +43,7 @@ public class SocialEntity {
     private String appleId;
 
 
-
+//    @OneToMany(mappedBy = "social", fetch = FetchType.LAZY)
+//    @ToString.Exclude
+//    private List<UserEntity> users;
 }

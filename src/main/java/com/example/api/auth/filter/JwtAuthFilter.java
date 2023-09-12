@@ -65,11 +65,11 @@ public class JwtAuthFilter extends OncePerRequestFilter {
             // Security Context에 등록할 user 객체 생성
             SecurityUserDto securityUserDto = SecurityUserDto.builder()
                     .userId(user.getUserId())
-                    .naverId(user.getNaverId())
-                    .appleId(user.getAppleId())
-                    .kakaoId(user.getKakaoId())
-                    .googleId(user.getGoogleId())
-                    .instaId(user.getInstaId())
+                    .naverId(user.getSocialId().getNaverId())
+                    .appleId(user.getSocialId().getAppleId())
+                    .kakaoId(user.getSocialId().getKakaoId())
+                    .googleId(user.getSocialId().getGoogleId())
+                    .instaId(user.getSocialId().getInstaId())
                     .role(user.getRole().getRole())
                     .nickname(user.getNickname())
                     .build();
