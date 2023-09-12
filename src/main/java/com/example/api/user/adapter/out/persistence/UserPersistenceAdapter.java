@@ -63,6 +63,5 @@ public class UserPersistenceAdapter implements SaveUserPort, FindUserPort, Delet
             case "insta" -> userRepository.getUserEntityBySocialId_InstaId(id);
             default -> Optional.empty();
         };
-//        return Optional.empty();
     }
 }
