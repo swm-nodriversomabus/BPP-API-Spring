@@ -3,6 +3,7 @@ package com.example.api.user.repository;
 //import com.example.api.user.adapter.out.persistence.SocialEntity;
 import com.example.api.user.adapter.out.persistence.UserEntity;
 //import org.springframework.data.jpa.repository.EntityGraph;
+import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -12,19 +13,28 @@ import java.util.Optional;
 @Repository
 public interface UserRepository extends JpaRepository<UserEntity, Long> {
     List<UserEntity> getAllBy();
-    Optional<UserEntity> getUserByUserId(Long userId);
+
+
+    Optional<UserEntity> getUserEntityByUserId_UserId(Long userId);
+//    Optional<UserEntity> getUserByUserId(Long userId);
     void deleteAllBy();
-    void deleteByUserId(Long userId);
 
-    Optional<UserEntity> getByKakaoId(String kakaoId);
+    void deleteByUserId_UserId(Long userId);
 
-    Optional<UserEntity> getByAppleId(String appleId);
 
-    Optional<UserEntity> getByNaverId(String naverId);
+    @EntityGraph(attributePaths = {"userId"})
+    Optional<UserEntity> getUserEntityByUserId_KakaoId(String kakaoId);
 
-    Optional<UserEntity> getByInstaId(String instaId);
+    @EntityGraph(attributePaths = {"userId"})
+    Optional<UserEntity> getUserEntityByUserId_AppleId(String appleId);
+    @EntityGraph(attributePaths = {"userId"})
+    Optional<UserEntity> getUserEntityByUserId_NaverId(String naverId);
 
-    Optional<UserEntity> getByGoogleId(String googleId);
+    @EntityGraph(attributePaths = {"userId"})
+    Optional<UserEntity> getUserEntityByUserId_InstaId(String instaId);
+
+    @EntityGraph(attributePaths = {"userId"})
+    Optional<UserEntity> getUserEntityByUserId_GoogleId(String googleId);
 
 
 }
