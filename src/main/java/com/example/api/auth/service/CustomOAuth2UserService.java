@@ -46,6 +46,7 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
         String email = (String) userAttribute.get("email");
         // 이메일로 가입되어 있는지를 체크한다
         // TODO 타입은 수정 예정
+
         Optional<UserEntity> findUser = socialService.findUserSigned(email, registrationId);
 
         if (findUser.isEmpty()){
@@ -55,8 +56,8 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
                     userAttribute, "email"
             );
         }
-        userAttribute.put("exist", true);
 
+        userAttribute.put("exist", true);
         return new DefaultOAuth2User(
                 Collections.singleton(new SimpleGrantedAuthority("ROLE_".concat(findUser.get().getRole().getRole()))),
                 userAttribute, "email"

@@ -1,5 +1,6 @@
 package com.example.api.social.service;
 
+import com.example.api.social.adapter.out.persistence.SocialEntity;
 import com.example.api.social.application.port.out.SaveSocialPort;
 import com.example.api.social.dto.AddSocialDto;
 import com.example.api.user.adapter.out.persistence.UserEntity;
@@ -18,7 +19,8 @@ import java.util.Optional;
 public class SocialService {
     private final FindSocialPort findSocialPort;
     private final SaveSocialPort saveSocialPort;
-    public Optional<UserEntity> findUserSigned(String id, String provider){
+
+    public Optional<SocialEntity> findSocialInfo(String id, String provider) {
         return findSocialPort.findSocialUser(id, provider);
     }
 

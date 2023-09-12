@@ -75,4 +75,9 @@ public class UserService implements SaveUserUsecase, FindUserUsecase, DeleteUser
     public void deleteUser(Long userId) {
         deleteUserPort.deleteByUserId(userId);
     }
+
+    @Transactional
+    public Optional<UserEntity> findUserSigned(Long id){
+        return findUserPort.findUserSigned(id);
+    }
 }

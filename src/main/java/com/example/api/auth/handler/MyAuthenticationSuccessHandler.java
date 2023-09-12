@@ -31,12 +31,12 @@ public class MyAuthenticationSuccessHandler extends SimpleUrlAuthenticationSucce
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
         OAuth2User oAuth2User = (OAuth2User) authentication.getPrincipal();
-        log.info("succccceeeeeesssss");
+        log.info("oauth login success handler");
         String id = oAuth2User.getAttribute("email");
         String provider = oAuth2User.getAttribute("provider");
 
         // 로그인한 회원 존재 여부
-        boolean isExist = oAuth2User.getAttribute("exist");
+        boolean isExist = Boolean.TRUE.equals(oAuth2User.getAttribute("exist"));
 
         String role = oAuth2User.getAuthorities().stream().
                 findFirst()
