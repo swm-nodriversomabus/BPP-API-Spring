@@ -5,17 +5,13 @@ import com.example.api.user.type.UserRoleEnum;
 import jakarta.validation.constraints.*;
 import lombok.*;
 
-import java.time.LocalDateTime;
-
 @Getter
 @Setter
 @Builder
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserDto {
-    private Long userId;
-    
+public class SaveUserDto {
     @NotBlank
     private String username;
     
@@ -60,10 +56,6 @@ public class UserDto {
     
     @NotNull
     private Long updatedUserId;
-    
-    private LocalDateTime createdAt;
-    
-    private LocalDateTime updatedAt;
     
     @NotNull
     private Boolean isActive;

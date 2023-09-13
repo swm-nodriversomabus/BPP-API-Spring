@@ -4,7 +4,8 @@ import com.example.api.friend.application.port.in.AddFriendUsecase;
 import com.example.api.friend.application.port.in.DeleteFriendUsecase;
 import com.example.api.friend.application.port.in.FindFriendUsecase;
 import com.example.api.friend.dto.FriendDto;
-import com.example.api.user.dto.UserDto;
+import com.example.api.user.dto.FindUserDto;
+import com.example.api.user.dto.SaveUserDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -38,7 +39,7 @@ public class FriendController {
      */
     @Operation(summary = "Get friend list", description = "사용자의 친구 목록을 조회한다.")
     @GetMapping("/user/{userId}/friend")
-    public List<UserDto> getFriendList(@PathVariable Long userId) {
+    public List<FindUserDto> getFriendList(@PathVariable Long userId) {
         return findFriendUsecase.getFriendList(userId);
     }
 

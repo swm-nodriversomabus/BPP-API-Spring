@@ -1,10 +1,7 @@
 package com.example.api.preference.adapter.out.persistence;
 
 import com.example.api.preference.domain.Preference;
-import com.example.api.preference.dto.ComparePreferenceDto;
-import com.example.api.preference.dto.MatchingPreferenceDto;
-import com.example.api.preference.dto.SavePreferenceDto;
-import com.example.api.preference.dto.UserPreferenceDto;
+import com.example.api.preference.dto.*;
 import org.mapstruct.InjectionStrategy;
 import org.mapstruct.Mapper;
 import org.mapstruct.ReportingPolicy;
@@ -18,8 +15,8 @@ public interface PreferenceMapperInterface {
     UserPreferenceEntity toEntity(UserPreferenceDto userPreferenceDto);
     MatchingPreferenceEntity toEntity(MatchingPreferenceDto matchingPreferenceDto);
     Preference toDomain(PreferenceEntity preferenceEntity);
-    SavePreferenceDto toDto(Preference preference);
-    //ComparePreferenceDto toCompareDto(PreferenceEntity preferenceEntity);
+    FindPreferenceDto toDto(Preference preference);
+    FindPreferenceDto toDto(PreferenceEntity preferenceEntity);
     UserPreferenceDto toDto(UserPreferenceEntity userPreferenceEntity);
     MatchingPreferenceDto toDto(MatchingPreferenceEntity matchingPreferenceEntity);
 }

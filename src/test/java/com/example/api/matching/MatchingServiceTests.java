@@ -2,8 +2,9 @@ package com.example.api.matching;
 
 import com.example.api.matching.adapter.out.persistence.MatchingMapperInterface;
 import com.example.api.matching.application.port.out.*;
+import com.example.api.matching.dto.FindMatchingDto;
 import com.example.api.matching.dto.LikeDto;
-import com.example.api.matching.dto.MatchingDto;
+import com.example.api.matching.dto.SaveMatchingDto;
 import com.example.api.matching.service.MatchingService;
 import com.example.api.matching.type.MatchingTypeEnum;
 import org.junit.jupiter.api.BeforeEach;
@@ -32,13 +33,13 @@ public class MatchingServiceTests {
     private DeleteMatchingPort deleteMatchingPort;
     @Mock
     private LikePort likePort;
-    private MatchingDto matching1, matching2, matching3;
+    private SaveMatchingDto matching1, matching2, matching3;
+    private FindMatchingDto mockMatching2;
     private LikeDto like;
     
     @BeforeEach
     void beforeEach() {
-        matching1 = MatchingDto.builder()
-                .matchingId(1L)
+        matching1 = SaveMatchingDto.builder()
                 .type(MatchingTypeEnum.TravelMate)
                 .title("title1")
                 .place("Busan")
@@ -51,8 +52,7 @@ public class MatchingServiceTests {
                 .readCount(34)
                 .isActive(false)
                 .build();
-        matching2 = MatchingDto.builder()
-                .matchingId(2L)
+        matching2 = SaveMatchingDto.builder()
                 .type(MatchingTypeEnum.TravelMate)
                 .title("title2")
                 .place("Jeju")
@@ -65,8 +65,7 @@ public class MatchingServiceTests {
                 .readCount(27)
                 .isActive(true)
                 .build();
-        matching3 = MatchingDto.builder()
-                .matchingId(3L)
+        matching3 = SaveMatchingDto.builder()
                 .type(MatchingTypeEnum.TravelMate)
                 .title("title3")
                 .place("Ulsan")
@@ -77,6 +76,20 @@ public class MatchingServiceTests {
                 .minusAge(5)
                 .plusAge(5)
                 .readCount(10)
+                .isActive(true)
+                .build();
+        mockMatching2 = FindMatchingDto.builder()
+                .matchingId(2L)
+                .type(MatchingTypeEnum.TravelMate)
+                .title("title2")
+                .place("Jeju")
+                .content("content2")
+                .startDate(LocalDateTime.of(2023, 9, 29, 10, 0, 0))
+                .endDate(LocalDateTime.of(2023, 10, 6, 20, 0, 0))
+                .maxMember(5)
+                .minusAge(0)
+                .plusAge(4)
+                .readCount(27)
                 .isActive(true)
                 .build();
         like = LikeDto.builder()
@@ -95,25 +108,25 @@ public class MatchingServiceTests {
     
     @Test
     void getAllTest() {
-        List<MatchingDto> matchingList = matchingService.getAll();
+        List<FindMatchingDto> matchingList = matchingService.getAll();
         verify(findMatchingPort, times(1)).getAllBy();
     }
     
     @Test
     void getMatchingByIdTest() {
-        MatchingDto matching = matchingService.getMatchingById(2L).orElse(matching2);
+        FindMatchingDto matching = matchingService.getMatchingById(2L).orElse(mockMatching2);
         verify(findMatchingPort, times(1)).getMatchingByMatchingId(2L);
     }
     
     @Test
     void getMatchingByIsActiveTest() {
-        List<MatchingDto> matchingList = matchingService.getMatchingByIsActive(true);
+        List<FindMatchingDto> matchingList = matchingService.getMatchingByIsActive(true);
         verify(findMatchingPort, times(1)).getMatchingByIsActive(true);
     }
     
     @Test
     void getRecommendedMatchingListTest() {
-        List<MatchingDto> matchingList = matchingService.getRecommendedMatchingList(1L);
+        List<FindMatchingDto> matchingList = matchingService.getRecommendedMatchingList(1L);
     }
     
     @Test
@@ -125,8 +138,8 @@ public class MatchingServiceTests {
     @Test
     void updateMatchingTest() {
         matching3.setReadCount(11);
-        MatchingDto matchingDto = matchingService.updateMatching(3L, matching3);
-        verify(saveMatchingPort, times(1)).updateMatching(matchingMapper.toDomain(matching3));
+        FindMatchingDto matchingDto = matchingService.updateMatching(3L, matching3);
+        verify(saveMatchingPort, times(1)).updateMatching(3L, matchingMapper.toDomain(matching3));
     }
     
     @Test

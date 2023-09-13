@@ -1,11 +1,11 @@
 package com.example.api.user.application.port.in;
 
-import com.example.api.user.dto.UserDto;
+import com.example.api.user.dto.FindUserDto;
 
 import java.util.List;
 import java.util.Optional;
 
 public interface FindUserUsecase {
-    List<UserDto> getAll();
-    Optional<UserDto> getUserById(Long userId);
+    List<FindUserDto> getAll();
+    Optional<FindUserDto> getUserById(Long userId);
 }

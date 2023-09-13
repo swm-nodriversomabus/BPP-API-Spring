@@ -18,7 +18,6 @@ import java.util.UUID;
 @Component
 @RequiredArgsConstructor
 public class ChatRoomPersistenceAdapter implements CreateChatRoomPort, FindChatRoomListPort, RetrieveChatRoomPort {
-
     private final ChatRoomRepository chatRoomRepository;
     private final ChatRoomMapper chatRoomMapper;
     private final MemberRepository memberRepository;

@@ -1,7 +1,7 @@
 package com.example.api.user.adapter.out.persistence;
 
 import com.example.api.common.entity.BaseEntity;
-import com.example.api.user.dto.UserDto;
+import com.example.api.user.dto.FindUserDto;
 import com.example.api.user.type.UserGenderEnum;
 import com.example.api.user.type.UserRoleEnum;
 import jakarta.persistence.*;
@@ -68,8 +68,8 @@ public class UserEntity extends BaseEntity {
     @Column(nullable = false)
     private Boolean isActive;
     
-    public UserDto toDto() {
-        return UserDto.builder()
+    public FindUserDto toDto() {
+        return FindUserDto.builder()
                 .userId(userId)
                 .username(username)
                 .nickname(nickname)

@@ -4,9 +4,9 @@ import com.example.api.common.type.ApplicationStateEnum;
 import com.example.api.matching.adapter.out.persistence.MatchingMapperInterface;
 import com.example.api.matching.application.port.out.MatchingApplicationPort;
 import com.example.api.matching.dto.MatchingApplicationDto;
-import com.example.api.matching.dto.MatchingDto;
+import com.example.api.matching.dto.FindMatchingDto;
 import com.example.api.matching.service.MatchingApplicationService;
-import com.example.api.user.dto.UserDto;
+import com.example.api.user.dto.FindUserDto;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -46,13 +46,13 @@ public class MatchingApplicationServiceTests {
 
     @Test
     void getByUserIdIsAndStateEqualsTest() {
-        List<MatchingDto> matchingList = matchingApplicationService.getByUserIdIsAndStateEquals(3L, ApplicationStateEnum.Pending);
+        List<FindMatchingDto> matchingList = matchingApplicationService.getByUserIdIsAndStateEquals(3L, ApplicationStateEnum.Pending);
         verify(matchingApplicationPort, times(1)).getByUserIdIsAndStateEquals(3L, ApplicationStateEnum.Pending);
     }
 
     @Test
     void getByMatchingIdIsAndStateEqualsTest() {
-        List<UserDto> userList = matchingApplicationService.getByMatchingIdIsAndStateEquals(1L, ApplicationStateEnum.Approved);
+        List<FindUserDto> userList = matchingApplicationService.getByMatchingIdIsAndStateEquals(1L, ApplicationStateEnum.Approved);
         verify(matchingApplicationPort, times(1)).getByMatchingIdIsAndStateEquals(1L, ApplicationStateEnum.Approved);
     }
 

@@ -2,12 +2,13 @@ package com.example.api.user.adapter.in.rest;
 
 import com.example.api.common.type.ApplicationStateEnum;
 import com.example.api.matching.application.port.in.MatchingApplicationUsecase;
-import com.example.api.matching.dto.MatchingDto;
+import com.example.api.matching.dto.FindMatchingDto;
 import com.example.api.user.application.port.in.DeleteUserUsecase;
 import com.example.api.user.application.port.in.FindUserUsecase;
 import com.example.api.user.application.port.in.RecommendedMatchingUsecase;
 import com.example.api.user.application.port.in.SaveUserUsecase;
-import com.example.api.user.dto.UserDto;
+import com.example.api.user.dto.FindUserDto;
+import com.example.api.user.dto.SaveUserDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -35,7 +36,7 @@ public class UserController {
      */
     @Operation(summary = "Create user", description = "새로운 사용자를 추가한다.")
     @PostMapping("/user")
-    public UserDto createUser(@RequestBody UserDto userDto) {
+    public FindUserDto createUser(@RequestBody SaveUserDto userDto) {
         return saveUserUsecase.createUser(userDto);
     }
 
@@ -45,7 +46,7 @@ public class UserController {
      */
     @Operation(summary = "Get all users", description = "모든 사용자 목록을 조회한다.")
     @GetMapping("/user")
-    public List<UserDto> getAll() {
+    public List<FindUserDto> getAll() {
         return findUserUsecase.getAll();
     }
 
@@ -56,7 +57,7 @@ public class UserController {
      */
     @Operation(summary = "Get user", description = "ID가 userId인 사용자를 조회한다.")
     @GetMapping("/user/{userId}")
-    public Optional<UserDto> getUserById(@PathVariable Long userId) {
+    public Optional<FindUserDto> getUserById(@PathVariable Long userId) {
         return findUserUsecase.getUserById(userId);
     }
 
@@ -67,7 +68,7 @@ public class UserController {
      */
     @Operation(summary = "Get recommended matching list of a user", description = "사용자의 추천 매칭 목록을 조회한다..")
     @GetMapping("/user/{userId}/recommendedmatching")
-    public List<MatchingDto> getRecommendedMatchingList(@PathVariable Long userId) {
+    public List<FindMatchingDto> getRecommendedMatchingList(@PathVariable Long userId) {
         return recommendedMatchingUsecase.getRecommendedMatchingList(userId);
     }
 
@@ -78,7 +79,7 @@ public class UserController {
      */
     @Operation(summary = "Get pending matching list of user", description = "사용자가 대기 중인 매칭 목록을 조회한다.")
     @GetMapping("/user/{userId}/pending")
-    public List<MatchingDto> getPendingMatchingList(@PathVariable Long userId) {
+    public List<FindMatchingDto> getPendingMatchingList(@PathVariable Long userId) {
         return matchingApplicationUsecase.getByUserIdIsAndStateEquals(userId, ApplicationStateEnum.Pending);
     }
 
@@ -89,7 +90,7 @@ public class UserController {
      */
     @Operation(summary = "Get approved matching list of user", description = "사용자가 참가한 매칭 목록을 조회한다.")
     @GetMapping("/user/{userId}/approved")
-    public List<MatchingDto> getApprovedMatchingList(@PathVariable Long userId) {
+    public List<FindMatchingDto> getApprovedMatchingList(@PathVariable Long userId) {
         return matchingApplicationUsecase.getByUserIdIsAndStateEquals(userId, ApplicationStateEnum.Approved);
     }
 
@@ -101,7 +102,7 @@ public class UserController {
      */
     @Operation(summary = "Update user information", description = "사용자 정보를 변경한다.")
     @PatchMapping("/user/{userId}")
-    public UserDto updateUser(@PathVariable Long userId, @RequestBody UserDto userDto) {
+    public FindUserDto updateUser(@PathVariable Long userId, @RequestBody SaveUserDto userDto) {
         return saveUserUsecase.updateUser(userId, userDto);
     }
 
