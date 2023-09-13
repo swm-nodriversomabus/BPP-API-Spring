@@ -38,6 +38,6 @@ public interface UserRepository extends JpaRepository<UserEntity, Long> {
     @EntityGraph(attributePaths = {"userId"})
     Optional<UserEntity> getUserEntityBySocialId_GoogleId(String googleId);
 
-    Optional<UserEntity> getUserEntityBySocialId(Long id);
+    Optional<UserEntity> getUserEntityBySocialId_SocialId(Long id);
 
 }

@@ -52,20 +52,20 @@ public class UserPersistenceAdapter implements SaveUserPort, FindUserPort, Delet
         userRepository.deleteByUserId(userId);
     }
 
-//    @Override
-//    public Optional<UserEntity> findSocialUser(String id, String provider) {
-//        return switch (provider){
-//            case "google" -> userRepository.getUserEntityBySocialId_GoogleId(id);
-//            case "naver" -> userRepository.getUserEntityBySocialId_NaverId(id);
-//            case "kakao" -> userRepository.getUserEntityBySocialId_KakaoId(id);
-//            case "apple" -> userRepository.getUserEntityBySocialId_AppleId(id);
-//            case "insta" -> userRepository.getUserEntityBySocialId_InstaId(id);
-//            default -> Optional.empty();
-//        };
-//    }
+    @Override
+    public Optional<UserEntity> findSocialUser(String id, String provider) {
+        return switch (provider){
+            case "google" -> userRepository.getUserEntityBySocialId_GoogleId(id);
+            case "naver" -> userRepository.getUserEntityBySocialId_NaverId(id);
+            case "kakao" -> userRepository.getUserEntityBySocialId_KakaoId(id);
+            case "apple" -> userRepository.getUserEntityBySocialId_AppleId(id);
+            case "insta" -> userRepository.getUserEntityBySocialId_InstaId(id);
+            default -> Optional.empty();
+        };
+    }
 
     @Override
     public Optional<UserEntity> findUserSigned(Long socialId) {
-        return userRepository.getUserEntityBySocialId(socialId);
+        return userRepository.getUserEntityBySocialId_SocialId(socialId);
     }
 }

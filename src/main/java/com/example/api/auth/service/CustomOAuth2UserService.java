@@ -1,6 +1,7 @@
 package com.example.api.auth.service;
 
 import com.example.api.auth.domain.OAuth2Attribute;
+import com.example.api.social.adapter.out.persistence.SocialEntity;
 import com.example.api.social.service.SocialService;
 import com.example.api.user.adapter.out.persistence.UserEntity;
 import com.example.api.user.service.UserService;
@@ -24,6 +25,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequest, OAuth2User> {
     private final SocialService socialService;
+    private final UserService userService;
     @Override
     public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
         // 기본 OAUth2UserService 생성
@@ -47,21 +49,29 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
         // 이메일로 가입되어 있는지를 체크한다
         // TODO 타입은 수정 예정
 
-        Optional<UserEntity> findUser = socialService.findUserSigned(email, registrationId);
+        Optional<SocialEntity> findSocial = socialService.findSocialInfo(email, registrationId);
 
-        if (findUser.isEmpty()){
-            userAttribute.put("exist", false);
+        if (findSocial.isEmpty()){
+            userAttribute.put("exist", 1);
             return new DefaultOAuth2User(
                     Collections.singleton(new SimpleGrantedAuthority("NO_USER")),
                     userAttribute, "email"
             );
         }
 
-        userAttribute.put("exist", true);
+        Optional<UserEntity> findUser = userService.findUserSigned(findSocial.get().getSocialId()); // user를 소셜 아이디 기준으로 찾자
+
+        if (findUser.isEmpty()) { // 이러면 소셜은 누르고, 회원 가입은 안한 경우이다
+            userAttribute.put("exist", 2);
+            return new DefaultOAuth2User(
+                    Collections.singleton(new SimpleGrantedAuthority("NO_USER")),
+                    userAttribute, "email"
+            );
+        }
+        userAttribute.put("exist", 3); // 소셜 로그인, 회원가입 다된겨우
         return new DefaultOAuth2User(
                 Collections.singleton(new SimpleGrantedAuthority("ROLE_".concat(findUser.get().getRole().getRole()))),
                 userAttribute, "email"
-
         );
 
     }

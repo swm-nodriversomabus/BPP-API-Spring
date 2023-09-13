@@ -6,6 +6,7 @@ import com.example.api.auth.service.JwtUtilService;
 import com.example.api.chat.exception.JwtException;
 import com.example.api.user.adapter.out.persistence.UserEntity;
 import com.example.api.user.adapter.out.persistence.UserPersistenceAdapter;
+import com.example.api.user.service.UserService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -29,7 +30,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class JwtAuthFilter extends OncePerRequestFilter {
     private final JwtUtilService jwtUtilService;
-    private final UserPersistenceAdapter userPersistenceAdapter;
+    private final UserService userService;
 
     /**
      * 필터를 거치지 않는 경우 추가
@@ -59,7 +60,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
         }else{
             //TODO 도메인으로 변경 예정
             // 유저가 회원가입 되어 있는지에 대한 체크
-            UserEntity user = userPersistenceAdapter.findSocialUser(jwtUtilService.getId(atc), jwtUtilService.getProvider(atc))
+            UserEntity user = userService.findSocialUser(jwtUtilService.getId(atc), jwtUtilService.getProvider(atc))
                     .orElseThrow(IllegalStateException::new);
 
             // Security Context에 등록할 user 객체 생성

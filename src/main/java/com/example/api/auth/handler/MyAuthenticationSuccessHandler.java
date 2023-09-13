@@ -36,14 +36,16 @@ public class MyAuthenticationSuccessHandler extends SimpleUrlAuthenticationSucce
         String provider = oAuth2User.getAttribute("provider");
 
         // 로그인한 회원 존재 여부
-        boolean isExist = Boolean.TRUE.equals(oAuth2User.getAttribute("exist"));
-
+        Integer isExist = oAuth2User.getAttribute("exist");
+        if (isExist == null) {
+            throw new IllegalAccessError();
+        }
         String role = oAuth2User.getAuthorities().stream().
                 findFirst()
                 .orElseThrow(IllegalAccessError::new) // 존재하지 안흔ㄴ 경우는 에러다
                 .getAuthority();
 
-        if (isExist) {
+        if (isExist == 3) {
             GeneratedToken token = jwtUtilService.generatedToken(id, role, provider);
 
             String targetUrl = UriComponentsBuilder.fromUriString(url + "/main")
@@ -54,18 +56,28 @@ public class MyAuthenticationSuccessHandler extends SimpleUrlAuthenticationSucce
             log.info("success redirecting");
 
             getRedirectStrategy().sendRedirect(request, response, targetUrl);
+        }else if (isExist == 2) {
+            String targetUrl = UriComponentsBuilder.fromUriString(url + "/signin")
+                    .build()
+                    .encode(StandardCharsets.UTF_8)
+                    .toUriString();
+            log.info("회원가입 페이지 이동1");
+            getRedirectStrategy().sendRedirect(request, response, targetUrl);
         }else{
-            log.info("회원가입 안되어 있네");
-            log.info(provider);
-            log.info(id);
-            log.info(role);
-            AddSocialDto addSocialDto = AddSocialDto.builder()
-                    .id(id)
-                    .provider(provider)
-                    .build();
-            socialService.saveSocialInfo(addSocialDto);
+                log.info("회원가입 안되어 있네");
+                AddSocialDto addSocialDto = AddSocialDto.builder()
+                        .id(id)
+                        .provider(provider)
+                        .build();
+                socialService.saveSocialInfo(addSocialDto);
+                String targetUrl = UriComponentsBuilder.fromUriString(url + "/signin")
+                        .build()
+                        .encode(StandardCharsets.UTF_8)
+                        .toUriString();
+                log.info("회원가입 페이지 이동1");
+                getRedirectStrategy().sendRedirect(request, response, targetUrl);
 
         }
-
     }
 }
+

@@ -11,4 +11,5 @@ public interface FindUserPort {
 
     Optional<UserEntity> findUserSigned(Long socialId); // 로그인시 처리 - OAuth용
 
+    Optional<UserEntity> findSocialUser(String id, String provider);
 }
