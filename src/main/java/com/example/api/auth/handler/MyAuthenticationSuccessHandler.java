@@ -1,6 +1,7 @@
 package com.example.api.auth.handler;
 
 import com.example.api.auth.service.JwtUtilService;
+import com.example.api.auth.utils.CookieUtils;
 import com.example.api.auth.utils.GeneratedToken;
 import com.example.api.social.dto.AddSocialDto;
 import com.example.api.social.service.SocialService;
@@ -48,13 +49,14 @@ public class MyAuthenticationSuccessHandler extends SimpleUrlAuthenticationSucce
         if (isExist == 3) {
             GeneratedToken token = jwtUtilService.generatedToken(id, role, provider);
 
-            String targetUrl = UriComponentsBuilder.fromUriString(url + "/main")
-                    .queryParam("accessToken", token.getAccessToken())
+            String targetUrl = UriComponentsBuilder.fromUriString(url)
                     .build()
                     .encode(StandardCharsets.UTF_8)
                     .toUriString();
             log.info("success redirecting");
-
+            log.info(token.getAccessToken());
+            CookieUtils.addCookie(response, "access_token",token.getAccessToken(), 1000 * 60 * 60);
+//            response.addCookie(CookieUtils.addCookie(););
             getRedirectStrategy().sendRedirect(request, response, targetUrl);
         }else if (isExist == 2) {
             String targetUrl = UriComponentsBuilder.fromUriString(url + "/signin")

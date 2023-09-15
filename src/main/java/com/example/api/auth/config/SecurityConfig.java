@@ -1,5 +1,6 @@
 package com.example.api.auth.config;
 
+import com.example.api.auth.exception.RestAuthenticationEntryPoint;
 import com.example.api.auth.filter.JwtAuthFilter;
 import com.example.api.auth.filter.JwtExceptionFIlter;
 import com.example.api.auth.handler.MyAuthenticationFailureHandler;
@@ -32,6 +33,7 @@ public class SecurityConfig{
         httpSecurity.httpBasic(AbstractHttpConfigurer::disable); // http 기본 인증 비활성화
         httpSecurity.cors(httpSecurityCorsConfigurer -> {});
         httpSecurity.csrf(AbstractHttpConfigurer::disable); // csrf 비활성화
+        httpSecurity.exceptionHandling(httpSecurityExceptionHandlingConfigurer -> httpSecurityExceptionHandlingConfigurer.authenticationEntryPoint(new RestAuthenticationEntryPoint()));
         httpSecurity.sessionManagement(httpSecuritySessionManagementConfigurer ->
                 httpSecuritySessionManagementConfigurer.sessionCreationPolicy(SessionCreationPolicy.STATELESS)); // 세션 관리는 Stateless
         httpSecurity.authorizeHttpRequests((authorizeRequests)-> // 인증 설정
@@ -44,15 +46,6 @@ public class SecurityConfig{
 //                   authorizationEndpointConfig.baseUri("/auth/authorize");
 //                   authorizationEndpointConfig.authorizationRequestRepository()
 //                });
-            // 회원가입 -> kakao id
-                // namhyo01
-                // 상세입력 ->
-                //
-            // 채팅방 나가기 =>
-            // 사진 보내기 =>
-            // 회원가입 => 핸드폰 인증 - amazon sns
-            // 푸시...
-            // FCM push
             // 카카오톡 읽기 확인
                 oauth2.userInfoEndpoint( // oauth2 로그인 시 사용자 정보를 가져오는 엔드포인트와 사용자 서비스 설정
                 userInfoEndpointConfig ->
