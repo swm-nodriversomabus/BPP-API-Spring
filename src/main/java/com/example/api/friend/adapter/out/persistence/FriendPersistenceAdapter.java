@@ -6,12 +6,14 @@ import com.example.api.friend.application.port.out.FindFriendPort;
 import com.example.api.friend.domain.Friend;
 import com.example.api.friend.repository.FriendRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
 @Repository
 @RequiredArgsConstructor
+@ComponentScan
 public class FriendPersistenceAdapter implements AddFriendPort, FindFriendPort, DeleteFriendPort {
     private final FriendMapperInterface friendMapper;
     private final FriendRepository friendRepository;
