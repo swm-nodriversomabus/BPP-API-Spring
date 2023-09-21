@@ -3,7 +3,8 @@ package com.example.api.notification.adapter.in.rest;
 import com.example.api.notification.application.port.in.FindNotificationUsecase;
 import com.example.api.notification.application.port.in.SaveNotificationUsecase;
 import com.example.api.notification.application.port.in.UserNotificationUsecase;
-import com.example.api.notification.dto.NotificationDto;
+import com.example.api.notification.dto.FindNotificationDto;
+import com.example.api.notification.dto.SaveNotificationDto;
 import com.example.api.notification.dto.UserNotificationDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -25,13 +26,13 @@ public class NotificationController {
 
     /**
      * 새 알림 생성
-     * @param notificationDto (데이터)
+     * @param saveNotificationDto (데이터)
      * @return NotificationDto
      */
     @Operation(summary = "Create Notification", description = "새로운 알림을 생성한다.")
     @PostMapping("/notification")
-    public NotificationDto createNotification(@RequestBody NotificationDto notificationDto) {
-        return saveNotificationUsecase.createNotification(notificationDto);
+    public FindNotificationDto createNotification(@RequestBody SaveNotificationDto saveNotificationDto) {
+        return saveNotificationUsecase.createNotification(saveNotificationDto);
     }
 
     /**
@@ -52,7 +53,7 @@ public class NotificationController {
      */
     @Operation(summary = "Get notification", description = "알림의 상세 정보를 조회한다.")
     @GetMapping("/notification/{notificationId}")
-    public Optional<NotificationDto> getNotificationById(@PathVariable Long notificationId) {
+    public Optional<FindNotificationDto> getNotificationById(@PathVariable Long notificationId) {
         return findNotificationUsecase.getNotificationById(notificationId);
     }
 
@@ -63,7 +64,7 @@ public class NotificationController {
      */
     @Operation(summary = "Ger notification list of user", description = "사용자의 알림 리스트를 조회한다.")
     @GetMapping("/user/{userId}/notification")
-    public List<NotificationDto> getUserNotificationList(@PathVariable Long userId) {
+    public List<FindNotificationDto> getUserNotificationList(@PathVariable Long userId) {
         return findNotificationUsecase.getUserNotificationList(userId);
     }
 

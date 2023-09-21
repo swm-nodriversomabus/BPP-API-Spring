@@ -10,6 +10,7 @@ import com.example.api.preference.application.port.out.FindPreferencePort;
 import com.example.api.preference.application.port.out.SavePreferencePort;
 import com.example.api.preference.domain.Preference;
 import com.example.api.preference.dto.ComparePreferenceDto;
+import com.example.api.preference.dto.FindPreferenceDto;
 import com.example.api.preference.dto.SavePreferenceDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -30,7 +31,7 @@ public class PreferenceService implements SavePreferenceUsecase, FindPreferenceU
     
     @Override
     @Transactional
-    public SavePreferenceDto createPreference(SavePreferenceDto preferenceDto) {
+    public FindPreferenceDto createPreference(SavePreferenceDto preferenceDto) {
         Preference preference = savePreferencePort.createPreference(preferenceMapper.toDomain(preferenceDto));
         return preferenceMapper.toDto(preference);
     }
@@ -43,7 +44,7 @@ public class PreferenceService implements SavePreferenceUsecase, FindPreferenceU
     
     @Override
     @Transactional
-    public SavePreferenceDto updatePreference(Long preferenceId, SavePreferenceDto preferenceDto) {
+    public FindPreferenceDto updatePreference(Long preferenceId, SavePreferenceDto preferenceDto) {
         Preference preference = savePreferencePort.updatePreference(preferenceId, preferenceMapper.toDomain(preferenceDto));
         return preferenceMapper.toDto(preference);
     }

@@ -9,7 +9,8 @@ import com.example.api.user.application.port.out.FindUserPort;
 import com.example.api.user.application.port.out.SaveUserPort;
 import com.example.api.user.domain.User;
 import com.example.api.user.application.port.in.SaveUserUsecase;
-import com.example.api.user.dto.UserDto;
+import com.example.api.user.dto.FindUserDto;
+import com.example.api.user.dto.SaveUserDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -29,27 +30,27 @@ public class UserService implements SaveUserUsecase, FindUserUsecase, DeleteUser
     
     @Override
     @Transactional
-    public UserDto createUser(UserDto userDto) {
+    public FindUserDto createUser(SaveUserDto userDto) {
         User user = saveUserPort.createUser(userMapper.toDomain(userDto));
         return userMapper.toDto(user);
     }
     
     @Override
-    public List<UserDto> getAll() {
+    public List<FindUserDto> getAll() {
         return findUserPort.getAllBy().stream()
                 .map(UserEntity::toDto)
                 .collect(Collectors.toList());
     }
     
     @Override
-    public Optional<UserDto> getUserById(Long userId) {
+    public Optional<FindUserDto> getUserById(Long userId) {
         return findUserPort.getUserByUserId(userId)
                 .map(UserEntity::toDto);
     }
 
     @Override
     @Transactional
-    public UserDto updateUser(Long userId,UserDto userDto) {
+    public FindUserDto updateUser(Long userId, SaveUserDto userDto) {
         User user = saveUserPort.updateUser(userId, userMapper.toDomain(userDto));
         return userMapper.toDto(user);
     }

@@ -24,7 +24,6 @@ import java.util.Map;
 
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-
 @SpringBootTest(classes = UserController.class)
 @AutoConfigureMockMvc
 public class UserControllerTests {

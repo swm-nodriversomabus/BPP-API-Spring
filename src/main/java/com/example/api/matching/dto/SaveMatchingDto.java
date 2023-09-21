@@ -15,8 +15,7 @@ import java.time.LocalDateTime;
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor
-public class MatchingDto {
-    private Long matchingId;
+public class SaveMatchingDto {
     
     @NotNull
     @Min(1L)
@@ -55,10 +54,6 @@ public class MatchingDto {
     @NotNull
     @Min(0)
     private Integer readCount;
-
-    private LocalDateTime createdAt;
-
-    private LocalDateTime updatedAt;
     
     @NotNull
     private Boolean isActive;

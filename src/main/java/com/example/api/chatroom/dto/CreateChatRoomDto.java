@@ -1,15 +1,16 @@
 package com.example.api.chatroom.dto;
 
 import com.example.api.chatroom.type.ChatRoomEnum;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
 @Data
 public class CreateChatRoomDto {
-    @NotNull()
+    @NotNull
     private ChatRoomEnum type;
     
-    @NotNull
+    @NotBlank
     private String chatroomName;
     
     @NotNull

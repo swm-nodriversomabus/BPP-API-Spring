@@ -2,10 +2,11 @@ package com.example.api.matching.adapter.in.rest;
 
 import com.example.api.common.type.ApplicationStateEnum;
 import com.example.api.matching.application.port.in.*;
+import com.example.api.matching.dto.FindMatchingDto;
 import com.example.api.matching.dto.LikeDto;
 import com.example.api.matching.dto.MatchingApplicationDto;
-import com.example.api.matching.dto.MatchingDto;
-import com.example.api.user.dto.UserDto;
+import com.example.api.matching.dto.SaveMatchingDto;
+import com.example.api.user.dto.FindUserDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -33,7 +34,7 @@ public class MatchingController {
      */
     @Operation(summary = "Create matching", description = "새로운 매칭을 생성한다.")
     @PostMapping("/matching")
-    public MatchingDto createMatching(@RequestBody MatchingDto matchingDto) {
+    public FindMatchingDto createMatching(@RequestBody SaveMatchingDto matchingDto) {
         return saveMatchingUsecase.createMatching(matchingDto);
     }
 
@@ -54,7 +55,7 @@ public class MatchingController {
      */
     @Operation(summary = "Get all matching", description = "모든 매칭 목록을 조회한다.")
     @GetMapping ("/matching")
-    public List<MatchingDto> getAll() {
+    public List<FindMatchingDto> getAll() {
         return findMatchingUsecase.getAll();
     }
     
@@ -65,7 +66,7 @@ public class MatchingController {
      */
     @Operation(summary = "Get matching", description = "ID가 matchingId인 매칭을 조회한다.")
     @GetMapping("/matching/{matchingId}")
-    public Optional<MatchingDto> getMatchingById(@PathVariable Long matchingId) {
+    public Optional<FindMatchingDto> getMatchingById(@PathVariable Long matchingId) {
         return findMatchingUsecase.getMatchingById(matchingId);
     }
 
@@ -76,7 +77,7 @@ public class MatchingController {
      */
     @Operation(summary = "Get pending user list of matching", description = "매칭의 대기자 목록을 조회한다.")
     @GetMapping("/matching/{matchingId}/pending")
-    public List<UserDto> getPendingUserList(@PathVariable Long matchingId) {
+    public List<FindUserDto> getPendingUserList(@PathVariable Long matchingId) {
         return matchingApplicationUsecase.getByMatchingIdIsAndStateEquals(matchingId, ApplicationStateEnum.Pending);
     }
 
@@ -87,7 +88,7 @@ public class MatchingController {
      */
     @Operation(summary = "Get approved user list of matching", description = "매칭의 참가자 목록을 조회한다.")
     @GetMapping("/matching/{matchingId}/approved")
-    public List<UserDto> getApprovedUserList(@PathVariable Long matchingId) {
+    public List<FindUserDto> getApprovedUserList(@PathVariable Long matchingId) {
         return matchingApplicationUsecase.getByMatchingIdIsAndStateEquals(matchingId, ApplicationStateEnum.Approved);
     }
 
@@ -110,7 +111,7 @@ public class MatchingController {
      */
     @Operation(summary = "Update matching", description = "매칭 정보를 수정한다.")
     @PatchMapping("/matching/{matchingId}")
-    public MatchingDto updateMatching(@PathVariable Long matchingId,@RequestBody MatchingDto matchingDto) {
+    public FindMatchingDto updateMatching(@PathVariable Long matchingId, @RequestBody SaveMatchingDto matchingDto) {
         return saveMatchingUsecase.updateMatching(matchingId, matchingDto);
     }
 

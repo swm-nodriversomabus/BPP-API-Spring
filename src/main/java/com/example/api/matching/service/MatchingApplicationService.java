@@ -7,11 +7,11 @@ import com.example.api.matching.application.port.in.MatchingApplicationUsecase;
 import com.example.api.matching.application.port.out.FindMatchingPort;
 import com.example.api.matching.application.port.out.MatchingApplicationPort;
 import com.example.api.matching.domain.MatchingApplication;
+import com.example.api.matching.dto.FindMatchingDto;
 import com.example.api.matching.dto.MatchingApplicationDto;
-import com.example.api.matching.dto.MatchingDto;
 import com.example.api.user.adapter.out.persistence.UserMapperInterface;
 import com.example.api.user.application.port.out.FindUserPort;
-import com.example.api.user.dto.UserDto;
+import com.example.api.user.dto.FindUserDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -37,9 +37,9 @@ public class MatchingApplicationService implements MatchingApplicationUsecase {
     }
     
     @Override
-    public List<MatchingDto> getByUserIdIsAndStateEquals(Long userId, ApplicationStateEnum state) {
+    public List<FindMatchingDto> getByUserIdIsAndStateEquals(Long userId, ApplicationStateEnum state) {
         List<MatchingApplicationEntity> matchingPairList = matchingApplicationPort.getByUserIdIsAndStateEquals(userId, state);
-        List<MatchingDto> matchingData = new ArrayList<>();
+        List<FindMatchingDto> matchingData = new ArrayList<>();
         for (MatchingApplicationEntity matchingPair: matchingPairList) {
             matchingData.add(matchingMapper.toDto(findMatchingPort.getMatchingByMatchingId(matchingPair.getMatchingId()).orElseThrow()));
         }
@@ -47,9 +47,9 @@ public class MatchingApplicationService implements MatchingApplicationUsecase {
     }
 
     @Override
-    public List<UserDto> getByMatchingIdIsAndStateEquals(Long matchingId, ApplicationStateEnum state) {
+    public List<FindUserDto> getByMatchingIdIsAndStateEquals(Long matchingId, ApplicationStateEnum state) {
         List<MatchingApplicationEntity> matchingPairList = matchingApplicationPort.getByMatchingIdIsAndStateEquals(matchingId, state);
-        List<UserDto> userData = new ArrayList<>();
+        List<FindUserDto> userData = new ArrayList<>();
         for (MatchingApplicationEntity matchingPair: matchingPairList) {
             userData.add(userMapper.toDto(findUserPort.getUserByUserId(matchingPair.getUserId()).orElseThrow()));
         }

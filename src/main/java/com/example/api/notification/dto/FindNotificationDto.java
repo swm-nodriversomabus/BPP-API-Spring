@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor
-public class NotificationDto {
+public class FindNotificationDto {
     private Long notificationId;
     
     @NotNull

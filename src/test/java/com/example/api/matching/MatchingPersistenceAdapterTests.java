@@ -123,7 +123,7 @@ public class MatchingPersistenceAdapterTests {
     @Test
     void updateMatchingTest() {
         matching3.setReadCount(11);
-        Matching matching = matchingPersistenceAdapter.updateMatching(matching3);
+        Matching matching = matchingPersistenceAdapter.updateMatching(3L, matching3);
         verify(matchingRepository, times(1)).save(matchingMapper.toEntity(matching3));
     }
 

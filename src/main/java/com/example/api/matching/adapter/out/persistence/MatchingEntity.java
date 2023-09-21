@@ -1,7 +1,7 @@
 package com.example.api.matching.adapter.out.persistence;
 
 import com.example.api.common.entity.BaseEntity;
-import com.example.api.matching.dto.MatchingDto;
+import com.example.api.matching.dto.FindMatchingDto;
 import com.example.api.matching.type.MatchingTypeEnum;
 import jakarta.persistence.*;
 import lombok.*;
@@ -59,8 +59,8 @@ public class MatchingEntity extends BaseEntity {
     @Column(nullable = false)
     private Boolean isActive;
     
-    public MatchingDto toDto() {
-        return MatchingDto.builder()
+    public FindMatchingDto toDto() {
+        return FindMatchingDto.builder()
                 .matchingId(matchingId)
                 .writerId(writerId)
                 .type(type)
