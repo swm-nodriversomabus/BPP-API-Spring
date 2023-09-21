@@ -5,16 +5,18 @@ import com.google.firebase.FirebaseApp;
 import com.google.firebase.FirebaseOptions;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.io.ClassPathResource;
 
-import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 
 @Configuration
 public class FcmConfig {
     @Bean
     public FirebaseApp firebaseApp() {
         try {
-            FileInputStream serviceAccount = new FileInputStream("/resources/firebase/accountKey.json");
+            ClassPathResource resource = new ClassPathResource("firebase/accountKey.json");
+            InputStream serviceAccount = resource.getInputStream();
             FirebaseOptions options = FirebaseOptions.builder()
                     .setCredentials(GoogleCredentials.fromStream(serviceAccount))
                     .build();
