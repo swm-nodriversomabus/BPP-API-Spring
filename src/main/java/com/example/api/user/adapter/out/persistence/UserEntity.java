@@ -24,16 +24,16 @@ public class UserEntity extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long userId;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(nullable = false, name="social_id", foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
     @ToString.Exclude
     private SocialEntity socialId;
 
     @Column(nullable = false, length = 30)
     private String username;
-
-    @Column(nullable = false, length = 30)
-    private String nickname;
+//
+//    @Column(nullable = false, length = 30)
+//    private String nickname;
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
@@ -45,11 +45,11 @@ public class UserEntity extends BaseEntity {
     @Column(nullable = false, length = 30)
     private String phone;
 
-    @Column(nullable = false, length = 100)
-    private String email;
+//    @Column(nullable = false, length = 100)
+//    private String email;
 
-    @Column(nullable = false, length = 300)
-    private String address;
+//    @Column(nullable = false, length = 300)
+//    private String address;
     
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
@@ -58,8 +58,8 @@ public class UserEntity extends BaseEntity {
     @Column(nullable = false)
     private Boolean blacklist;
 
-    @Column(nullable = false, length = 300)
-    private String personality;
+//    @Column(nullable = false, length = 300)
+//    private String personality;
 
     @Column(nullable = false, length = 300)
     private String stateMessage;
@@ -67,11 +67,11 @@ public class UserEntity extends BaseEntity {
     @Column(nullable = false)
     private Integer mannerScore;
 
-    @Column(nullable = false)
-    private Long createdUserId;
-
-    @Column(nullable = false)
-    private Long updatedUserId;
+//    @Column(nullable = false)
+//    private Long createdUserId;
+//
+//    @Column(nullable = false)
+//    private Long updatedUserId;
 
     @Column(nullable = false)
     private Boolean isActive;

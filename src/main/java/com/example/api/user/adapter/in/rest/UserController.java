@@ -5,10 +5,14 @@ import com.example.api.user.application.port.in.DeleteUserUsecase;
 import com.example.api.user.application.port.in.FindUserUsecase;
 import com.example.api.user.application.port.in.RecommendedMatchingUsecase;
 import com.example.api.user.application.port.in.SaveUserUsecase;
+import com.example.api.user.dto.CreaeUserDto;
 import com.example.api.user.dto.UserDto;
+import com.example.api.user.validator.CreateGenderValidator;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -22,6 +26,12 @@ public class UserController {
     private final FindUserUsecase findUserUsecase;
     private final DeleteUserUsecase deleteUserUsecase;
     private final RecommendedMatchingUsecase recommendedMatchingUsecase;
+    private final CreateGenderValidator createGenderValidator; // enum validator
+
+    @InitBinder
+    protected void initBinder(WebDataBinder binder) {
+        binder.addValidators(createGenderValidator);
+    }
 
     /**
      * 
@@ -30,8 +40,8 @@ public class UserController {
      */
     @Operation(summary = "Create user", description = "새로운 사용자를 추가한다.")
     @PostMapping("/user")
-    public UserDto createUser(@RequestBody UserDto userDto) {
-        return saveUserUsecase.createUser(userDto);
+    public void createUser(@RequestBody @Valid CreaeUserDto userDto) {
+        saveUserUsecase.createUser(userDto);
     }
 
     /**

@@ -54,6 +54,7 @@ public class UserPersistenceAdapter implements SaveUserPort, FindUserPort, Delet
 
     @Override
     public Optional<UserEntity> findSocialUser(String id, String provider) {
+
         return switch (provider){
             case "google" -> userRepository.getUserEntityBySocialId_GoogleId(id);
             case "naver" -> userRepository.getUserEntityBySocialId_NaverId(id);

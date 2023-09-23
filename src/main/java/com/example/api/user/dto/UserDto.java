@@ -21,10 +21,7 @@ public class UserDto {
     
     @NotEmpty
     private String username;
-    
-    @NotEmpty
-    private String nickname;
-    
+
     @NotEmpty
     private UserGenderEnum gender;
     
@@ -33,12 +30,6 @@ public class UserDto {
     
     @NotEmpty
     private String phone;
-    
-    @NotEmpty
-    private String email;
-    
-    @NotEmpty
-    private String address;
     
     @NotEmpty
     private UserRoleEnum role;
@@ -77,26 +68,4 @@ public class UserDto {
     private String instaId;
 
     private String appleId;
-
-
-
-    public UserEntity toEntity() {
-        return UserEntity.builder()
-                .username(username)
-                .nickname(nickname)
-                .gender(gender)
-                .age(age)
-                .phone(phone)
-                .email(email)
-                .address(address)
-                .role(role)
-                .blacklist(blacklist)
-                .personality(personality)
-                .stateMessage(stateMessage)
-                .mannerScore(mannerScore)
-                .createdUserId(createdUserId)
-                .updatedUserId(updatedUserId)
-                .isActive(isActive)
-                .build();
-    }
 }

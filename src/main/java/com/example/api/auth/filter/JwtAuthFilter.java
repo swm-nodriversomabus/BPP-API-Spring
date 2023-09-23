@@ -9,6 +9,7 @@ import com.example.api.user.adapter.out.persistence.UserPersistenceAdapter;
 import com.example.api.user.service.UserService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -23,7 +24,9 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 @Component
 @Slf4j
@@ -46,8 +49,19 @@ public class JwtAuthFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
 
-        String atc = request.getHeader("Authorization");
+//        String atc = Arrays.stream(request.getCookies())
+//                .filter(c -> c.getName().equals("access_token"))
+//                .findFirst()
+//                .map(Cookie::getValue)
+//                .orElse("");
+        Cookie[] cookies = request.getCookies();
+        Optional<Cookie> accessCookie = Optional.ofNullable(cookies)
+                .flatMap(cookiesArr -> Arrays.stream(cookiesArr)
+                        .filter(c -> "access_token".equals(c.getName()))
+                        .findFirst());
 
+        String atc = accessCookie.map(Cookie::getValue).orElse("");
+//        String atc = request.getHeader("Authorization");
         // 토큰 검사 생략
         // permitALl인 경우
         if (!StringUtils.hasText(atc)) {
@@ -56,13 +70,17 @@ public class JwtAuthFilter extends OncePerRequestFilter {
         }
 
         if (!jwtUtilService.verifyToken(atc)) {
+            log.info("JWT 이슈 발생");
             throw new JwtException("Access Token 만료");
         }else{
             //TODO 도메인으로 변경 예정
             // 유저가 회원가입 되어 있는지에 대한 체크
+            log.info("login test");
+
+            log.info(jwtUtilService.getId(atc));
+            log.info(jwtUtilService.getProvider(atc));
             UserEntity user = userService.findSocialUser(jwtUtilService.getId(atc), jwtUtilService.getProvider(atc))
                     .orElseThrow(IllegalStateException::new);
-
             // Security Context에 등록할 user 객체 생성
             SecurityUserDto securityUserDto = SecurityUserDto.builder()
                     .userId(user.getUserId())
@@ -72,7 +90,6 @@ public class JwtAuthFilter extends OncePerRequestFilter {
                     .googleId(user.getSocialId().getGoogleId())
                     .instaId(user.getSocialId().getInstaId())
                     .role(user.getRole().getRole())
-                    .nickname(user.getNickname())
                     .build();
 
             // Security Context에 인증 객체 등록

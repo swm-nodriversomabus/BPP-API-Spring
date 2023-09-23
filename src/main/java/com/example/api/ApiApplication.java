@@ -28,7 +28,7 @@ public class ApiApplication {
 			@Override
 			public void addCorsMappings(@NonNull CorsRegistry registry){
 				registry.addMapping("/**")
-						.allowedOrigins("*")
+						.allowedOriginPatterns("*")
 						.allowedMethods("GET","POST","PUT","PATCH","DELETE","OPTIONS")
 						.allowedHeaders("*")
 						.allowCredentials(true) // 자격증명 허용

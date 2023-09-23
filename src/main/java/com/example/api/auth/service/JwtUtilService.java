@@ -75,6 +75,7 @@ public class JwtUtilService {
                     .build().parseClaimsJws(token);
             return claimsJws.getBody().getExpiration().after(new Date()); // 만료 시간 유혀성 검사
         } catch (Exception e) {
+            log.error(e.getMessage());
             return false;
         }
     }

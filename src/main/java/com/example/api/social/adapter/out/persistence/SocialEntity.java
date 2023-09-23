@@ -18,6 +18,7 @@ import java.util.List;
 @AllArgsConstructor
 @Table(name = "social")
 public class SocialEntity {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long socialId;

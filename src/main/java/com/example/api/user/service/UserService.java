@@ -1,5 +1,6 @@
 package com.example.api.user.service;
 
+import com.example.api.social.adapter.out.persistence.SocialEntity;
 import com.example.api.user.adapter.out.persistence.UserEntity;
 import com.example.api.user.adapter.out.persistence.UserMapperInterface;
 import com.example.api.user.application.port.in.DeleteUserUsecase;
@@ -10,8 +11,10 @@ import com.example.api.user.application.port.out.FindUserPort;
 import com.example.api.user.application.port.out.SaveUserPort;
 import com.example.api.user.domain.User;
 import com.example.api.user.application.port.in.SaveUserUsecase;
+import com.example.api.user.dto.CreaeUserDto;
 import com.example.api.user.dto.UserDto;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,6 +23,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
+@Slf4j
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
 public class UserService implements SaveUserUsecase, FindUserUsecase, DeleteUserUsecase {
@@ -27,7 +31,7 @@ public class UserService implements SaveUserUsecase, FindUserUsecase, DeleteUser
     private final SaveUserPort saveUserPort;
     private final FindUserPort findUserPort;
     private final DeleteUserPort deleteUserPort;
-
+    private final FindSocialPort findSocialPort;
 
 //    /**
 //     * 유저가 회원가입 되어 있는지 여부 체크
@@ -39,9 +43,15 @@ public class UserService implements SaveUserUsecase, FindUserUsecase, DeleteUser
     
     @Override
     @Transactional
-    public UserDto createUser(UserDto userDto) {
-        User user = saveUserPort.createUser(userMapper.toDomain(userDto));
-        return userMapper.toDto(user);
+    public void createUser(CreaeUserDto userDto) {
+        log.info("welcome");
+        log.info(userDto.toString());
+        SocialEntity social = findSocialPort.findSocialUser(userDto.getSocialEmail(), userDto.getProvider()).orElseThrow(()->new IllegalArgumentException("로그인 정보가 없습니다"));
+
+
+        log.info(social.toString());
+//        User user = saveUserPort.createUser(userMapper.toDomain(userDto));
+//        return userMapper.toDto(user);
     }
 
     @Override

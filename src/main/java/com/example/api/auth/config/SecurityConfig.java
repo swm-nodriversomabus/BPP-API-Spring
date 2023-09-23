@@ -9,10 +9,12 @@ import com.example.api.auth.service.CustomOAuth2UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.oauth2.client.web.OAuth2LoginAuthenticationFilter;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
@@ -31,15 +33,16 @@ public class SecurityConfig{
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
         httpSecurity.httpBasic(AbstractHttpConfigurer::disable); // http 기본 인증 비활성화
-        httpSecurity.cors(httpSecurityCorsConfigurer -> {});
+        httpSecurity.cors(AbstractHttpConfigurer::disable);
         httpSecurity.csrf(AbstractHttpConfigurer::disable); // csrf 비활성화
         httpSecurity.exceptionHandling(httpSecurityExceptionHandlingConfigurer -> httpSecurityExceptionHandlingConfigurer.authenticationEntryPoint(new RestAuthenticationEntryPoint()));
         httpSecurity.sessionManagement(httpSecuritySessionManagementConfigurer ->
                 httpSecuritySessionManagementConfigurer.sessionCreationPolicy(SessionCreationPolicy.STATELESS)); // 세션 관리는 Stateless
         httpSecurity.authorizeHttpRequests((authorizeRequests)-> // 인증 설정
-                authorizeRequests.requestMatchers("/api/admin/**").hasRole("ADMIN") // 이 url로 오는 요청들은 admin권한만 접근 가능
-                .requestMatchers("/api/auth/**").permitAll() // auth 로 오는 애들은 일단 인증 없이 가능
-                .requestMatchers("/api/login/**").permitAll()
+                authorizeRequests.requestMatchers("/admin/**").hasRole("ADMIN") // 이 url로 오는 요청들은 admin권한만 접근 가능
+                .requestMatchers("/auth/**").permitAll() // auth 로 오는 애들은 일단 인증 없이 가능
+                .requestMatchers(HttpMethod.POST, "/user/**").permitAll()
+                .requestMatchers("/login/**").permitAll()
                 .anyRequest().authenticated()); // 그 외는 전부 인증 필요
         httpSecurity.oauth2Login(oauth2 ->{ // oauth2 로그인 설정 시작
 //                oauth2.authorizationEndpoint(authorizationEndpointConfig -> {
@@ -58,7 +61,7 @@ public class SecurityConfig{
 
         // jwt 인증 필터를 UsernmaepasswordAuthenticationFilter앞에 추가
         return httpSecurity
-                .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(jwtAuthFilter, OAuth2LoginAuthenticationFilter.class)
                 .addFilterBefore(jwtExceptionFIlter, JwtAuthFilter.class) // jwt AuthFilter 앞에 추가
                 .build();
 
