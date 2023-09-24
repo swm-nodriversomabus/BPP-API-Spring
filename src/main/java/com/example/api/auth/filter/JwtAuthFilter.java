@@ -78,19 +78,11 @@ public class JwtAuthFilter extends OncePerRequestFilter {
             log.info("login test");
 
             log.info(jwtUtilService.getId(atc));
-            log.info(jwtUtilService.getProvider(atc));
-            UserEntity user = userService.findSocialUser(jwtUtilService.getId(atc), jwtUtilService.getProvider(atc))
-                    .orElseThrow(IllegalStateException::new);
+//            log.info(jwtUtilService.getProvider(atc));
+//            UserEntity user = userService.findSocialUser(jwtUtilService.getId(atc), jwtUtilService.getProvider(atc))
+//                    .orElseThrow(IllegalStateException::new);
             // Security Context에 등록할 user 객체 생성
-            SecurityUserDto securityUserDto = SecurityUserDto.builder()
-                    .userId(user.getUserId())
-                    .naverId(user.getSocialId().getNaverId())
-                    .appleId(user.getSocialId().getAppleId())
-                    .kakaoId(user.getSocialId().getKakaoId())
-                    .googleId(user.getSocialId().getGoogleId())
-                    .instaId(user.getSocialId().getInstaId())
-                    .role(user.getRole().getRole())
-                    .build();
+            SecurityUserDto securityUserDto = userService.findSocialUser(jwtUtilService.getId(atc), jwtUtilService.getProvider(atc));
 
             // Security Context에 인증 객체 등록
             Authentication authentication = getAuthentication(securityUserDto);

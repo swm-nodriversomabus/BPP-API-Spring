@@ -1,5 +1,6 @@
 package com.example.api.user.service;
 
+import com.example.api.auth.dto.SecurityUserDto;
 import com.example.api.common.exception.CustomException;
 import com.example.api.common.type.ErrorCodeEnum;
 import com.example.api.social.adapter.out.persistence.SocialEntity;
@@ -90,12 +91,25 @@ public class UserService implements SaveUserUsecase, FindUserUsecase, DeleteUser
         deleteUserPort.deleteByUserId(userId);
     }
 
-    public Optional<UserEntity> findSocialUser(String id, String provider) {
-        return findUserPort.findSocialUser(id, provider);
+    public SecurityUserDto findSocialUser(String id, String provider) {
+
+        User user = userMapper.toDomain(findUserPort.findSocialUser(id, provider).orElseThrow(IllegalStateException::new));
+//        UserEntity user = findUserPort.findSocialUser(id, provider).orElseThrow(IllegalStateException::new);
+        return SecurityUserDto.builder()
+                .userId(user.getUserId())
+                .naverId(user.getSocialId().getNaverId())
+                .appleId(user.getSocialId().getAppleId())
+                .kakaoId(user.getSocialId().getKakaoId())
+                .googleId(user.getSocialId().getGoogleId())
+                .instaId(user.getSocialId().getInstaId())
+                .role(user.getRole().getRole())
+                .build();
     }
 
 
     public Optional<UserEntity> findUserSigned(Long id){
+
         return findUserPort.findUserSigned(id);
+
     }
 }

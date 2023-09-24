@@ -27,6 +27,7 @@ public interface UserMapperInterface {
     UserEntity toEntity(User user);
 
 //    @Mapping(source = "userId.userId", target = "userId")
+    @Mapping(source = "socialId", target = "socialId")
     User toDomain(UserEntity userEntity);
 //    @Mapping(source = "userId.userId", target = "userId")
     ChatUser toChatDomain(UserEntity userEntity);

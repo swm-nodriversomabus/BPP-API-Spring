@@ -1,5 +1,6 @@
 package com.example.api.user.domain;
 
+import com.example.api.social.adapter.out.persistence.SocialEntity;
 import com.example.api.user.type.UserGenderEnum;
 import com.example.api.user.type.UserRoleEnum;
 import lombok.*;
@@ -25,4 +26,5 @@ public class User {
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
     private Boolean isActive;
+    private SocialEntity socialId;
 }
