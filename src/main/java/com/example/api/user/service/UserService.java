@@ -1,5 +1,7 @@
 package com.example.api.user.service;
 
+import com.example.api.common.exception.CustomException;
+import com.example.api.common.type.ErrorCodeEnum;
 import com.example.api.social.adapter.out.persistence.SocialEntity;
 import com.example.api.user.adapter.out.persistence.UserEntity;
 import com.example.api.user.adapter.out.persistence.UserMapperInterface;
@@ -9,9 +11,10 @@ import com.example.api.user.application.port.out.DeleteUserPort;
 import com.example.api.social.application.port.out.FindSocialPort;
 import com.example.api.user.application.port.out.FindUserPort;
 import com.example.api.user.application.port.out.SaveUserPort;
+import com.example.api.user.domain.CreateUser;
 import com.example.api.user.domain.User;
 import com.example.api.user.application.port.in.SaveUserUsecase;
-import com.example.api.user.dto.CreaeUserDto;
+import com.example.api.user.dto.CreateUserDto;
 import com.example.api.user.dto.UserDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -43,13 +46,14 @@ public class UserService implements SaveUserUsecase, FindUserUsecase, DeleteUser
     
     @Override
     @Transactional
-    public void createUser(CreaeUserDto userDto) {
-        log.info("welcome");
-        log.info(userDto.toString());
-        SocialEntity social = findSocialPort.findSocialUser(userDto.getSocialEmail(), userDto.getProvider()).orElseThrow(()->new IllegalArgumentException("로그인 정보가 없습니다"));
-
-
-        log.info(social.toString());
+    public void createUser(CreateUserDto userDto) {
+        SocialEntity social = findSocialPort.findSocialUser(userDto.getSocialEmail(), userDto.getProvider()).orElseThrow(()->new CustomException(ErrorCodeEnum.LOGIN_IS_NOT_DONE));
+        userDto.setSocialId(social.getSocialId());
+//        CreateUser createUser = userMapper.toDomain(userDto);
+//        log.info(createUser.toString());
+//        log.info(createUser.getUsername());
+        saveUserPort.createUser(userMapper.toDomain(userDto));
+//        log.info(social.toString());
 //        User user = saveUserPort.createUser(userMapper.toDomain(userDto));
 //        return userMapper.toDto(user);
     }

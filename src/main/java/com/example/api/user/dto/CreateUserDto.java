@@ -13,7 +13,7 @@ import lombok.experimental.FieldDefaults;
 @NoArgsConstructor
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class CreaeUserDto {
+public class CreateUserDto {
     @NotBlank(message = "소셜 로그인 값이 없습니다")
     String socialEmail; // 소셜 이메일
 
@@ -22,7 +22,7 @@ public class CreaeUserDto {
 
     // 위 두개는 소셜에서 데이터를 가져오는 용
 
-    Integer socialId;
+    Long socialId;
 
     @NotBlank(message = "이름을 입력해주세요")
     @Size(max=30, message = "이름은 최대 30글자까지 입니다")

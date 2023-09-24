@@ -3,9 +3,12 @@ package com.example.api.user.adapter.out.persistence;
 import com.example.api.user.application.port.out.DeleteUserPort;
 import com.example.api.user.application.port.out.FindUserPort;
 import com.example.api.user.application.port.out.SaveUserPort;
+import com.example.api.user.domain.CreateUser;
 import com.example.api.user.domain.User;
+import com.example.api.user.dto.CreateUserDto;
 import com.example.api.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Repository;
 
@@ -15,14 +18,15 @@ import java.util.Optional;
 @Component
 @RequiredArgsConstructor
 @Repository
+@Slf4j
 public class UserPersistenceAdapter implements SaveUserPort, FindUserPort, DeleteUserPort {
     private final UserMapperInterface userMapper;
     private final UserRepository userRepository;
     
     @Override
-    public User createUser(User user) {
+    public void createUser(CreateUser user) {
         UserEntity userData = userRepository.save(userMapper.toEntity(user));
-        return userMapper.toDomain(userData);
+//        return userMapper.toDomain(userData);
     }
     
     @Override

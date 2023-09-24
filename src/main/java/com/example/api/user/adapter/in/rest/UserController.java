@@ -5,7 +5,7 @@ import com.example.api.user.application.port.in.DeleteUserUsecase;
 import com.example.api.user.application.port.in.FindUserUsecase;
 import com.example.api.user.application.port.in.RecommendedMatchingUsecase;
 import com.example.api.user.application.port.in.SaveUserUsecase;
-import com.example.api.user.dto.CreaeUserDto;
+import com.example.api.user.dto.CreateUserDto;
 import com.example.api.user.dto.UserDto;
 import com.example.api.user.validator.CreateGenderValidator;
 import io.swagger.v3.oas.annotations.Operation;
@@ -40,7 +40,7 @@ public class UserController {
      */
     @Operation(summary = "Create user", description = "새로운 사용자를 추가한다.")
     @PostMapping("/user")
-    public void createUser(@RequestBody @Valid CreaeUserDto userDto) {
+    public void createUser(@RequestBody @Valid CreateUserDto userDto) {
         saveUserUsecase.createUser(userDto);
     }
 

@@ -1,6 +1,6 @@
 package com.example.api.user.validator;
 
-import com.example.api.user.dto.CreaeUserDto;
+import com.example.api.user.dto.CreateUserDto;
 import com.example.api.user.type.UserGenderEnum;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
@@ -10,12 +10,12 @@ import org.springframework.validation.Validator;
 public class CreateGenderValidator implements Validator {
     @Override
     public boolean supports(Class<?> clazz) {
-        return CreaeUserDto.class.equals(clazz);
+        return CreateUserDto.class.equals(clazz);
     }
 
     @Override
     public void validate(Object target, Errors errors) {
-        CreaeUserDto creaeUserDto = (CreaeUserDto) target;
+        CreateUserDto creaeUserDto = (CreateUserDto) target;
 
         if (creaeUserDto.getGender() == null) {
             errors.rejectValue("gender", "enum.required","성별을 넣어주세요");

@@ -1,7 +1,9 @@
 package com.example.api.user.adapter.out.persistence;
 
 import com.example.api.user.domain.ChatUser;
+import com.example.api.user.domain.CreateUser;
 import com.example.api.user.domain.User;
+import com.example.api.user.dto.CreateUserDto;
 import com.example.api.user.dto.UserDto;
 import org.mapstruct.InjectionStrategy;
 import org.mapstruct.Mapper;
@@ -12,6 +14,13 @@ import org.mapstruct.ReportingPolicy;
         injectionStrategy = InjectionStrategy.CONSTRUCTOR,
         unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface UserMapperInterface {
+
+
+
+    CreateUser toDomain(CreateUserDto userDto);
+
+    @Mapping(source = "socialId", target = "socialId.socialId")
+    UserEntity toEntity(CreateUser user);
 
     User toDomain(UserDto userDto);
 //    @Mapping(source = "userId",target = "userId.userId")
