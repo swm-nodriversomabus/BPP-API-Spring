@@ -12,7 +12,6 @@ import com.example.api.user.application.port.out.DeleteUserPort;
 import com.example.api.social.application.port.out.FindSocialPort;
 import com.example.api.user.application.port.out.FindUserPort;
 import com.example.api.user.application.port.out.SaveUserPort;
-import com.example.api.user.domain.CreateUser;
 import com.example.api.user.domain.User;
 import com.example.api.user.application.port.in.SaveUserUsecase;
 import com.example.api.user.dto.CreateUserDto;
@@ -50,13 +49,7 @@ public class UserService implements SaveUserUsecase, FindUserUsecase, DeleteUser
     public void createUser(CreateUserDto userDto) {
         SocialEntity social = findSocialPort.findSocialUser(userDto.getSocialEmail(), userDto.getProvider()).orElseThrow(()->new CustomException(ErrorCodeEnum.LOGIN_IS_NOT_DONE));
         userDto.setSocialId(social.getSocialId());
-//        CreateUser createUser = userMapper.toDomain(userDto);
-//        log.info(createUser.toString());
-//        log.info(createUser.getUsername());
         saveUserPort.createUser(userMapper.toDomain(userDto));
-//        log.info(social.toString());
-//        User user = saveUserPort.createUser(userMapper.toDomain(userDto));
-//        return userMapper.toDto(user);
     }
 
     @Override
