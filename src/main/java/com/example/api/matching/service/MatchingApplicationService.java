@@ -1,7 +1,10 @@
 package com.example.api.matching.service;
 
 import com.example.api.common.type.ApplicationStateEnum;
+import com.example.api.fcm.dto.FcmDto;
+import com.example.api.fcm.service.FcmService;
 import com.example.api.matching.adapter.out.persistence.MatchingApplicationEntity;
+import com.example.api.matching.adapter.out.persistence.MatchingApplicationPK;
 import com.example.api.matching.adapter.out.persistence.MatchingMapperInterface;
 import com.example.api.matching.application.port.in.MatchingApplicationUsecase;
 import com.example.api.matching.application.port.out.FindMatchingPort;
@@ -18,6 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 @Service
 @RequiredArgsConstructor
@@ -28,6 +32,7 @@ public class MatchingApplicationService implements MatchingApplicationUsecase {
     private final FindUserPort findUserPort;
     private final FindMatchingPort findMatchingPort;
     private final MatchingApplicationPort matchingApplicationPort;
+    private final FcmService fcmService;
     
     @Override
     @Transactional
@@ -61,5 +66,33 @@ public class MatchingApplicationService implements MatchingApplicationUsecase {
     public MatchingApplicationDto updateMatchingApplication(MatchingApplicationDto matchingApplicationDto) {
         MatchingApplication matchingApplication = matchingApplicationPort.updateMatchingApplication(matchingMapper.toDomain(matchingApplicationDto));
         return matchingMapper.toDto(matchingApplication);
+    }
+
+    @Transactional
+    public void acceptMatchingApplication(MatchingApplicationPK matchingApplicationPK) {
+        MatchingApplicationEntity matchingApplicationEntity = matchingApplicationPort.getByMatchingApplicationPK(matchingApplicationPK)
+                .orElseThrow(NoSuchElementException::new);
+        MatchingApplication matchingApplication = matchingMapper.toDomain(matchingApplicationEntity);
+        matchingApplication.setState(ApplicationStateEnum.Approved);
+        FcmDto fcmDto = FcmDto.builder()
+                .userId(matchingApplication.getUserId())
+                .title("신청 수락")
+                .body("매칭 신청이 수락되었어요!")
+                .build();
+        fcmService.sendNotification(fcmDto);
+    }
+
+    @Transactional
+    public void declineMatchingApplication(MatchingApplicationPK matchingApplicationPK) {
+        MatchingApplicationEntity matchingApplicationEntity = matchingApplicationPort.getByMatchingApplicationPK(matchingApplicationPK)
+                .orElseThrow(NoSuchElementException::new);
+        MatchingApplication matchingApplication = matchingMapper.toDomain(matchingApplicationEntity);
+        matchingApplication.setState(ApplicationStateEnum.Declined);
+        FcmDto fcmDto = FcmDto.builder()
+                .userId(matchingApplication.getUserId())
+                .title("신청 거절")
+                .body("매칭 신청이 거절되었어요.")
+                .build();
+        fcmService.sendNotification(fcmDto);
     }
 }

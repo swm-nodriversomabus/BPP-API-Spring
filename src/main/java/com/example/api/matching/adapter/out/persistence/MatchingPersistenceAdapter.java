@@ -1,9 +1,6 @@
 package com.example.api.matching.adapter.out.persistence;
 
-import com.example.api.matching.application.port.out.DeleteMatchingPort;
-import com.example.api.matching.application.port.out.FindMatchingPort;
-import com.example.api.matching.application.port.out.LikePort;
-import com.example.api.matching.application.port.out.SaveMatchingPort;
+import com.example.api.matching.application.port.out.*;
 import com.example.api.matching.domain.Matching;
 import com.example.api.matching.repository.LikeRepository;
 import com.example.api.matching.repository.MatchingRepository;

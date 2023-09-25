@@ -9,6 +9,7 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 @RequiredArgsConstructor
@@ -21,6 +22,11 @@ public class MatchingApplicationPersistenceAdapter implements MatchingApplicatio
     public MatchingApplication createMatchingApplication(MatchingApplication matchingApplication) {
         MatchingApplicationEntity matchingApplicationData = matchingApplicationRepository.save(matchingMapper.toEntity(matchingApplication));
         return matchingMapper.toDomain(matchingApplicationData);
+    }
+
+    @Override
+    public Optional<MatchingApplicationEntity> getByMatchingApplicationPK(MatchingApplicationPK matchingApplicationPK) {
+        return matchingApplicationRepository.getByUserIdAndMatchingId(matchingApplicationPK.getUserId(), matchingApplicationPK.getMatchingId());
     }
     
     @Override
