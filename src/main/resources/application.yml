@@ -6,17 +6,17 @@ server:
 spring:
   profiles:
     active: local
-    include: oauth
+    include: loauth
 
 ---
 
 spring:
   profiles:
     active: prod
-    include: oauth
+    include: poauth
 ---
 
 spring:
   profiles:
     active: dev
-    include: oauth
+    include: doauth
