@@ -2,16 +2,21 @@ package com.example.api.preference.adapter.out.persistence;
 
 import com.example.api.preference.application.port.out.*;
 import com.example.api.preference.domain.Preference;
+import com.example.api.preference.repository.MatchingPreferenceRepository;
+import com.example.api.preference.repository.PreferenceRepository;
+import com.example.api.preference.repository.UserPreferenceRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Component;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
 
-@Component
+@Repository
 @RequiredArgsConstructor
+@ComponentScan
 public class PreferencePersistenceAdapter implements
         SavePreferencePort, FindPreferencePort, ComparePreferencePort, CreateUserPreferencePort, CreateMatchingPreferencePort {
-    private final PreferenceMapper preferenceMapper;
+    private final PreferenceMapperInterface preferenceMapper;
     private final PreferenceRepository preferenceRepository;
     private final UserPreferenceRepository userPreferenceRepository;
     private final MatchingPreferenceRepository matchingPreferenceRepository;
@@ -20,8 +25,8 @@ public class PreferencePersistenceAdapter implements
     
     @Override
     public Preference createPreference(Preference preference) {
-        PreferenceEntity preferenceData = preferenceRepository.save(preferenceMapper.fromDomainToEntity(preference));
-        return preferenceMapper.fromEntityToDomain(preferenceData);
+        PreferenceEntity preferenceData = preferenceRepository.save(preferenceMapper.toEntity(preference));
+        return preferenceMapper.toDomain(preferenceData);
     }
     
     @Override
@@ -32,8 +37,8 @@ public class PreferencePersistenceAdapter implements
     @Override
     public Preference updatePreference(Long preferenceId, Preference preference) {
         preference.setPreferenceId(preferenceId);
-        PreferenceEntity preferenceData = preferenceRepository.save(preferenceMapper.fromDomainToEntity(preference));
-        return preferenceMapper.fromEntityToDomain(preferenceData);
+        PreferenceEntity preferenceData = preferenceRepository.save(preferenceMapper.toEntity(preference));
+        return preferenceMapper.toDomain(preferenceData);
     }
     
     // UserPreference

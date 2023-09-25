@@ -1,8 +1,7 @@
 package com.example.api.user.adapter.out.persistence;
 
-import com.example.api.common.entity.BaseEntity;
 import com.example.api.social.adapter.out.persistence.SocialEntity;
-import com.example.api.user.dto.UserDto;
+import com.example.api.common.entity.BaseEntity;
 import com.example.api.user.type.UserGenderEnum;
 import com.example.api.user.type.UserRoleEnum;
 import jakarta.persistence.*;
@@ -19,7 +18,6 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 @AllArgsConstructor
 @Table(name="users")
 public class UserEntity extends BaseEntity {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long userId;

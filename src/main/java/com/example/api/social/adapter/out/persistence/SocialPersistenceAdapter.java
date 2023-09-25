@@ -5,7 +5,6 @@ import com.example.api.social.application.port.out.SaveSocialPort;
 import com.example.api.social.dto.AddSocialDto;
 import com.example.api.social.repository.SocialRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
@@ -41,3 +40,4 @@ public class SocialPersistenceAdapter implements SaveSocialPort, FindSocialPort 
         };
     }
 }
+

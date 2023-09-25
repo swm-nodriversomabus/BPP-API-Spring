@@ -29,8 +29,7 @@ public class AsyncConfig implements AsyncConfigurer {
         return executor;
     }
     @Override
-    public AsyncUncaughtExceptionHandler getAsyncUncaughtExceptionHandler(){
+    public AsyncUncaughtExceptionHandler getAsyncUncaughtExceptionHandler() {
         return new AsyncExceptionHandler(); // 에러 잡기
     }
-
 }

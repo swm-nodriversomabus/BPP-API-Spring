@@ -14,7 +14,6 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 @SpringBootApplication
 @EnableJpaRepositories
 @EnableJpaAuditing
-@OpenAPIDefinition(info = @Info(title = "BPP API Document", version = "1.0", description = "BPP API Document Swagger"))
 public class ApiApplication {
 
 	public static void main(String[] args) {

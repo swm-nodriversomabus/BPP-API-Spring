@@ -19,3 +19,4 @@ public interface SocialRepository extends JpaRepository<SocialEntity, Long> {
 
 
 }
+

@@ -5,9 +5,12 @@ import com.example.api.user.application.port.out.FindUserPort;
 import com.example.api.user.application.port.out.SaveUserPort;
 import com.example.api.user.domain.CreateUser;
 import com.example.api.user.domain.User;
+import com.example.api.user.repository.UserRepository;
 import com.example.api.user.dto.CreateUserDto;
 import com.example.api.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.stereotype.Repository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Repository;
@@ -15,10 +18,10 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 import java.util.Optional;
 
-@Component
 @RequiredArgsConstructor
 @Repository
 @Slf4j
+@ComponentScan
 public class UserPersistenceAdapter implements SaveUserPort, FindUserPort, DeleteUserPort {
     private final UserMapperInterface userMapper;
     private final UserRepository userRepository;
@@ -36,7 +39,7 @@ public class UserPersistenceAdapter implements SaveUserPort, FindUserPort, Delet
     
     @Override
     public Optional<UserEntity> getUserByUserId(Long userId) {
-        return userRepository.getUserEntityByUserId(userId);
+        return userRepository.getUserByUserId(userId);
     }
     
     @Override

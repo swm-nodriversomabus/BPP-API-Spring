@@ -1,9 +1,9 @@
 package com.example.api.user.application.port.in;
 
-import com.example.api.matching.dto.MatchingDto;
+import com.example.api.matching.dto.FindMatchingDto;
 
 import java.util.List;
 
 public interface RecommendedMatchingUsecase {
-    List<MatchingDto> getRecommendedMatchingList(Long userId);
+    List<FindMatchingDto> getRecommendedMatchingList(Long userId);
 }

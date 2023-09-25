@@ -40,11 +40,14 @@ dependencies {
 	implementation 'org.apache.commons:commons-lang3:3.11' // lang3
 	implementation 'org.springframework.boot:spring-boot-starter-data-redis' // redis
 	runtimeOnly 'com.mysql:mysql-connector-j'
+	implementation 'com.google.firebase:firebase-admin:9.2.0' // 푸시 알림
+	runtimeOnly 'com.mysql:mysql-connector-j' // MySQL 8
 	annotationProcessor 'org.projectlombok:lombok'
 	annotationProcessor 'org.mapstruct:mapstruct-processor:1.5.3.Final'
 	annotationProcessor "org.springframework.boot:spring-boot-configuration-processor"
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testImplementation 'org.springframework.security:spring-security-test'
+	testImplementation 'com.h2database:h2' // 테스트 DB
 	testImplementation 'org.springframework.kafka:spring-kafka-test' // 카프카 전용
 	// https://mvnrepository.com/artifact/io.jsonwebtoken/jjwt-api
 	implementation group: 'io.jsonwebtoken', name: 'jjwt-api', version: '0.11.5'

@@ -15,9 +15,10 @@ import com.example.api.user.application.port.out.SaveUserPort;
 import com.example.api.user.domain.User;
 import com.example.api.user.application.port.in.SaveUserUsecase;
 import com.example.api.user.dto.CreateUserDto;
-import com.example.api.user.dto.UserDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import com.example.api.user.dto.FindUserDto;
+import com.example.api.user.dto.SaveUserDto;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -53,21 +54,21 @@ public class UserService implements SaveUserUsecase, FindUserUsecase, DeleteUser
     }
 
     @Override
-    public List<UserDto> getAll() {
+    public List<FindUserDto> getAll() {
         return findUserPort.getAllBy().stream()
                 .map(userMapper::toDto)
                 .collect(Collectors.toList());
     }
     
     @Override
-    public Optional<UserDto> getUserById(Long userId) {
+    public Optional<FindUserDto> getUserById(Long userId) {
         return findUserPort.getUserByUserId(userId)
                 .map(userMapper::toDto);
     }
 
     @Override
     @Transactional
-    public UserDto updateUser(Long userId,UserDto userDto) {
+    public FindUserDto updateUser(Long userId, SaveUserDto userDto) {
         User user = saveUserPort.updateUser(userId, userMapper.toDomain(userDto));
         return userMapper.toDto(user);
     }
@@ -83,7 +84,6 @@ public class UserService implements SaveUserUsecase, FindUserUsecase, DeleteUser
     public void deleteUser(Long userId) {
         deleteUserPort.deleteByUserId(userId);
     }
-
     public SecurityUserDto findSocialUser(String id, String provider) {
 
         User user = userMapper.toDomain(findUserPort.findSocialUser(id, provider).orElseThrow(IllegalStateException::new));

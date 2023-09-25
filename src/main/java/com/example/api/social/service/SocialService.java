@@ -3,7 +3,6 @@ package com.example.api.social.service;
 import com.example.api.social.adapter.out.persistence.SocialEntity;
 import com.example.api.social.application.port.out.SaveSocialPort;
 import com.example.api.social.dto.AddSocialDto;
-import com.example.api.user.adapter.out.persistence.UserEntity;
 import com.example.api.social.application.port.out.FindSocialPort;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -30,3 +29,4 @@ public class SocialService {
     }
 
 }
+
