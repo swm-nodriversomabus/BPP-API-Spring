@@ -33,7 +33,6 @@ out/
 /nbdist/
 /.nb-gradle/
 
-
 application-*.properties
 application-dev.properties
 application-prod.properties
@@ -41,3 +40,7 @@ application-*.yml
 
 ### VS Code ###
 .vscode/
+
+### Extra ###
+desktop.ini
+/src/main/resources/firebase/
