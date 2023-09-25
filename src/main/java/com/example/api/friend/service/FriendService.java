@@ -13,7 +13,6 @@ import com.example.api.friend.dto.FriendDto;
 import com.example.api.user.adapter.out.persistence.UserMapperInterface;
 import com.example.api.user.application.port.out.FindUserPort;
 import com.example.api.user.dto.FindUserDto;
-import com.example.api.user.dto.SaveUserDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

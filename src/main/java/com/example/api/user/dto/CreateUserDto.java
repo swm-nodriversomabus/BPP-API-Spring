@@ -1,13 +1,12 @@
 package com.example.api.user.dto;
 
-
 import com.example.api.user.type.UserGenderEnum;
 import com.example.api.user.type.UserRoleEnum;
 import jakarta.validation.constraints.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
-// user 셍성 DTO
+// User 셍성 DTO
 @Builder
 @Data
 @NoArgsConstructor
@@ -50,17 +49,4 @@ public class CreateUserDto {
     Integer mannerScore = 30;
     @Builder.Default
     Boolean isActive = true;
-
-//    public CreaeUserDto(String username, UserGenderEnum gender, Integer age, String phone, UserRoleEnum role, Boolean blacklist, String stateMessage, Integer mannerScore, Boolean isActive){
-//        this.username = username;
-//        this.gender = gender;
-//        this.age = age;
-//        this.phone = phone;
-//
-//        this.role = role;
-//        this.blacklist = blacklist;
-//        this.stateMessage = stateMessage;
-//        this.mannerScore = mannerScore;
-//        this.isActive = isActive;
-//    }
 }

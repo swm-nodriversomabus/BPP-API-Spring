@@ -11,12 +11,9 @@ import lombok.*;
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor
-public class SaveUserDto {
+public class UpdateUserDto { // 추후 UpdateUserDto로 바꾸기
     @NotBlank
     private String username;
-    
-    @NotBlank
-    private String nickname;
     
     @NotNull
     private UserGenderEnum gender;
@@ -28,13 +25,6 @@ public class SaveUserDto {
     @NotBlank
     private String phone;
     
-    @NotBlank
-    @Email
-    private String email;
-    
-    @NotBlank
-    private String address;
-    
     @NotNull
     private UserRoleEnum role;
     
@@ -42,20 +32,11 @@ public class SaveUserDto {
     private Boolean blacklist;
     
     @NotEmpty
-    private String personality;
-    
-    @NotEmpty
     private String stateMessage;
     
     @NotNull
     @Min(0)
     private Integer mannerScore;
-    
-    @NotNull
-    private Long createdUserId;
-    
-    @NotNull
-    private Long updatedUserId;
     
     @NotNull
     private Boolean isActive;

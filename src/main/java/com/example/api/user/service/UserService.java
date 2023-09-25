@@ -15,10 +15,10 @@ import com.example.api.user.application.port.out.SaveUserPort;
 import com.example.api.user.domain.User;
 import com.example.api.user.application.port.in.SaveUserUsecase;
 import com.example.api.user.dto.CreateUserDto;
+import com.example.api.user.dto.UpdateUserDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import com.example.api.user.dto.FindUserDto;
-import com.example.api.user.dto.SaveUserDto;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -36,14 +36,6 @@ public class UserService implements SaveUserUsecase, FindUserUsecase, DeleteUser
     private final FindUserPort findUserPort;
     private final DeleteUserPort deleteUserPort;
     private final FindSocialPort findSocialPort;
-
-//    /**
-//     * 유저가 회원가입 되어 있는지 여부 체크
-//     * @return
-//     */
-//    public Optional<UserEntity> findUserSigned(String id, String provider){
-//        return findSocialPort.findSocialUser(id, provider);
-//    }
     
     @Override
     @Transactional
@@ -68,7 +60,7 @@ public class UserService implements SaveUserUsecase, FindUserUsecase, DeleteUser
 
     @Override
     @Transactional
-    public FindUserDto updateUser(Long userId, SaveUserDto userDto) {
+    public FindUserDto updateUser(Long userId, UpdateUserDto userDto) {
         User user = saveUserPort.updateUser(userId, userMapper.toDomain(userDto));
         return userMapper.toDto(user);
     }
@@ -84,10 +76,11 @@ public class UserService implements SaveUserUsecase, FindUserUsecase, DeleteUser
     public void deleteUser(Long userId) {
         deleteUserPort.deleteByUserId(userId);
     }
+    
+    // Social
+    
     public SecurityUserDto findSocialUser(String id, String provider) {
-
         User user = userMapper.toDomain(findUserPort.findSocialUser(id, provider).orElseThrow(IllegalStateException::new));
-//        UserEntity user = findUserPort.findSocialUser(id, provider).orElseThrow(IllegalStateException::new);
         return SecurityUserDto.builder()
                 .userId(user.getUserId())
                 .naverId(user.getSocialId().getNaverId())
@@ -98,11 +91,8 @@ public class UserService implements SaveUserUsecase, FindUserUsecase, DeleteUser
                 .role(user.getRole().getRole())
                 .build();
     }
-
-
-    public Optional<UserEntity> findUserSigned(Long id){
-
+    
+    public Optional<UserEntity> findUserSigned(Long id) {
         return findUserPort.findUserSigned(id);
-
     }
 }
