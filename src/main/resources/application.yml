@@ -17,10 +17,6 @@ spring:
   profiles:
     active: local
     include: loauth
-  config:
-    import: optional:configserver:https://dev.yeohaengparty.com/config
-#        configserver: http://localhost:8888
-
 
 
 ---
