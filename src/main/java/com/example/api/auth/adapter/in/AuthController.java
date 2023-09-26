@@ -9,7 +9,10 @@ import com.example.api.auth.type.TokenResponseStatus;
 import com.example.api.common.dto.StatusResponseDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RestController;
@@ -20,11 +23,19 @@ import java.util.Optional;
 @Slf4j
 @RestController
 @RequiredArgsConstructor
+@RefreshScope
 public class AuthController {
     private final JwtUtilService jwtUtilService;
     private final LogoutUsecase logoutUsecase;
     private final FindRefreshUsecase findRefreshUsecase;
+    @Value("${test}")
+    private String test;
 
+
+    @GetMapping("/auth/test")
+    public String test(){
+        return test;
+    }
     @PostMapping("/auth/logout")
     public ResponseEntity<StatusResponseDto> logout(@RequestHeader("Authorization") final String accessToken) {
         logoutUsecase.removeToken(accessToken);

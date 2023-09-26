@@ -41,6 +41,7 @@ public class SecurityConfig{
         httpSecurity.authorizeHttpRequests((authorizeRequests)-> // 인증 설정
                 authorizeRequests.requestMatchers("/admin/**").hasRole("ADMIN") // 이 url로 오는 요청들은 admin권한만 접근 가능
                 .requestMatchers("/auth/**").permitAll() // auth 로 오는 애들은 일단 인증 없이 가능
+                .requestMatchers("/actuator/**").permitAll()
                 .requestMatchers(HttpMethod.POST, "/user/**").permitAll()
                 .requestMatchers("/login/**").permitAll()
                 .anyRequest().authenticated()); // 그 외는 전부 인증 필요
