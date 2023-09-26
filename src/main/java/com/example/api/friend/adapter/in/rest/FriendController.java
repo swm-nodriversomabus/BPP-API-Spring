@@ -5,7 +5,6 @@ import com.example.api.friend.application.port.in.DeleteFriendUsecase;
 import com.example.api.friend.application.port.in.FindFriendUsecase;
 import com.example.api.friend.dto.FriendDto;
 import com.example.api.user.dto.FindUserDto;
-import com.example.api.user.dto.SaveUserDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;

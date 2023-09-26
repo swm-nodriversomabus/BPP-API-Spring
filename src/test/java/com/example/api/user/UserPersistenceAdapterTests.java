@@ -3,6 +3,7 @@ package com.example.api.user;
 import com.example.api.user.adapter.out.persistence.UserEntity;
 import com.example.api.user.adapter.out.persistence.UserMapperInterface;
 import com.example.api.user.adapter.out.persistence.UserPersistenceAdapter;
+import com.example.api.user.domain.CreateUser;
 import com.example.api.user.domain.User;
 import com.example.api.user.repository.UserRepository;
 import com.example.api.user.type.UserGenderEnum;
@@ -31,62 +32,53 @@ public class UserPersistenceAdapterTests {
     private UserMapperInterface userMapper = mock(UserMapperInterface.class);
     @InjectMocks
     private UserRepository userRepository = mock(UserRepository.class);
-    private User user1, user2, user3;
+    private CreateUser user1, user2, user3;
+    private User newUser;
     
     @BeforeEach
     void beforeEach() {
-        user1 = User.builder()
-                .userId(1L)
+        user1 = CreateUser.builder()
                 .username("Andrew")
-                .nickname("TestUser1")
                 .gender(UserGenderEnum.Male)
                 .age(24)
                 .phone("010-9876-5432")
-                .email("test1@gmail.com")
-                .address("Seoul")
                 .role(UserRoleEnum.User)
                 .blacklist(false)
-                .personality(" ")
                 .stateMessage(" ")
                 .mannerScore(75)
-                .createdUserId(0L)
-                .updatedUserId(0L)
                 .isActive(true)
                 .build();
-        user2 = User.builder()
-                .userId(2L)
+        user2 = CreateUser.builder()
                 .username("Andrew")
-                .nickname("TestUser1")
                 .gender(UserGenderEnum.Male)
                 .age(22)
                 .phone("010-8765-4321")
-                .email("test2@gmail.com")
-                .address("Busan")
                 .role(UserRoleEnum.User)
                 .blacklist(false)
-                .personality(" ")
                 .stateMessage(" ")
                 .mannerScore(72)
-                .createdUserId(0L)
-                .updatedUserId(0L)
                 .isActive(true)
                 .build();
-        user3 = User.builder()
-                .userId(3L)
+        user3 = CreateUser.builder()
                 .username("Andrew")
-                .nickname("TestUser1")
                 .gender(UserGenderEnum.Male)
                 .age(25)
                 .phone("010-7654-3210")
-                .email("test3@gmail.com")
-                .address("Incheon")
                 .role(UserRoleEnum.User)
                 .blacklist(false)
-                .personality(" ")
                 .stateMessage(" ")
                 .mannerScore(73)
-                .createdUserId(0L)
-                .updatedUserId(0L)
+                .isActive(true)
+                .build();
+        newUser = User.builder()
+                .username("Andrew")
+                .gender(UserGenderEnum.Male)
+                .age(25)
+                .phone("010-7654-3210")
+                .role(UserRoleEnum.User)
+                .blacklist(false)
+                .stateMessage(" ")
+                .mannerScore(76)
                 .isActive(true)
                 .build();
     }
@@ -106,16 +98,16 @@ public class UserPersistenceAdapterTests {
     }
     
     @Test
-    void getUserByUserIdTest() throws Exception {
+    void getUserByUserIdTest() {
         UserEntity userEntity = userPersistenceAdapter.getUserByUserId(2L).orElse(userMapper.toEntity(user2));
-        verify(userRepository, times(1)).getUserByUserId(2L);
+        verify(userRepository, times(1)).getByUserId(2L);
     }
     
     @Test
     void updateUserTest() {
-        user3.setAddress("Gwangju");
-        User user = userPersistenceAdapter.updateUser(3L, user3);
-        verify(userRepository, times(1)).save(userMapper.toEntity(user3));
+        user3.setMannerScore(71);
+        User user = userPersistenceAdapter.updateUser(3L, newUser);
+        verify(userRepository, times(1)).save(userMapper.toEntity(newUser));
     }
 
     @Test

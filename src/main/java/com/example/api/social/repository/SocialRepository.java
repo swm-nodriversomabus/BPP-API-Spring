@@ -16,7 +16,4 @@ public interface SocialRepository extends JpaRepository<SocialEntity, Long> {
     Optional<SocialEntity> findSocialEntityByNaverId(String id);
     // 인스타 id 기준 social entity 찾아오기
     Optional<SocialEntity> findSocialEntityByInstaId(String id);
-
-
 }
-

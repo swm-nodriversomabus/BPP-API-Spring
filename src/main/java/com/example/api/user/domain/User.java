@@ -20,7 +20,6 @@ public class User {
     private String phone;
     private UserRoleEnum role;
     private Boolean blacklist;
-    private String personality;
     private String stateMessage;
     private Integer mannerScore;
     private LocalDateTime createdAt;
