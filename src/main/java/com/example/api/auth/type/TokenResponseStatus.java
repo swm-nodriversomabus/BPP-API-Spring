@@ -11,13 +11,14 @@ import lombok.Getter;
 public class TokenResponseStatus {
     private Integer status;
     private Object data;
-    private String accessToken;
-    public TokenResponseStatus(Integer status, String accessToken) {
+//    private String accessToken;
+    public TokenResponseStatus(Integer status, Object data) {
         this.status = status;
-        this.accessToken = accessToken;
+        this.data = data;
+//        this.accessToken = accessToken;
     }
 
-    public static TokenResponseStatus addStatus(Integer status, String accessToken) {
-        return new TokenResponseStatus(status, accessToken);
+    public static TokenResponseStatus addStatus(Integer status, Object data) {
+        return new TokenResponseStatus(status, data);
     }
 }
