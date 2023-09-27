@@ -12,9 +12,8 @@ public class TokenResponseStatus {
     private Integer status;
     private Object data;
 //    private String accessToken;
-    public TokenResponseStatus(Integer status, Object data) {
+    public TokenResponseStatus(Integer status) {
         this.status = status;
-        this.data = data;
 //        this.accessToken = accessToken;
     }
 

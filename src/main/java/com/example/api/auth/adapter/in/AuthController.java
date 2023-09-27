@@ -30,8 +30,8 @@ public class AuthController {
     private final FindRefreshUsecase findRefreshUsecase;
 
     @PostMapping("/auth/logout")
-    public ResponseEntity<StatusResponseDto> logout(@CookieValue String accessToken, HttpServletResponse response) {
-        logoutUsecase.removeToken(accessToken);
+    public ResponseEntity<StatusResponseDto> logout(@CookieValue String access_token, HttpServletResponse response) {
+        logoutUsecase.removeToken(access_token);
 
         Cookie cookie = new Cookie("accessToken", null);
         cookie.setMaxAge(0);
@@ -40,10 +40,10 @@ public class AuthController {
     }
 
     @PostMapping("/auth/refresh")
-    public ResponseEntity<TokenResponseStatus> refresh(@CookieValue String accessToken, HttpServletResponse response) {
+    public ResponseEntity<TokenResponseStatus> refresh(@CookieValue String access_token, HttpServletResponse response) {
 
         // accessToken 여부 확인
-        Optional<RefreshToken> refreshToken = findRefreshUsecase.findByAccessToken(accessToken);
+        Optional<RefreshToken> refreshToken = findRefreshUsecase.findByAccessToken(access_token);
 
         if (refreshToken.isPresent() && jwtUtilService.verifyToken(refreshToken.get().getRefreshToken())) {
             RefreshToken token = refreshToken.get(); // refresh토큰 가져오기
@@ -54,6 +54,7 @@ public class AuthController {
 
             token.updateAccessToken(newAccessToken);
             findRefreshUsecase.save(token);
+            log.info(newAccessToken);
             CookieUtils.addCookie(response, "access_token",newAccessToken, 1000 * 60 * 60);
 
             return ResponseEntity.ok(TokenResponseStatus.addStatus(200,null));
