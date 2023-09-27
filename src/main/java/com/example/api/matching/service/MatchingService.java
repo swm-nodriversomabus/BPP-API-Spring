@@ -1,5 +1,6 @@
 package com.example.api.matching.service;
 
+import com.example.api.chatroom.service.ChatRoomService;
 import com.example.api.common.type.Pair;
 import com.example.api.matching.adapter.out.persistence.MatchingMapperInterface;
 import com.example.api.matching.application.port.in.DeleteMatchingUsecase;

@@ -41,3 +41,7 @@ application-*.yml
 
 ### VS Code ###
 .vscode/
+
+### Extra ###
+desktop.ini
+/src/main/resources/firebase/

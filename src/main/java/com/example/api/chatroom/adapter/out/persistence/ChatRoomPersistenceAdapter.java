@@ -18,15 +18,14 @@ import java.util.UUID;
 @Component
 @RequiredArgsConstructor
 public class ChatRoomPersistenceAdapter implements CreateChatRoomPort, FindChatRoomListPort, RetrieveChatRoomPort {
-
     private final ChatRoomRepository chatRoomRepository;
     private final ChatRoomMapper chatRoomMapper;
     private final MemberRepository memberRepository;
 
     @Override
     public ChatRoom createChatRoom(ChatRoom chatRoom) {
-        ChatRoomEntity ret = chatRoomRepository.save(chatRoomMapper.fromDomainToEntityWithoutId(chatRoom));
-        return chatRoomMapper.fromEntityToDomain(ret);
+        ChatRoomEntity chatRoomEntity = chatRoomRepository.save(chatRoomMapper.fromDomainToEntityWithoutId(chatRoom));
+        return chatRoomMapper.fromEntityToDomain(chatRoomEntity);
     }
 
     @Override

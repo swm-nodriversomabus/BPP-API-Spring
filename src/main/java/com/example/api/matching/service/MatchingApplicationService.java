@@ -1,5 +1,9 @@
 package com.example.api.matching.service;
 
+import com.example.api.chatroom.domain.ChatRoom;
+import com.example.api.chatroom.dto.CreateChatRoomDto;
+import com.example.api.chatroom.service.ChatRoomService;
+import com.example.api.chatroom.type.ChatRoomEnum;
 import com.example.api.common.type.ApplicationStateEnum;
 import com.example.api.matching.adapter.out.persistence.MatchingApplicationEntity;
 import com.example.api.matching.adapter.out.persistence.MatchingMapperInterface;
@@ -9,6 +13,8 @@ import com.example.api.matching.application.port.out.MatchingApplicationPort;
 import com.example.api.matching.domain.MatchingApplication;
 import com.example.api.matching.dto.MatchingApplicationDto;
 import com.example.api.matching.dto.MatchingDto;
+import com.example.api.member.dto.AddMemberDto;
+import com.example.api.member.service.MemberService;
 import com.example.api.user.adapter.out.persistence.UserMapperInterface;
 import com.example.api.user.application.port.out.FindUserPort;
 import com.example.api.user.dto.UserDto;
@@ -18,6 +24,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 @Service
 @RequiredArgsConstructor
@@ -28,12 +35,36 @@ public class MatchingApplicationService implements MatchingApplicationUsecase {
     private final FindUserPort findUserPort;
     private final FindMatchingPort findMatchingPort;
     private final MatchingApplicationPort matchingApplicationPort;
+    private final ChatRoomService chatRoomService;
+    private final MemberService memberService;
     
     @Override
     @Transactional
-    public MatchingApplicationDto createMatchingApplication(MatchingApplicationDto matchingApplicationDto) {
+    public ChatRoom createMatchingApplication(MatchingApplicationDto matchingApplicationDto) {
         MatchingApplication matchingApplication = matchingApplicationPort.createMatchingApplication(matchingMapper.toDomain(matchingApplicationDto));
-        return matchingMapper.toDto(matchingApplication);
+        
+        CreateChatRoomDto createChatRoomDto = CreateChatRoomDto.builder()
+                .masterId(matchingApplicationDto.getUserId())
+                .chatroomName("매칭 신청") // 이거 바꿔야 함
+                .type(ChatRoomEnum.Normal)
+                .isActive(true)
+                .build();
+        ChatRoom chatRoom = chatRoomService.createRoom(createChatRoomDto);
+        
+        List<Long> memberIds = new ArrayList<>();
+        memberIds.add(matchingApplicationDto.getUserId());
+        Long matchingWriterId = findMatchingPort.getMatchingByMatchingId(matchingApplicationDto.getMatchingId())
+                .orElseThrow(NoSuchElementException::new)
+                .getWriterId();
+        memberIds.add(matchingWriterId);
+
+        AddMemberDto addMemberDto = AddMemberDto.builder()
+                .chatroomId(chatRoom.getChatroomId())
+                .memberIds(memberIds)
+                .build();
+        memberService.addMember(addMemberDto);
+        
+        return chatRoom;
     }
     
     @Override

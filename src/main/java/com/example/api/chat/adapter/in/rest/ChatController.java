@@ -33,11 +33,10 @@ public class ChatController {
     private final GetChatListUsecase getChatListUsecase;
     private final SimpMessagingTemplate simpMessagingTemplate;
 
-
     /**
      * 추후에 jwt 인증을 통해 유저 데이터를 불러와 message에 추가할 예정
-     * @param roomNumber
-     * @param message
+     * @param roomNumber (ID)
+     * @param message (데이터)
      */
     @Operation(summary = "Send message", description = "채팅방에 메시지를 보낸다.")
     @MessageMapping("/chat/{roomNumber}")
@@ -49,7 +48,7 @@ public class ChatController {
     /**
      * 구독을 시작할 때 클라이언트가 사용
      * 컨슈머가 없을 시 등록 + 추후에 유저 추가 알림 같은 것을 전달 가능해 보임
-     * @param roomId
+     * @param roomId (ID)
      */
     @Operation(summary = "Enter chatroom", description = "채팅방에 입장한다.")
     @MessageMapping("/subscribe/{roomId}")
@@ -59,13 +58,13 @@ public class ChatController {
 
     /**
      * 채팅 내역 불러오기
-     * @param roomId
-     * @param pageable
+     * @param roomId (ID)
+     * @param pageable (데이터)
      * @return List<Chat>
      */
     @Operation(summary = "Get chat list", description = "채팅 목록을 불러온다.")
     @GetMapping("/chat")
-    public List<Chat> getChatList(@RequestParam UUID roomId,@PageableDefault(sort = "createdAt",direction = Sort.Direction.DESC, page = 0, size = 30) Pageable pageable) {
+    public List<Chat> getChatList(@RequestParam UUID roomId, @PageableDefault(sort = "createdAt", direction = Sort.Direction.DESC, page = 0, size = 30) Pageable pageable) {
         return getChatListUsecase.getChatList(roomId, pageable);
     }
 }

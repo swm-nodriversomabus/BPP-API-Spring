@@ -34,8 +34,9 @@ public class ChatRoomService implements CreateChatRoomUsecase, FindChatRomListUs
         ChatRoom chatRoom = ChatRoom.builder()
                 .masterId(createChatRoomDto.getMasterId())
                 .chatroomName(createChatRoomDto.getChatroomName())
+                .type(createChatRoomDto.getType())
                 .isActive(createChatRoomDto.getIsActive())
-                .type(createChatRoomDto.getType()).build();
+                .build();
         chatRoom = createChatRoomPort.createChatRoom(chatRoom);
         createTopic(chatRoom.getChatroomId().toString());
         kafkaConsumerConfig.createListenerContainerForRoom(chatRoom.getChatroomId().toString());

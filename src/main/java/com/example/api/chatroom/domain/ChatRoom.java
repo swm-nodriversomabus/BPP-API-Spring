@@ -20,6 +20,7 @@ public class ChatRoom {
     private String chatroomName;
     private Boolean isActive;
     private List<Member> members;
+    
     @Builder
     public ChatRoom(UUID chatroomId, ChatRoomEnum type, String chatroomName, Boolean isActive, Long masterId, List<Member> members){
         this.chatroomId = chatroomId;
