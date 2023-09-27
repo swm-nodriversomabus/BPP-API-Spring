@@ -44,6 +44,7 @@ public class SecurityConfig{
                 .requestMatchers("/actuator/**").permitAll()
                 .requestMatchers(HttpMethod.POST, "/user/**").permitAll()
                 .requestMatchers("/login/**").permitAll()
+                .requestMatchers("/swagger-ui/**").permitAll()
                 .anyRequest().authenticated()); // 그 외는 전부 인증 필요
         httpSecurity.oauth2Login(oauth2 ->{ // oauth2 로그인 설정 시작
 //                oauth2.authorizationEndpoint(authorizationEndpointConfig -> {
