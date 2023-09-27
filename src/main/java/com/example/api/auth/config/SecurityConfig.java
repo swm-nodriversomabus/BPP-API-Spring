@@ -16,7 +16,6 @@ import org.springframework.security.config.annotation.web.configurers.AbstractHt
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.oauth2.client.web.OAuth2LoginAuthenticationFilter;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
@@ -30,6 +29,11 @@ public class SecurityConfig{
     private final MyAuthenticationSuccessHandler oAUth2LoginSuccessHandler;
     private final JwtAuthFilter jwtAuthFilter;
     private final JwtExceptionFIlter jwtExceptionFIlter;
+    private static final String[] PERMIT_URL_ARRAY = {
+            // swagger
+            "/v3/api-docs/**",
+            "/swagger-ui/**"
+    };
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
         httpSecurity.httpBasic(AbstractHttpConfigurer::disable); // http 기본 인증 비활성화
@@ -38,25 +42,25 @@ public class SecurityConfig{
         httpSecurity.exceptionHandling(httpSecurityExceptionHandlingConfigurer -> httpSecurityExceptionHandlingConfigurer.authenticationEntryPoint(new RestAuthenticationEntryPoint()));
         httpSecurity.sessionManagement(httpSecuritySessionManagementConfigurer ->
                 httpSecuritySessionManagementConfigurer.sessionCreationPolicy(SessionCreationPolicy.STATELESS)); // 세션 관리는 Stateless
-        httpSecurity.authorizeHttpRequests((authorizeRequests)-> // 인증 설정
+        httpSecurity.authorizeHttpRequests(authorizeRequests -> // 인증 설정
                 authorizeRequests.requestMatchers("/admin/**").hasRole("ADMIN") // 이 url로 오는 요청들은 admin권한만 접근 가능
-                .requestMatchers("/auth/**").permitAll() // auth 로 오는 애들은 일단 인증 없이 가능
-                .requestMatchers("/actuator/**").permitAll()
-                .requestMatchers(HttpMethod.POST, "/user/**").permitAll()
-                .requestMatchers("/login/**").permitAll()
-                .requestMatchers("/swagger-ui/**").permitAll()
-                .anyRequest().authenticated()); // 그 외는 전부 인증 필요
+                        .requestMatchers("/auth/**").permitAll() // auth 로 오는 애들은 일단 인증 없이 가능
+                        .requestMatchers("/actuator/**").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/user/**").permitAll()
+                        .requestMatchers("/login/**").permitAll()
+                        .requestMatchers(PERMIT_URL_ARRAY).permitAll()
+                        .anyRequest().authenticated()); // 그 외는 전부 인증 필요
         httpSecurity.oauth2Login(oauth2 ->{ // oauth2 로그인 설정 시작
 //                oauth2.authorizationEndpoint(authorizationEndpointConfig -> {
 //                   authorizationEndpointConfig.baseUri("/auth/authorize");
 //                   authorizationEndpointConfig.authorizationRequestRepository()
 //                });
             // 카카오톡 읽기 확인
-                oauth2.userInfoEndpoint( // oauth2 로그인 시 사용자 정보를 가져오는 엔드포인트와 사용자 서비스 설정
-                userInfoEndpointConfig ->
-                        userInfoEndpointConfig.userService(customOAuth2UserService));
-                oauth2.failureHandler(oAuth2LoginFailureHandler);//핸들러
-                oauth2.successHandler(oAUth2LoginSuccessHandler);
+            oauth2.userInfoEndpoint( // oauth2 로그인 시 사용자 정보를 가져오는 엔드포인트와 사용자 서비스 설정
+                    userInfoEndpointConfig ->
+                            userInfoEndpointConfig.userService(customOAuth2UserService));
+            oauth2.failureHandler(oAuth2LoginFailureHandler);//핸들러
+            oauth2.successHandler(oAUth2LoginSuccessHandler);
         });
         httpSecurity.logout(logout -> logout.logoutSuccessUrl("/"));
 
