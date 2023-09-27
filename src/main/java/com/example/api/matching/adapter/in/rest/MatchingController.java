@@ -1,5 +1,6 @@
 package com.example.api.matching.adapter.in.rest;
 
+import com.example.api.chatroom.domain.ChatRoom;
 import com.example.api.common.type.ApplicationStateEnum;
 import com.example.api.matching.application.port.in.*;
 import com.example.api.matching.dto.FindMatchingDto;
@@ -41,11 +42,11 @@ public class MatchingController {
     /**
      * 새 매칭 신청 생성
      * @param matchingApplicationDto (데이터)
-     * @return matchingApplicationDto
+     * @return ChatRoom
      */
     @Operation(summary = "Create matching application", description = "새로운 매칭 신청을 생성한다.")
     @PostMapping("/matching/application")
-    public MatchingApplicationDto createMatchingApplication(@RequestBody MatchingApplicationDto matchingApplicationDto) {
+    public ChatRoom createMatchingApplication(@RequestBody MatchingApplicationDto matchingApplicationDto) {
         return matchingApplicationUsecase.createMatchingApplication(matchingApplicationDto);
     }
     

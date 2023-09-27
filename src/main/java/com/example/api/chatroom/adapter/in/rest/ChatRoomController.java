@@ -26,20 +26,20 @@ public class ChatRoomController {
     private final FindChatRomListUsecase findChatRomListUsecase;
     /**
      * 채팅방 생성
-     * @param createChatRoomDto
+     * @param createChatRoomDto (Data)
      * @return 채팅 방 ID 값
      */
     @Operation(summary = "Create chatroom", description = "새로운 채팅방을 생성한다.")
     @PostMapping
     public UUID createChatroom(@RequestBody @Valid CreateChatRoomDto createChatRoomDto){
-        ChatRoom ret = createChatRoomUsecase.createRoom(createChatRoomDto);
-        return ret.getChatroomId();
+        ChatRoom chatRoom = createChatRoomUsecase.createRoom(createChatRoomDto);
+        return chatRoom.getChatroomId();
     }
 
     /**
      * TODO: 추후에 로그인한 jwt 값으로 회원 정보를 확인하려고 함
-     * 지금은 임시로 유저 id값을 받자
-     * @return
+     * 지금은 임시로 유저 ID값을 받자
+     * @return List<ChatRoom>
      */
     @Operation(summary = "Get chatroom list", description = "사용자의 채팅방 목록을 불러온다.")
     @GetMapping

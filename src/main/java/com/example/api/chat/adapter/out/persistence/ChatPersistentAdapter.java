@@ -7,7 +7,6 @@ import com.example.api.chat.dto.AddChatDto;
 import com.example.api.chat.repository.ChatRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.checkerframework.checker.units.qual.C;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
@@ -22,6 +21,7 @@ import java.util.UUID;
 public class ChatPersistentAdapter implements AddChatPort, GetChatListPort {
     private final ChatRepository chatRepository;
     private final ChatMapper chatMapper;
+    
     @Override
     public void addChat(AddChatDto addChatDto) {
         ChatEntity chatEntity = chatMapper.toEntity(addChatDto);
@@ -31,7 +31,7 @@ public class ChatPersistentAdapter implements AddChatPort, GetChatListPort {
     @Override
     public List<Chat> getChatList(UUID roomId, Pageable pageable) {
         Page<ChatEntity> ret = chatRepository.findAllByRoomId_ChatroomId(roomId, pageable);
-        if(ret != null && ret.hasContent()){
+        if (ret != null && ret.hasContent()){
             return chatMapper.toDomainList(ret.getContent());
         }
         return new ArrayList<>();

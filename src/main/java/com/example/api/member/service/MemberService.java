@@ -21,16 +21,17 @@ import java.util.List;
 public class MemberService implements AddMemberChatRoomUsecase {
     private final AddMemberChaatRoomPort addMemberChaatRoomPort;
     private final RetrieveChatRoomPort retrieveChatRoomPort;
+    
     /**
      * chatroom에 해당 멤버 추가
-     * @param addMemberDto
+     * @param addMemberDto (Data)
      */
     @Override
     @Transactional
     public void addMember(AddMemberDto addMemberDto) {
         List<Member> members = new ArrayList<>();
         ChatRoom chatRoom = retrieveChatRoomPort.retrieveChatRoom(addMemberDto.getChatroomId());
-        for(Long userId: addMemberDto.getMemberIds()){
+        for(Long userId: addMemberDto.getMemberIds()) {
             Member member = Member.builder()
                     .chatroomId(chatRoom.getChatroomId())
                     .userId(userId)
@@ -39,6 +40,5 @@ public class MemberService implements AddMemberChatRoomUsecase {
             members.add(member);
         }
         addMemberChaatRoomPort.addMember(members, chatRoom);
-
     }
 }
