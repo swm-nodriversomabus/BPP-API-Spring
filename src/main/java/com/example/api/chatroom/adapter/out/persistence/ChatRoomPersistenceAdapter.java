@@ -24,8 +24,8 @@ public class ChatRoomPersistenceAdapter implements CreateChatRoomPort, FindChatR
 
     @Override
     public ChatRoom createChatRoom(ChatRoom chatRoom) {
-        ChatRoomEntity ret = chatRoomRepository.save(chatRoomMapper.fromDomainToEntityWithoutId(chatRoom));
-        return chatRoomMapper.fromEntityToDomain(ret);
+        ChatRoomEntity chatRoomEntity = chatRoomRepository.save(chatRoomMapper.fromDomainToEntityWithoutId(chatRoom));
+        return chatRoomMapper.fromEntityToDomain(chatRoomEntity);
     }
 
     @Override
