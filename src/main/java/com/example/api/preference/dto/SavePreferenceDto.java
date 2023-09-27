@@ -7,8 +7,6 @@ import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
-import java.time.LocalDateTime;
-
 @Getter
 @Setter
 @Builder
@@ -16,8 +14,6 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 public class SavePreferenceDto {
-    private Long preferenceId;
-    
     @NotNull
     @Min(0)
     private Integer alcoholAmount;
@@ -49,8 +45,4 @@ public class SavePreferenceDto {
     @NotNull
     @Min(0)
     private Integer slang;
-    
-    private LocalDateTime createdAt;
-    
-    private LocalDateTime updatedAt;
 }

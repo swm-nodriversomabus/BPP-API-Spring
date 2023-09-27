@@ -12,7 +12,7 @@ import com.example.api.friend.domain.Friend;
 import com.example.api.friend.dto.FriendDto;
 import com.example.api.user.adapter.out.persistence.UserMapperInterface;
 import com.example.api.user.application.port.out.FindUserPort;
-import com.example.api.user.dto.UserDto;
+import com.example.api.user.dto.FindUserDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -39,9 +39,9 @@ public class FriendService implements AddFriendUsecase, FindFriendUsecase, Delet
     }
     
     @Override
-    public List<UserDto> getFriendList(Long userId) {
+    public List<FindUserDto> getFriendList(Long userId) {
         List<FriendEntity> friendPairList = findFriendPort.getFriendList(userId);
-        List<UserDto> friendList = new ArrayList<>();
+        List<FindUserDto> friendList = new ArrayList<>();
         for (FriendEntity friendPair: friendPairList) {
             friendList.add(userMapper.toDto(findUserPort.getUserByUserId(friendPair.getUserId()).orElseThrow()));
         }

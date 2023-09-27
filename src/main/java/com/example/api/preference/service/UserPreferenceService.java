@@ -6,6 +6,7 @@ import com.example.api.preference.application.port.in.UserPreferenceUsecase;
 import com.example.api.preference.application.port.out.ComparePreferencePort;
 import com.example.api.preference.application.port.out.CreateUserPreferencePort;
 import com.example.api.preference.application.port.out.SavePreferencePort;
+import com.example.api.preference.dto.FindPreferenceDto;
 import com.example.api.preference.dto.SavePreferenceDto;
 import com.example.api.preference.dto.UserPreferenceDto;
 import lombok.RequiredArgsConstructor;
@@ -28,7 +29,7 @@ public class UserPreferenceService implements UserPreferenceUsecase {
     }
     
     @Override
-    public SavePreferenceDto updateUserPreference(Long userId, SavePreferenceDto savePreferenceDto) {
+    public FindPreferenceDto updateUserPreference(Long userId, SavePreferenceDto savePreferenceDto) {
         Long preferenceId = comparePreferencePort.getUserPreferenceId(userId);
         return preferenceMapper.toDto(savePreferencePort.updatePreference(preferenceId, preferenceMapper.toDomain(savePreferenceDto)));
     }

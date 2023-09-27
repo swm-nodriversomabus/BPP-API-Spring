@@ -13,8 +13,9 @@ import com.example.api.matching.application.port.out.DeleteMatchingPort;
 import com.example.api.matching.application.port.out.FindMatchingPort;
 import com.example.api.matching.application.port.out.LikePort;
 import com.example.api.matching.application.port.out.SaveMatchingPort;
+import com.example.api.matching.dto.FindMatchingDto;
 import com.example.api.matching.dto.LikeDto;
-import com.example.api.matching.dto.MatchingDto;
+import com.example.api.matching.dto.SaveMatchingDto;
 import com.example.api.preference.service.PreferenceService;
 import com.example.api.user.application.port.in.RecommendedMatchingUsecase;
 import lombok.RequiredArgsConstructor;
@@ -41,42 +42,42 @@ public class MatchingService implements
 
     @Override
     @Transactional
-    public MatchingDto createMatching(MatchingDto matchingDto) {
+    public FindMatchingDto createMatching(SaveMatchingDto matchingDto) {
         Matching matching = saveMatchingPort.createMatching(matchingMapper.toDomain(matchingDto));
         return matchingMapper.toDto(matching);
     }
 
     @Override
-    public List<MatchingDto> getAll() {
+    public List<FindMatchingDto> getAll() {
         return findMatchingPort.getAllBy().stream()
                 .map(MatchingEntity::toDto)
                 .collect(Collectors.toList());
     }
 
     @Override
-    public Optional<MatchingDto> getMatchingById(Long matchingId) {
+    public Optional<FindMatchingDto> getMatchingById(Long matchingId) {
         return findMatchingPort.getMatchingByMatchingId(matchingId)
                 .map(MatchingEntity::toDto);
     }
     
     @Override
-    public List<MatchingDto> getMatchingByIsActive(Boolean isActive) {
+    public List<FindMatchingDto> getMatchingByIsActive(Boolean isActive) {
         return findMatchingPort.getMatchingByIsActive(isActive).stream()
                 .map(MatchingEntity::toDto)
                 .collect(Collectors.toList());
     }
     
     @Override
-    public List<MatchingDto> getRecommendedMatchingList(Long userId) {
-        List<MatchingDto> activeMatchingList = this.getMatchingByIsActive(true);
+    public List<FindMatchingDto> getRecommendedMatchingList(Long userId) {
+        List<FindMatchingDto> activeMatchingList = this.getMatchingByIsActive(true);
         List<Pair<Long, Integer>> matchingScoreList = new ArrayList<>();
-        for (MatchingDto matchingData: activeMatchingList) {
+        for (FindMatchingDto matchingData: activeMatchingList) {
             Long matchingId = matchingData.getMatchingId();
             Integer matchingScore = preferenceService.getMatchingScore(userId, matchingId);
             matchingScoreList.add(new Pair<>(matchingId, matchingScore));
         }
         matchingScoreList.sort(Comparator.comparing(Pair::getSecond));
-        List<MatchingDto> sortedMatchingList = new ArrayList<>();
+        List<FindMatchingDto> sortedMatchingList = new ArrayList<>();
         for (Pair<Long, Integer> matchingData: matchingScoreList) {
             sortedMatchingList.add(this.getMatchingById(matchingData.getFirst()).orElseThrow());
         }
@@ -92,9 +93,8 @@ public class MatchingService implements
 
     @Override
     @Transactional
-    public MatchingDto updateMatching(Long matchingId, MatchingDto matchingDto) {
-        matchingDto.setMatchingId(matchingId);
-        Matching matching = saveMatchingPort.updateMatching(matchingMapper.toDomain(matchingDto));
+    public FindMatchingDto updateMatching(Long matchingId, SaveMatchingDto matchingDto) {
+        Matching matching = saveMatchingPort.updateMatching(matchingId, matchingMapper.toDomain(matchingDto));
         return matchingMapper.toDto(matching);
     }
     

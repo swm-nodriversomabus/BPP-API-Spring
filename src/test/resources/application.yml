@@ -1,19 +1,23 @@
 server:
   servlet:
     contextPath: /api/
-
+jasypt:
+  encryptor:
+    bean: jasyptStringEncryptor
 ---
 spring:
   profiles:
     active: local
-
+    include: loauth
 ---
 
 spring:
   profiles:
     active: prod
+    include: oauth
 ---
 
 spring:
   profiles:
     active: dev
+    include: loauth

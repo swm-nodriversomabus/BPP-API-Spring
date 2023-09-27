@@ -43,7 +43,7 @@ public class ChatRoomController {
      */
     @Operation(summary = "Get chatroom list", description = "사용자의 채팅방 목록을 불러온다.")
     @GetMapping
-    public List<ChatRoom> chatRoomList(@RequestParam Long userid,@PageableDefault(sort = "createdAt",direction = Sort.Direction.DESC) Pageable pageable){ //추후 바꾸자함
+    public List<ChatRoom> chatRoomList(@RequestParam Long userid, @PageableDefault(sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable) { //추후 바꾸자함
         return findChatRomListUsecase.chatRoomList(pageable, userid);
     }
 

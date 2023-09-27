@@ -38,12 +38,12 @@ public class ChatRoomEntity extends BaseEntity {
     @Column(nullable = false)
     private Boolean isActive;
 
-    @OneToMany(mappedBy = "chatroom",fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "chatroom", fetch = FetchType.LAZY)
     @ToString.Exclude
     private List<MemberEntity> members;
 
     // 멤버 추가
-    public void addMember(MemberEntity member){
+    public void addMember(MemberEntity member) {
         this.members.add(member);
         member.addChatRoom(this);
     }

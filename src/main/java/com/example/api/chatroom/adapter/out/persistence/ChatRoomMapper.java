@@ -18,8 +18,7 @@ public class ChatRoomMapper {
      * @param chatRoom
      * @return chatRoomEntity
      */
-    public ChatRoomEntity fromDomainToEntityWithoutId(ChatRoom chatRoom){
-
+    public ChatRoomEntity fromDomainToEntityWithoutId(ChatRoom chatRoom) {
         return ChatRoomEntity.builder()
                 .chatroomName(chatRoom.getChatroomName())
                 .type(chatRoom.getType())
@@ -28,8 +27,8 @@ public class ChatRoomMapper {
                 .members(new ArrayList<>())
                 .build();
     }
-    public ChatRoomEntity fromDomainToEntity(ChatRoom chatRoom){
-
+    
+    public ChatRoomEntity fromDomainToEntity(ChatRoom chatRoom) {
         return ChatRoomEntity.builder()
                 .chatroomId(chatRoom.getChatroomId())
                 .chatroomName(chatRoom.getChatroomName())
@@ -40,7 +39,7 @@ public class ChatRoomMapper {
                 .build();
     }
 
-    public ChatRoom fromEntityToDomain(ChatRoomEntity chatRoomEntity){
+    public ChatRoom fromEntityToDomain(ChatRoomEntity chatRoomEntity) {
         return ChatRoom.builder()
                 .chatroomName(chatRoomEntity.getChatroomName())
                 .type(chatRoomEntity.getType())
@@ -51,7 +50,7 @@ public class ChatRoomMapper {
                 .build();
     }
 
-    public List<ChatRoom> fromEntityListToDomain(List<ChatRoomEntity> chatRoomEntityList){
+    public List<ChatRoom> fromEntityListToDomain(List<ChatRoomEntity> chatRoomEntityList) {
         List<ChatRoom> chatRoomList = new ArrayList<>();
         chatRoomEntityList.forEach(chatRoomEntity -> chatRoomList.add(
                 ChatRoom.builder()

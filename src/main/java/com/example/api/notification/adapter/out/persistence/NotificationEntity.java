@@ -1,7 +1,8 @@
 package com.example.api.notification.adapter.out.persistence;
 
 import com.example.api.common.entity.BaseEntity;
-import com.example.api.notification.dto.NotificationDto;
+import com.example.api.notification.dto.FindNotificationDto;
+import com.example.api.notification.dto.SaveNotificationDto;
 import com.example.api.notification.type.NotificationTypeEnum;
 import jakarta.persistence.*;
 import lombok.*;
@@ -29,8 +30,8 @@ public class NotificationEntity extends BaseEntity {
     @Column(nullable = false)
     private Boolean isActive;
     
-    public NotificationDto toDto() {
-        return NotificationDto.builder()
+    public FindNotificationDto toDto() {
+        return FindNotificationDto.builder()
                 .notificationId(notificationId)
                 .type(type)
                 .content(content)

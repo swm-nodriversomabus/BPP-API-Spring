@@ -1,7 +1,8 @@
 package com.example.api.notification.application.port.in;
 
-import com.example.api.notification.dto.NotificationDto;
+import com.example.api.notification.dto.FindNotificationDto;
+import com.example.api.notification.dto.SaveNotificationDto;
 
 public interface SaveNotificationUsecase {
-    NotificationDto createNotification(NotificationDto notificationDto);
+    FindNotificationDto createNotification(SaveNotificationDto saveNotificationDto);
 }

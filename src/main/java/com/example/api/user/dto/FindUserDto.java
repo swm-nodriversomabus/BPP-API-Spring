@@ -13,14 +13,11 @@ import java.time.LocalDateTime;
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserDto {
+public class FindUserDto {
     private Long userId;
     
     @NotBlank
     private String username;
-    
-    @NotBlank
-    private String nickname;
     
     @NotNull
     private UserGenderEnum gender;
@@ -32,21 +29,11 @@ public class UserDto {
     @NotBlank
     private String phone;
     
-    @NotBlank
-    @Email
-    private String email;
-    
-    @NotBlank
-    private String address;
-    
     @NotNull
     private UserRoleEnum role;
     
     @NotNull
     private Boolean blacklist;
-    
-    @NotEmpty
-    private String personality;
     
     @NotEmpty
     private String stateMessage;
@@ -56,13 +43,9 @@ public class UserDto {
     private Integer mannerScore;
     
     @NotNull
-    private Long createdUserId;
-    
-    @NotNull
-    private Long updatedUserId;
-    
     private LocalDateTime createdAt;
     
+    @NotNull
     private LocalDateTime updatedAt;
     
     @NotNull

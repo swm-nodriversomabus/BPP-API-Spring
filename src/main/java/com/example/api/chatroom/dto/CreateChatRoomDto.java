@@ -1,6 +1,7 @@
 package com.example.api.chatroom.dto;
 
 import com.example.api.chatroom.type.ChatRoomEnum;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
 import lombok.Data;
@@ -11,10 +12,10 @@ public class CreateChatRoomDto {
     @NotNull
     private Long masterId; // TODO 추후 jwt에서 얻을 수 있어 삭제 가능
     
-    @NotNull
+    @NotBlank
     private String chatroomName;
     
-    @NotNull()
+    @NotNull
     private ChatRoomEnum type;
     
     @NotNull

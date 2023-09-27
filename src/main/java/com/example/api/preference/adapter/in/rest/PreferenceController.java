@@ -4,10 +4,7 @@ import com.example.api.preference.application.port.in.ComparePreferenceUsecase;
 import com.example.api.preference.application.port.in.MatchingPreferenceUsecase;
 import com.example.api.preference.application.port.in.SavePreferenceUsecase;
 import com.example.api.preference.application.port.in.UserPreferenceUsecase;
-import com.example.api.preference.dto.ComparePreferenceDto;
-import com.example.api.preference.dto.MatchingPreferenceDto;
-import com.example.api.preference.dto.SavePreferenceDto;
-import com.example.api.preference.dto.UserPreferenceDto;
+import com.example.api.preference.dto.*;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -29,7 +26,7 @@ public class PreferenceController {
      */
     @Operation(summary = "Create preference", description = "선호도 데이터를 생성한다.")
     @PostMapping("/preference")
-    public SavePreferenceDto createPreference(@RequestBody SavePreferenceDto preferenceDto) {
+    public FindPreferenceDto createPreference(@RequestBody SavePreferenceDto preferenceDto) {
         return savePreferenceUsecase.createPreference(preferenceDto);
     }
 
@@ -85,7 +82,7 @@ public class PreferenceController {
      */
     @Operation(summary = "Update user preference", description = "사용자 선호도를 변경한다.")
     @PatchMapping("/user/{userId}/preference")
-    public SavePreferenceDto updateUserPreference(@PathVariable Long userId, @RequestBody SavePreferenceDto savePreferenceDto) {
+    public FindPreferenceDto updateUserPreference(@PathVariable Long userId, @RequestBody SavePreferenceDto savePreferenceDto) {
         return userPreferenceUsecase.updateUserPreference(userId, savePreferenceDto);
     }
 
@@ -97,7 +94,7 @@ public class PreferenceController {
      */
     @Operation(summary = "Update matching preference", description = "매칭 선호도를 변경한다.")
     @PatchMapping("/matching/{matchingId}/preference")
-    public SavePreferenceDto updateMatchingPreference(@PathVariable Long matchingId, @RequestBody SavePreferenceDto savePreferenceDto) {
+    public FindPreferenceDto updateMatchingPreference(@PathVariable Long matchingId, @RequestBody SavePreferenceDto savePreferenceDto) {
         return  matchingPreferenceUsecase.updateMatchingPreference(matchingId, savePreferenceDto);
     }
 }

@@ -1,19 +1,40 @@
 server:
   servlet:
     contextPath: /api/
+jasypt:
+  encryptor:
+    bean: jasyptStringEncryptor
+spring:
+  main:
+    allow-bean-definition-overriding: true
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+
 
 ---
 spring:
   profiles:
     active: local
+    group:
+      "local": "local, loauth"
+
+
 
 ---
 
 spring:
   profiles:
     active: prod
+    group:
+      "prod": "prod, poauth"
 ---
 
 spring:
   profiles:
     active: dev
+    group:
+      "dev": "dev, doauth"

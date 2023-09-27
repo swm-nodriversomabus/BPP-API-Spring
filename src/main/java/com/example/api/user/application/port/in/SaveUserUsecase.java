@@ -1,8 +1,10 @@
 package com.example.api.user.application.port.in;
 
-import com.example.api.user.dto.UserDto;
+import com.example.api.user.dto.CreateUserDto;
+import com.example.api.user.dto.FindUserDto;
+import com.example.api.user.dto.UpdateUserDto;
 
 public interface SaveUserUsecase {
-    UserDto createUser(UserDto userDto);
-    UserDto updateUser(Long userId, UserDto userDto);
+    void createUser(CreateUserDto userDto);
+    FindUserDto updateUser(Long userId, UpdateUserDto userDto);
 }
