@@ -5,6 +5,8 @@ jasypt:
   encryptor:
     bean: jasyptStringEncryptor
 spring:
+  session:
+    storage-type: redis
   main:
     allow-bean-definition-overriding: true
 
