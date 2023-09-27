@@ -67,12 +67,20 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
                     Collections.singleton(new SimpleGrantedAuthority("NO_USER")),
                     userAttribute, "email"
             );
+        } else if (Boolean.TRUE.equals(findUser.get().getIsActive())) {
+            userAttribute.put("exist", 3); // 소셜 로그인, 회원가입 다된겨우
+            return new DefaultOAuth2User(
+                    Collections.singleton(new SimpleGrantedAuthority("ROLE_".concat(findUser.get().getRole().getRole()))),
+                    userAttribute, "email"
+            );
+        }else{
+            userAttribute.put("exist", 4); // 탈퇴한 경우
+            return new DefaultOAuth2User(
+                    Collections.singleton(new SimpleGrantedAuthority("OUT_USER")),
+                    userAttribute, "email"
+            );
         }
-        userAttribute.put("exist", 3); // 소셜 로그인, 회원가입 다된겨우
-        return new DefaultOAuth2User(
-                Collections.singleton(new SimpleGrantedAuthority("ROLE_".concat(findUser.get().getRole().getRole()))),
-                userAttribute, "email"
-        );
+
 
     }
 }
