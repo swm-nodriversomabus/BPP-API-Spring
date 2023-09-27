@@ -7,16 +7,21 @@ jasypt:
 spring:
   main:
     allow-bean-definition-overriding: true
+
 management:
   endpoints:
     web:
       exposure:
         include: "*"
+
+
 ---
 spring:
   profiles:
     active: local
-    include: loauth
+    group:
+      "local": "local, loauth"
+
 
 
 ---
@@ -24,10 +29,12 @@ spring:
 spring:
   profiles:
     active: prod
-    include: poauth
+    group:
+      "prod": "prod, poauth"
 ---
 
 spring:
   profiles:
     active: dev
-    include: doauth
+    group:
+      "dev": "dev, doauth"
