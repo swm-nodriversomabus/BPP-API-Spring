@@ -61,6 +61,13 @@ public class MatchingService implements
     }
     
     @Override
+    public List<FindMatchingDto> getMatchingByWriterId(Long userId) {
+        return findMatchingPort.getMatchingByWriterId(userId).stream()
+                .map(MatchingEntity::toDto)
+                .collect(Collectors.toList());
+    }
+    
+    @Override
     public List<FindMatchingDto> getMatchingByIsActive(Boolean isActive) {
         return findMatchingPort.getMatchingByIsActive(isActive).stream()
                 .map(MatchingEntity::toDto)

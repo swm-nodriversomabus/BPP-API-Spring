@@ -8,6 +8,7 @@ import java.util.Optional;
 public interface FindMatchingUsecase {
     List<FindMatchingDto> getAll();
     Optional<FindMatchingDto> getMatchingById(Long matchingId);
+    List<FindMatchingDto> getMatchingByWriterId(Long userId);
     List<FindMatchingDto> getMatchingByIsActive(Boolean isActive);
     List<FindMatchingDto> getRecommendedMatchingList(Long userId);
 }

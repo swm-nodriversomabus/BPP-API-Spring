@@ -105,13 +105,13 @@ public class MatchingPersistenceAdapterTests {
     @Test
     void getMatchingByIdTest() {
         MatchingEntity matching = matchingPersistenceAdapter.getMatchingByMatchingId(2L).orElse(matchingMapper.toEntity(matching2));
-        verify(matchingRepository, times(1)).getMatchingEntityByMatchingId(2L);
+        verify(matchingRepository, times(1)).getByMatchingId(2L);
     }
 
     @Test
     void getMatchingByIsActiveTest() {
         List<MatchingEntity> matchingList = matchingPersistenceAdapter.getMatchingByIsActive(true);
-        verify(matchingRepository, times(1)).getMatchingEntitiesByIsActive(true);
+        verify(matchingRepository, times(1)).getByIsActive(true);
     }
 
     @Test
