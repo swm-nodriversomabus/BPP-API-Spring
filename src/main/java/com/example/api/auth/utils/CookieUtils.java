@@ -24,20 +24,21 @@ public class CookieUtils {
     }
 
     public static void addCookie(HttpServletResponse response, String name, String value, int maxAge) {
-//        ResponseCookie cookie = ResponseCookie.from(name, value)
-//                .maxAge(maxAge)
-//                .path("/")
-//                .sameSite("None") // 동일 사이트와 크로스 사이트 전부 가능
-//                .httpOnly(true)
-////                .secure(true)
-//                .build();
-//        response.addHeader("Set-Cookie", cookie.toString());
+        ResponseCookie cookie = ResponseCookie.from(name, value)
+                .maxAge(maxAge)
+                .path("/")
+                .sameSite("None") // 동일 사이트와 크로스 사이트 전부 가능
+                .httpOnly(true)
+//                .domain("localhost")
+                .secure(true)
+                .build();
+        response.addHeader("Set-Cookie", cookie.toString());
 //        response.addCookie(cookie);
-        Cookie cookie = new Cookie(name, value); // local용
-        cookie.setPath("/");
-        cookie.setHttpOnly(true);
-        cookie.setMaxAge(maxAge);
-        response.addCookie(cookie);
+//        Cookie cookie = new Cookie(name, value); // local용
+//        cookie.setPath("/");
+//        cookie.setHttpOnly(true);
+//        cookie.setMaxAge(maxAge);
+//        response.addCookie(cookie);
     }
 
     public static void deleteCookie(HttpServletRequest request, HttpServletResponse response, String name) {

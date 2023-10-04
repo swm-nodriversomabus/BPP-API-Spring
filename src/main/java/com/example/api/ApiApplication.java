@@ -18,7 +18,6 @@ public class ApiApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(ApiApplication.class, args);
 	}
-
 	// cors 설정
 	@Bean
 	public WebMvcConfigurer corsConfigurer(){
