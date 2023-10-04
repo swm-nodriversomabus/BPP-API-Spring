@@ -50,6 +50,7 @@ dependencies {
 	implementation 'org.springframework.cloud:spring-cloud-starter-config'
 //	implementation 'org.springframework.cloud:spring-cloud-starter-config' // spring cloud config
 	implementation 'org.springframework.boot:spring-boot-starter-actuator'
+	implementation "com.github.ulisesbocchio:jasypt-spring-boot-starter:3.0.3" // Jasypt
 	runtimeOnly 'com.mysql:mysql-connector-j' // MySQL 8
 	annotationProcessor 'org.projectlombok:lombok'
 	annotationProcessor 'org.mapstruct:mapstruct-processor:1.5.3.Final'

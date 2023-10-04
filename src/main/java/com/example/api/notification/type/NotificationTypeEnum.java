@@ -8,7 +8,9 @@ import lombok.ToString;
 @ToString
 @AllArgsConstructor
 public enum NotificationTypeEnum {
-    Temp("temp", 1);
+    NewApplication("새로운 매칭 신청", 0),
+    ApplicationApproved("매칭 신청 수락", 1),
+    ApplicationDeclined("매칭 신청 거절", 2);
     
     private final String notificationType;
     private final Integer notificationTypeCode;

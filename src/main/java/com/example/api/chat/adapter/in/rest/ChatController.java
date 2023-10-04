@@ -5,9 +5,7 @@ import com.example.api.chat.application.port.in.SendChatUsecase;
 import com.example.api.chat.application.port.in.SubscribeRoomUsecase;
 import com.example.api.chat.domain.Chat;
 import com.example.api.chat.dto.AddChatDto;
-import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.info.Info;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -16,7 +14,6 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
-import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -29,11 +26,9 @@ import java.util.UUID;
 @RequiredArgsConstructor
 @Tag(name = "Chat", description = "Chat API")
 public class ChatController {
-    //임시용
     private final SendChatUsecase sendChatUsecase;
     private final SubscribeRoomUsecase subscribeRoomUsecase;
     private final GetChatListUsecase getChatListUsecase;
-    private final SimpMessagingTemplate simpMessagingTemplate;
 
     /**
      * 추후에 jwt 인증을 통해 유저 데이터를 불러와 message에 추가할 예정
