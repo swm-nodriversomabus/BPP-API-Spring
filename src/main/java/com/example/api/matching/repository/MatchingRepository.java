@@ -8,8 +8,9 @@ import java.util.Optional;
 
 public interface MatchingRepository extends JpaRepository<MatchingEntity, Long> {
     List<MatchingEntity> getAllBy();
-    Optional<MatchingEntity> getMatchingEntityByMatchingId(Long matchingId);
-    List<MatchingEntity> getMatchingEntitiesByIsActive(Boolean isActive);
+    Optional<MatchingEntity> getByMatchingId(Long matchingId);
+    List<MatchingEntity> getByWriterId(Long userId);
+    List<MatchingEntity> getByIsActive(Boolean isActive);
     void deleteAllBy();
     void deleteByMatchingId(Long matchingId);
 }

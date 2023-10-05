@@ -8,5 +8,6 @@ import java.util.Optional;
 public interface FindMatchingPort {
     List<MatchingEntity> getAllBy();
     Optional<MatchingEntity> getMatchingByMatchingId(Long matchingId);
+    List<MatchingEntity> getMatchingByWriterId(Long userId);
     List<MatchingEntity> getMatchingByIsActive(Boolean isActive);
 }

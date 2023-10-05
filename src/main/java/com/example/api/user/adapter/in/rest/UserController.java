@@ -1,6 +1,7 @@
 package com.example.api.user.adapter.in.rest;
 
 import com.example.api.common.type.ApplicationStateEnum;
+import com.example.api.matching.application.port.in.FindMatchingUsecase;
 import com.example.api.matching.application.port.in.MatchingApplicationUsecase;
 import com.example.api.matching.dto.FindMatchingDto;
 import com.example.api.user.application.port.in.DeleteUserUsecase;
@@ -36,6 +37,7 @@ public class UserController {
     private final SaveUserUsecase saveUserUsecase;
     private final FindUserUsecase findUserUsecase;
     private final DeleteUserUsecase deleteUserUsecase;
+    private final FindMatchingUsecase findMatchingUsecase;
     private final RecommendedMatchingUsecase recommendedMatchingUsecase;
     private final MatchingApplicationUsecase matchingApplicationUsecase;
     private final CreateGenderValidator createGenderValidator; // enum validator
@@ -48,7 +50,6 @@ public class UserController {
     /**
      * 사용자 추가
      * @param userDto (데이터)
-     * @return UserDto
      */
     @Operation(summary = "Create user", description = "새로운 사용자를 추가한다.")
     @PostMapping("/user")
@@ -90,6 +91,17 @@ public class UserController {
     @GetMapping("/user/{userId}/recommendedmatching")
     public List<FindMatchingDto> getRecommendedMatchingList(@PathVariable Long userId) {
         return recommendedMatchingUsecase.getRecommendedMatchingList(userId);
+    }
+
+    /**
+     * ID가 userId인 사용자가 작성한 매칭 목록 조회
+     * @param userId (ID)
+     * @return List<FindMatchingDto>
+     */
+    @Operation(summary = "Get own matching list of user", description = "사용자가 작성한 매칭 목록을 조회한다.")
+    @GetMapping("/user/{userId}/matching/own")
+    public List<FindMatchingDto> getOwnMatchingList(@PathVariable Long userId) {
+        return findMatchingUsecase.getMatchingByWriterId(userId);
     }
 
     /**
