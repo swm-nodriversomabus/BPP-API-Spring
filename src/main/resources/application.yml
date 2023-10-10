@@ -9,32 +9,24 @@ spring:
     storage-type: redis
   main:
     allow-bean-definition-overriding: true
-
 management:
   endpoints:
     web:
       exposure:
         include: "*"
-
-
 ---
 spring:
   profiles:
     active: local
     group:
       "local": "local, loauth"
-
-
-
 ---
-
 spring:
   profiles:
     active: prod
     group:
       "prod": "prod, poauth"
 ---
-
 spring:
   profiles:
     active: dev

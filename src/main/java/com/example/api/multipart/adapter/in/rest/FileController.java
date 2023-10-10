@@ -6,9 +6,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 @RestController
@@ -23,9 +21,9 @@ public class FileController {
      * @param file (데이터)
      */
     @Operation(summary = "Upload File", description = "파일을 업로드한다.")
-    @PostMapping("/upload")
-    public void uploadFile(MultipartFile file) {
-        uploadFileUsecase.uploadFile(file);
+    @PostMapping("/file")
+    public String uploadFile(@RequestParam("file") MultipartFile file) {
+        return uploadFileUsecase.uploadFile(file);
     }
 
     /**
@@ -34,8 +32,10 @@ public class FileController {
      * @return ResponseEntity<byte[]>
      */
     @Operation(summary = "Show File", description = "파일을 조회한다.")
-    @GetMapping("/image")
-    public ResponseEntity<byte[]> getFile(String fileName) {
+    @GetMapping("/file/{fileName}")
+    public ResponseEntity<byte[]> getFile(@PathVariable String fileName) {
         return showFileUsecase.getFile(fileName);
     }
+    
+    // 요즘 이미지들은 용량이 커서 썸네일 만들고 불러오는 기능도 필요함
 }

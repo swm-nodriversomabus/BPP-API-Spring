@@ -2,7 +2,7 @@ package com.example.api.auth.config;
 
 import com.example.api.auth.exception.RestAuthenticationEntryPoint;
 import com.example.api.auth.filter.JwtAuthFilter;
-import com.example.api.auth.filter.JwtExceptionFIlter;
+import com.example.api.auth.filter.JwtExceptionFilter;
 import com.example.api.auth.handler.MyAuthenticationFailureHandler;
 import com.example.api.auth.handler.MyAuthenticationSuccessHandler;
 import com.example.api.auth.service.CustomOAuth2UserService;
@@ -21,36 +21,39 @@ import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 @Configuration
-@EnableWebSecurity()
+@EnableWebSecurity
 @RequiredArgsConstructor
-public class SecurityConfig{
+public class SecurityConfig {
     private final CustomOAuth2UserService customOAuth2UserService;
     private final MyAuthenticationFailureHandler oAuth2LoginFailureHandler;
     private final MyAuthenticationSuccessHandler oAUth2LoginSuccessHandler;
     private final JwtAuthFilter jwtAuthFilter;
-    private final JwtExceptionFIlter jwtExceptionFIlter;
+    private final JwtExceptionFilter jwtExceptionFIlter;
     private static final String[] PERMIT_URL_ARRAY = {
             // swagger
             "/v3/api-docs/**",
             "/swagger-ui/**"
     };
+    
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
         httpSecurity.httpBasic(AbstractHttpConfigurer::disable); // http 기본 인증 비활성화
         httpSecurity.cors(AbstractHttpConfigurer::disable);
         httpSecurity.csrf(AbstractHttpConfigurer::disable); // csrf 비활성화
-        httpSecurity.exceptionHandling(httpSecurityExceptionHandlingConfigurer -> httpSecurityExceptionHandlingConfigurer.authenticationEntryPoint(new RestAuthenticationEntryPoint()));
+        httpSecurity.exceptionHandling(httpSecurityExceptionHandlingConfigurer ->
+                httpSecurityExceptionHandlingConfigurer.authenticationEntryPoint(new RestAuthenticationEntryPoint()));
         httpSecurity.sessionManagement(httpSecuritySessionManagementConfigurer ->
                 httpSecuritySessionManagementConfigurer.sessionCreationPolicy(SessionCreationPolicy.STATELESS)); // 세션 관리는 Stateless
         httpSecurity.authorizeHttpRequests(authorizeRequests -> // 인증 설정
-                authorizeRequests.requestMatchers("/admin/**").hasRole("ADMIN") // 이 url로 오는 요청들은 admin권한만 접근 가능
-                        .requestMatchers("/auth/**").permitAll() // auth 로 오는 애들은 일단 인증 없이 가능
+                //authorizeRequests.requestMatchers("/**").permitAll());
+                authorizeRequests.requestMatchers("/admin/**").hasRole("ADMIN") // 이 URL로 오는 요청들은 admin 권한만 접근 가능
+                        .requestMatchers("/auth/**").permitAll() // auth로 오는 애들은 일단 인증 없이 가능
                         .requestMatchers("/actuator/**").permitAll()
                         .requestMatchers(HttpMethod.POST, "/user/**").permitAll()
                         .requestMatchers("/login/**").permitAll()
                         .requestMatchers(PERMIT_URL_ARRAY).permitAll()
                         .anyRequest().authenticated()); // 그 외는 전부 인증 필요
-        httpSecurity.oauth2Login(oauth2 ->{ // oauth2 로그인 설정 시작
+        httpSecurity.oauth2Login(oauth2 -> { // oauth2 로그인 설정 시작
 //                oauth2.authorizationEndpoint(authorizationEndpointConfig -> {
 //                   authorizationEndpointConfig.baseUri("/auth/authorize");
 //                   authorizationEndpointConfig.authorizationRequestRepository()
@@ -63,14 +66,12 @@ public class SecurityConfig{
             oauth2.successHandler(oAUth2LoginSuccessHandler);
         });
         httpSecurity.logout(logout -> logout.logoutSuccessUrl("/"));
-
-
-        // jwt 인증 필터를 UsernmaepasswordAuthenticationFilter앞에 추가
+        
+        // jwt 인증 필터를 UserNamePasswordAuthenticationFilter 앞에 추가
         return httpSecurity
                 .addFilterBefore(jwtAuthFilter, OAuth2LoginAuthenticationFilter.class)
                 .addFilterBefore(jwtExceptionFIlter, JwtAuthFilter.class) // jwt AuthFilter 앞에 추가
                 .build();
-
     }
 
     @Bean
@@ -84,5 +85,4 @@ public class SecurityConfig{
         source.registerCorsConfiguration("/**", configuration);
         return source;
     }
-
 }

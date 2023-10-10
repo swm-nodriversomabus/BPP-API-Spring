@@ -1,6 +1,5 @@
 package com.example.api.auth.service;
 
-
 import com.example.api.auth.config.JwtProperties;
 import com.example.api.auth.utils.GeneratedToken;
 import io.jsonwebtoken.Claims;
@@ -46,8 +45,6 @@ public class JwtUtilService {
 
         // 새 클레임 객체를 생성하고, 이메일과 역할을 셋팅
         return getToken(id, role, provider, tokenPeriod);
-
-
     }
 
     public String generateAccessToken(String id, String role, String provider) {
@@ -90,6 +87,5 @@ public class JwtUtilService {
 
     public String getProvider(String token) {
         return Jwts.parserBuilder().setSigningKey(secretKey).build().parseClaimsJws(token).getBody().get("provider", String.class);
-
     }
 }

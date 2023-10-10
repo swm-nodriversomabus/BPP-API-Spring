@@ -35,22 +35,23 @@ public class FileService implements UploadFileUsecase, ShowFileUsecase {
     
     @Override
     @Transactional
-    public void uploadFile(MultipartFile file) {
+    public String uploadFile(MultipartFile file) {
         String fileName = file.getOriginalFilename();
         String fileExtension = fileName.substring(fileName.lastIndexOf('.'));
-        String newFileName = UUID.randomUUID().toString();
-        File saveFile = new File(uploadPath + "\\" + newFileName + fileExtension);
+        String newFileName = uploadPath + "\\" + UUID.randomUUID() + fileExtension;
+        File saveFile = new File(newFileName);
         
         try {
             file.transferTo(saveFile);
         } catch (Exception e) {
             e.printStackTrace();
         }
+        return newFileName;
     }
     
     @Override
     public ResponseEntity<byte[]> getFile(String fileName) {
-        ResponseEntity<byte[]> data = null;
+        ResponseEntity<byte[]> data;
         
         try {
             String srcFileName = URLDecoder.decode(fileName, StandardCharsets.UTF_8);

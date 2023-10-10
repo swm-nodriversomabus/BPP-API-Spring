@@ -15,14 +15,14 @@ public class CreateGenderValidator implements Validator {
 
     @Override
     public void validate(Object target, Errors errors) {
-        CreateUserDto creaeUserDto = (CreateUserDto) target;
+        CreateUserDto createUserDto = (CreateUserDto) target;
 
-        if (creaeUserDto.getGender() == null) {
+        if (createUserDto.getGender() == null) {
             errors.rejectValue("gender", "enum.required","성별을 넣어주세요");
-        }else{
+        } else {
             boolean isValid = false;
             for(UserGenderEnum genderEnum: UserGenderEnum.values()){
-                if (genderEnum.equals(creaeUserDto.getGender())){
+                if (genderEnum.equals(createUserDto.getGender())){
                     isValid = true;
                     break;
                 }

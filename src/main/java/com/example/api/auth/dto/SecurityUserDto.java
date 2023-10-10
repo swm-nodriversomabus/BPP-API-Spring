@@ -22,8 +22,4 @@ public class SecurityUserDto {
 
     @NotNull
     private String role;
-
-//    @NotNull
-//    private String nickname;
-
 }
