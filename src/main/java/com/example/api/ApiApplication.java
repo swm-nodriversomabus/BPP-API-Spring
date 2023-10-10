@@ -12,7 +12,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 @SpringBootApplication
 @EnableJpaRepositories
-@EnableRedisHttpSession
+//@EnableRedisHttpSession
 @EnableJpaAuditing
 public class ApiApplication {
 	public static void main(String[] args) {

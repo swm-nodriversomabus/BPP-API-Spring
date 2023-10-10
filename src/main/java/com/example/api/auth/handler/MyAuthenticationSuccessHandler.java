@@ -62,7 +62,7 @@ public class MyAuthenticationSuccessHandler extends SimpleUrlAuthenticationSucce
 //            response.addCookie(CookieUtils.addCookie(););
             getRedirectStrategy().sendRedirect(request, response, targetUrl);
         }else if (isExist == 2) {
-            String targetUrl = UriComponentsBuilder.fromUriString(url + "/register/step1")
+            String targetUrl = UriComponentsBuilder.fromUriString(url + "/register")
                     .queryParam("provider", CustomBase64Utils   .getBase64EncodeString(provider))
                     .queryParam("socialEmail", CustomBase64Utils.getBase64EncodeString(id))
                     .build()
@@ -77,7 +77,7 @@ public class MyAuthenticationSuccessHandler extends SimpleUrlAuthenticationSucce
                     .provider(provider)
                     .build();
             socialService.saveSocialInfo(addSocialDto);
-            String targetUrl = UriComponentsBuilder.fromUriString(url + "/register/step1")
+            String targetUrl = UriComponentsBuilder.fromUriString(url + "/register")
                     .queryParam("provider", CustomBase64Utils.getBase64EncodeString(provider))
                     .queryParam("socialEmail", CustomBase64Utils.getBase64EncodeString(id))
                     .build()
