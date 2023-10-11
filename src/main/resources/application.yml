@@ -1,12 +1,12 @@
 server:
   servlet:
+    session:
+      tracking-modes: cookie
     contextPath: /api/
 jasypt:
   encryptor:
     bean: jasyptStringEncryptor
 spring:
-  session:
-    storage-type: redis
   main:
     allow-bean-definition-overriding: true
 
@@ -15,7 +15,15 @@ management:
     web:
       exposure:
         include: "*"
-
+logging:
+  level:
+    org:
+      springframework:
+        session:
+          web:
+            http:
+              SessionRepositoryFilter:
+                SESSION_LOGGER: DEBUG
 
 ---
 spring:
