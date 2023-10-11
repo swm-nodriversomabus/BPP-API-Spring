@@ -57,12 +57,13 @@ public class MyAuthenticationSuccessHandler extends SimpleUrlAuthenticationSucce
                     .encode(StandardCharsets.UTF_8)
                     .toUriString();
             log.info("success redirecting");
+            log.info(targetUrl);
             CookieUtils.addCookie(response, "access_token",token.getAccessToken(), 1000 * 60 * 60);
 //            response.addCookie(CookieUtils.addCookie(););
             getRedirectStrategy().sendRedirect(request, response, targetUrl);
         }else if (isExist == 2) {
-            String targetUrl = UriComponentsBuilder.fromUriString(url + "/register/step1")
-                    .queryParam("provider", CustomBase64Utils.getBase64EncodeString(provider))
+            String targetUrl = UriComponentsBuilder.fromUriString(url + "/register")
+                    .queryParam("provider", CustomBase64Utils   .getBase64EncodeString(provider))
                     .queryParam("socialEmail", CustomBase64Utils.getBase64EncodeString(id))
                     .build()
                     .encode(StandardCharsets.UTF_8)
@@ -76,7 +77,7 @@ public class MyAuthenticationSuccessHandler extends SimpleUrlAuthenticationSucce
                     .provider(provider)
                     .build();
             socialService.saveSocialInfo(addSocialDto);
-            String targetUrl = UriComponentsBuilder.fromUriString(url + "/register/step1")
+            String targetUrl = UriComponentsBuilder.fromUriString(url + "/register")
                     .queryParam("provider", CustomBase64Utils.getBase64EncodeString(provider))
                     .queryParam("socialEmail", CustomBase64Utils.getBase64EncodeString(id))
                     .build()

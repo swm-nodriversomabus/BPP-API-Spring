@@ -16,16 +16,22 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @RestController
 @RequiredArgsConstructor
 @EnableWebMvc
+@Validated
 @Tag(name = "User", description = "User API")
 public class UserController {
     private final SaveUserUsecase saveUserUsecase;
@@ -47,7 +53,11 @@ public class UserController {
      */
     @Operation(summary = "Create user", description = "새로운 사용자를 추가한다.")
     @PostMapping("/user")
-    public void createUser(@RequestBody @Valid CreateUserDto userDto) {
+    public void createUser(@Valid @RequestBody CreateUserDto userDto, BindingResult bindingResult) {
+//        if(bindingResult.hasErrors()){
+//            List<String> errors = bindingResult.getAllErrors().stream().map(e -> e.getDefaultMessage()).collect(Collectors.toList());
+//
+//        }
         saveUserUsecase.createUser(userDto);
     }
 

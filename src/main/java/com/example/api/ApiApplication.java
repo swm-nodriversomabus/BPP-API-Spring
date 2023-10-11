@@ -14,14 +14,13 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 @SpringBootApplication
 @EnableJpaRepositories
-@EnableRedisHttpSession
+//@EnableRedisHttpSession
 @EnableJpaAuditing
 @EnableConfigurationProperties({FileUploadProperties.class})
 public class ApiApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(ApiApplication.class, args);
 	}
-
 	// cors 설정
 	@Bean
 	public WebMvcConfigurer corsConfigurer(){

@@ -14,6 +14,7 @@ import lombok.experimental.FieldDefaults;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class CreateUserDto {
     @NotBlank(message = "소셜 로그인 값이 없습니다")
+
     String socialEmail; // 소셜 이메일
 
     @NotBlank(message = "소셜 로그인 값이 없습니다")
