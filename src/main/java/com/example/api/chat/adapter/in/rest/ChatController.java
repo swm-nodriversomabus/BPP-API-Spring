@@ -40,22 +40,11 @@ public class ChatController {
      */
     @Operation(summary = "Send message", description = "채팅방에 메시지를 보낸다.")
     @MessageMapping("/chat/{roomNumber}")
-    public void message(@DestinationVariable String roomNumber, AddChatDto message){
+    public void sendMessage(@DestinationVariable String roomNumber, AddChatDto message, String contentType, @RequestParam("file") MultipartFile file) {
         log.info("roomNumber : {}", roomNumber);
-        sendChatUsecase.send(roomNumber, message);
-    }
-
-    /**
-     * 이미지 전송
-     * @param roomNumber (ID)
-     * @param file (데이터)
-     */
-    @Operation(summary = "Send image", description = "채팅방에 이미지를 보낸다.")
-    @MessageMapping("/chat/{roomNumber}/image")
-    public void sendImage(@DestinationVariable String roomNumber, AddChatDto message, @RequestParam("file") MultipartFile file) {
-        String imageName = uploadFileUsecase.uploadFile(file);
-        message.setContent(imageName);
-        log.info("roomNumber : {}", roomNumber);
+        if (contentType.equals("image")) {
+            message.setContent(uploadFileUsecase.uploadFile(file));
+        }
         sendChatUsecase.send(roomNumber, message);
     }
 
