@@ -1,8 +1,10 @@
 package com.example.api;
 
+import com.example.api.multipart.property.FileUploadProperties;
 import lombok.NonNull;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import org.springframework.session.data.redis.config.annotation.web.http.EnableRedisHttpSession;
@@ -14,6 +16,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 @EnableJpaRepositories
 //@EnableRedisHttpSession
 @EnableJpaAuditing
+@EnableConfigurationProperties({FileUploadProperties.class})
 public class ApiApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(ApiApplication.class, args);

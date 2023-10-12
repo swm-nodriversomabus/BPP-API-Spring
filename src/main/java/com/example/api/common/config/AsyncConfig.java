@@ -15,7 +15,7 @@ import java.util.concurrent.ThreadPoolExecutor;
 public class AsyncConfig implements AsyncConfigurer {
     /**
      * 비동기 작업을 처리 가능하게 설정
-     * @return
+     * @return ThreadPoolTaskExecutor
      */
     @Bean(name = "chatSaveTaskExecutor")
     public ThreadPoolTaskExecutor threadPoolTaskExecutor() {
@@ -28,6 +28,7 @@ public class AsyncConfig implements AsyncConfigurer {
         executor.initialize();
         return executor;
     }
+    
     @Override
     public AsyncUncaughtExceptionHandler getAsyncUncaughtExceptionHandler() {
         return new AsyncExceptionHandler(); // 에러 잡기
