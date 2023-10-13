@@ -1,5 +1,6 @@
 package com.example.api.auth.handler;
 
+import com.example.api.auth.repository.OAuth2AuthorizationRequestBasedOnCookieRepository;
 import com.example.api.auth.service.JwtUtilService;
 import com.example.api.auth.utils.CookieUtils;
 import com.example.api.auth.utils.GeneratedToken;
@@ -30,6 +31,7 @@ import java.nio.charset.StandardCharsets;
 public class MyAuthenticationSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
     private final JwtUtilService jwtUtilService;
     private final SocialService socialService;
+    private final OAuth2AuthorizationRequestBasedOnCookieRepository authorizationRequestRepository;
 
     @Value("${main.url}")
     String url;
@@ -59,6 +61,7 @@ public class MyAuthenticationSuccessHandler extends SimpleUrlAuthenticationSucce
             log.info("success redirecting");
             log.info(targetUrl);
             CookieUtils.addCookie(response, "access_token",token.getAccessToken(), 1000 * 60 * 60);
+            clearAuthenticationAttributes(request, response);
 //            response.addCookie(CookieUtils.addCookie(););
             getRedirectStrategy().sendRedirect(request, response, targetUrl);
         }else if (isExist == 2) {
@@ -95,6 +98,10 @@ public class MyAuthenticationSuccessHandler extends SimpleUrlAuthenticationSucce
             getRedirectStrategy().sendRedirect(request, response, targetUrl);
 
         }
+    }
+    protected void clearAuthenticationAttributes(HttpServletRequest request, HttpServletResponse response) {
+        super.clearAuthenticationAttributes(request);
+        authorizationRequestRepository.removeAuthorizationRequestCookies(request, response);
     }
 }
 
