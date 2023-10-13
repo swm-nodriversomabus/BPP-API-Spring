@@ -1,8 +1,7 @@
 package com.example.api.auth.config;
 
-//import com.example.api.auth.exception.RestAuthenticationEntryPoint;
 import com.example.api.auth.filter.JwtAuthFilter;
-import com.example.api.auth.filter.JwtExceptionFIlter;
+import com.example.api.auth.filter.JwtExceptionFilter;
 import com.example.api.auth.handler.MyAuthenticationFailureHandler;
 import com.example.api.auth.handler.MyAuthenticationSuccessHandler;
 import com.example.api.auth.repository.OAuth2AuthorizationRequestBasedOnCookieRepository;
@@ -26,22 +25,24 @@ import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 @Configuration
-@EnableWebSecurity(debug = true)
 @EnableMethodSecurity(securedEnabled = true)
+@EnableWebSecurity
 @RequiredArgsConstructor
-public class SecurityConfig{
+public class SecurityConfig {
     private final CustomOAuth2UserService customOAuth2UserService;
     private final MyAuthenticationFailureHandler oAuth2LoginFailureHandler;
     private final MyAuthenticationSuccessHandler oAUth2LoginSuccessHandler;
     private final JwtAuthFilter jwtAuthFilter;
-    private final JwtExceptionFIlter jwtExceptionFIlter;
+    private final JwtExceptionFilter jwtExceptionFIlter;
     private static final String[] PERMIT_URL_ARRAY = {
             // swagger
             "/v3/api-docs/**",
             "/swagger-ui/**"
     };
+    
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
+
         httpSecurity.formLogin(AbstractHttpConfigurer::disable)
                     .httpBasic(AbstractHttpConfigurer::disable)
                     .sessionManagement(httpSecuritySessionManagementConfigurer ->
@@ -54,15 +55,19 @@ public class SecurityConfig{
 //        httpSecurity.sessionManagement(AbstractSession)
 //        httpSecurity.sessionManagement(httpSecuritySessionManagementConfigurer -> httpSecuritySessionManagementConfigurer.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 //        httpSecurity.exceptionHandling(httpSecurityExceptionHandlingConfigurer -> httpSecurityExceptionHandlingConfigurer.authenticationEntryPoint(new RestAuthenticationEntryPoint()));
+
         httpSecurity.authorizeHttpRequests(authorizeRequests -> // 인증 설정
-                authorizeRequests.requestMatchers("/admin/**").hasRole("ADMIN") // 이 url로 오는 요청들은 admin권한만 접근 가능
-                        .requestMatchers("/auth/**").permitAll() // auth 로 오는 애들은 일단 인증 없이 가능
+                //authorizeRequests.requestMatchers("/**").permitAll());
+                authorizeRequests.requestMatchers("/admin/**").hasRole("ADMIN") // 이 URL로 오는 요청들은 admin 권한만 접근 가능
+                        .requestMatchers("/auth/**").permitAll() // auth로 오는 애들은 일단 인증 없이 가능
                         .requestMatchers("/actuator/**").permitAll()
                         .requestMatchers(HttpMethod.POST, "/user/**").permitAll()
                         .requestMatchers("/login/**").permitAll()
                         .requestMatchers(PERMIT_URL_ARRAY).permitAll()
                         .anyRequest().authenticated()); // 그 외는 전부 인증 필요
+
         httpSecurity.oauth2Login(oauth2 ->{ // oauth2 로그인 설정 시작
+
             oauth2.userInfoEndpoint( // oauth2 로그인 시 사용자 정보를 가져오는 엔드포인트와 사용자 서비스 설정
                     userInfoEndpointConfig ->
                             userInfoEndpointConfig.userService(customOAuth2UserService));
@@ -73,14 +78,11 @@ public class SecurityConfig{
         });
 //        httpSecurity.logout(logout -> logout.logoutSuccessUrl("/"));
 
-
-        // jwt 인증 필터를 UsernmaepasswordAuthenticationFilter앞에 추가
         return httpSecurity
                 .addFilterBefore(jwtAuthFilter, OAuth2LoginAuthenticationFilter.class)
 //                .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
                 .addFilterBefore(jwtExceptionFIlter, JwtAuthFilter.class) // jwt AuthFilter 앞에 추가
                 .build();
-
     }
 
     @Bean
@@ -95,16 +97,3 @@ public class SecurityConfig{
         return source;
     }
 
-//    @Bean
-//    public HttpSessionSecurityContextRepository securityContextRepository() {
-//        HttpSessionSecurityContextRepository repository = new HttpSessionSecurityContextRepository();
-//        repository.setAllowSessionCreation(false);
-//        return repository;
-//    }
-    //쿠키 기반 인가 repository, 인가 응답을 연계 하고 검증할 때 사용
-//    @Bean
-//    public OAuth2AuthorizationRequestBasedOnCookieRepository oAuth2AuthorizationRequestbasedOnCookieRepository() {
-//        return new OAuth2AuthorizationRequestBasedOnCookieRepository();
-//    }
-
-}

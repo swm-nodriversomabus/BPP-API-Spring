@@ -38,7 +38,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
     /**
      * 필터를 거치지 않는 경우 추가
      * @param request current HTTP request
-     * @return
+     * @return boolean
      * @throws ServletException
      */
     @Override
@@ -48,7 +48,6 @@ public class JwtAuthFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-
 //        String atc = Arrays.stream(request.getCookies())
 //                .filter(c -> c.getName().equals("access_token"))
 //                .findFirst()
@@ -73,7 +72,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
         if (!jwtUtilService.verifyToken(atc)) {
             log.info("JWT 이슈 발생");
             throw new JwtException("Access Token 만료");
-        }else{
+        } else {
             //TODO 도메인으로 변경 예정
             // 유저가 회원가입 되어 있는지에 대한 체크
             log.info("jwt 인증");
@@ -88,11 +87,9 @@ public class JwtAuthFilter extends OncePerRequestFilter {
             // Security Context에 인증 객체 등록
             Authentication authentication = getAuthentication(securityUserDto);
             SecurityContextHolder.getContext().setAuthentication(authentication);
-
         }
 
         filterChain.doFilter(request, response);
-
     }
 
     public Authentication getAuthentication(SecurityUserDto user){

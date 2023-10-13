@@ -1,6 +1,5 @@
 package com.example.api.common.handler;
 
-
 import com.example.api.common.dto.ExceptionDto;
 import com.example.api.common.exception.CustomException;
 import jakarta.validation.ConstraintViolationException;
@@ -15,16 +14,6 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 @Slf4j
 @RestControllerAdvice
 public class CustomExceptionHandler {
-
-    @ExceptionHandler(value = Exception.class)
-    public ResponseEntity exception(Exception e){
-
-        log.error(e.getClass().getName());
-        log.error(e.getLocalizedMessage());
-
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("");
-    }
-
     // 글로벌 예외처리
     @ExceptionHandler(CustomException.class)
     public ResponseEntity<?> exceptionHandler(CustomException e) {
@@ -46,7 +35,6 @@ public class CustomExceptionHandler {
     @ExceptionHandler(RuntimeException.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public String runtimeExceptionHandler(RuntimeException e) {
-
         log.error(e.getMessage());
         return "Internal Server Error while Running";
     }

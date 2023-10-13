@@ -10,7 +10,7 @@ public class ExceptionDto {
     private ErrorCodeEnum status;
     private String statusMessage;
 
-    public ExceptionDto(ErrorCodeEnum e){
+    public ExceptionDto(ErrorCodeEnum e) {
         this.result = "ERROR";
         this.status = e;
         this.statusMessage = e.getMessage();

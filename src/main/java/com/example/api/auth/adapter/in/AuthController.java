@@ -12,12 +12,10 @@ import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.swing.text.html.Option;
 import java.util.Optional;
 
 @Slf4j
@@ -41,12 +39,11 @@ public class AuthController {
 
     @PostMapping("/auth/refresh")
     public ResponseEntity<TokenResponseStatus> refresh(@CookieValue String access_token, HttpServletResponse response) {
-
         // accessToken 여부 확인
         Optional<RefreshToken> refreshToken = findRefreshUsecase.findByAccessToken(access_token);
 
         if (refreshToken.isPresent() && jwtUtilService.verifyToken(refreshToken.get().getRefreshToken())) {
-            RefreshToken token = refreshToken.get(); // refresh토큰 가져오기
+            RefreshToken token = refreshToken.get(); // refresh 토큰 가져오기
 
             String newAccessToken = jwtUtilService.generateAccessToken(token.getId(),
                     jwtUtilService.getRole(token.getRefreshToken()),

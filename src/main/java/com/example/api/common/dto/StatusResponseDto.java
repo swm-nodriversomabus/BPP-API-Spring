@@ -1,6 +1,5 @@
 package com.example.api.common.dto;
 
-
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -11,8 +10,7 @@ import lombok.Getter;
 public class StatusResponseDto {
     private Integer status;
     private Object data;
-
-
+    
     public StatusResponseDto(Integer status) {
         this.status = status;
     }
