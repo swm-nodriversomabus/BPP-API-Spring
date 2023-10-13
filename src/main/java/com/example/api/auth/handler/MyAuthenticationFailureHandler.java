@@ -1,9 +1,11 @@
 package com.example.api.auth.handler;
 
+import com.example.api.auth.repository.OAuth2AuthorizationRequestBasedOnCookieRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.AuthenticationException;
@@ -16,7 +18,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Component
+@RequiredArgsConstructor
 public class MyAuthenticationFailureHandler implements AuthenticationFailureHandler {
+    private final OAuth2AuthorizationRequestBasedOnCookieRepository authorizationRequestRepository;
     private ObjectMapper ob = new ObjectMapper();
 
     /**
@@ -36,6 +40,7 @@ public class MyAuthenticationFailureHandler implements AuthenticationFailureHand
                 "exception",
                 exception.getMessage()
         );
+        authorizationRequestRepository.removeAuthorizationRequestCookies(request,response);
         response.getOutputStream()
                 .println(ob.writeValueAsString(data));
     }

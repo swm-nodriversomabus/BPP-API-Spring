@@ -34,6 +34,7 @@ public class SecurityConfig {
     private final MyAuthenticationSuccessHandler oAUth2LoginSuccessHandler;
     private final JwtAuthFilter jwtAuthFilter;
     private final JwtExceptionFilter jwtExceptionFIlter;
+    private final OAuth2AuthorizationRequestBasedOnCookieRepository oAuth2AuthorizationRequestBasedOnCookieRepository;
     private static final String[] PERMIT_URL_ARRAY = {
             // swagger
             "/v3/api-docs/**",
@@ -49,15 +50,8 @@ public class SecurityConfig {
                         httpSecuritySessionManagementConfigurer.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .cors(httpSecurityCorsConfigurer -> httpSecurityCorsConfigurer.configurationSource(corsConfigurationSource()))
                 .logout(AbstractHttpConfigurer::disable)
-//                .securityContext(s->s.requireExplicitSave(false))
                 .csrf(AbstractHttpConfigurer::disable);
-//        httpSecurity.securityContext(httpSecuritySecurityContextConfigurer -> httpSecuritySecurityContextConfigurer.securityContextRepository(securityContextRepository()));
-//        httpSecurity.sessionManagement(AbstractSession)
-//        httpSecurity.sessionManagement(httpSecuritySessionManagementConfigurer -> httpSecuritySessionManagementConfigurer.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-//        httpSecurity.exceptionHandling(httpSecurityExceptionHandlingConfigurer -> httpSecurityExceptionHandlingConfigurer.authenticationEntryPoint(new RestAuthenticationEntryPoint()));
-
         httpSecurity.authorizeHttpRequests(authorizeRequests -> // 인증 설정
-                //authorizeRequests.requestMatchers("/**").permitAll());
                 authorizeRequests.requestMatchers("/admin/**").hasRole("ADMIN") // 이 URL로 오는 요청들은 admin 권한만 접근 가능
                         .requestMatchers("/auth/**").permitAll() // auth로 오는 애들은 일단 인증 없이 가능
                         .requestMatchers("/actuator/**").permitAll()
@@ -67,12 +61,16 @@ public class SecurityConfig {
                         .anyRequest().authenticated()); // 그 외는 전부 인증 필요
 
         httpSecurity.oauth2Login(oauth2 -> { // oauth2 로그인 설정 시작
-
+            oauth2.authorizationEndpoint(authorizationEndpointConfig ->
+                    authorizationEndpointConfig
+                            .baseUri("/oauth2/authorization")
+                            .authorizationRequestRepository(oAuth2AuthorizationRequestBasedOnCookieRepository)
+            );
+            oauth2.redirectionEndpoint(redirectionEndpointConfig -> redirectionEndpointConfig.baseUri("/*/oauth2/code/*"));
             oauth2.userInfoEndpoint( // oauth2 로그인 시 사용자 정보를 가져오는 엔드포인트와 사용자 서비스 설정
                     userInfoEndpointConfig ->
                             userInfoEndpointConfig.userService(customOAuth2UserService));
-//            oauth2.tokenEndpoint()
-//            oauth2.authorizedClientRepository(oauth2)
+
             oauth2.failureHandler(oAuth2LoginFailureHandler);//핸들러
             oauth2.successHandler(oAUth2LoginSuccessHandler);
         });
@@ -84,6 +82,11 @@ public class SecurityConfig {
                 .addFilterBefore(jwtExceptionFIlter, JwtAuthFilter.class) // jwt AuthFilter 앞에 추가
                 .build();
     }
+
+//    @Bean
+//    public OAuth2AuthorizationRequestBasedOnCookieRepository oAuth2AuthorizationRequestBasedOnCookieRepository() {
+//        return new OAuth2AuthorizationRequestBasedOnCookieRepository();
+//    }
 
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
