@@ -60,6 +60,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
                         .findFirst());
 
         String atc = accessCookie.map(Cookie::getValue).orElse("");
+//        String atc = "";
 //        String atc = request.getHeader("Authorization");
         // 토큰 검사 생략
         // permitALl인 경우
@@ -74,9 +75,9 @@ public class JwtAuthFilter extends OncePerRequestFilter {
         } else {
             //TODO 도메인으로 변경 예정
             // 유저가 회원가입 되어 있는지에 대한 체크
-            log.info("login test");
+            log.info("jwt 인증");
 
-            log.info(jwtUtilService.getId(atc));
+//            log.info(jwtUtilService.getId(atc));
 //            log.info(jwtUtilService.getProvider(atc));
 //            UserEntity user = userService.findSocialUser(jwtUtilService.getId(atc), jwtUtilService.getProvider(atc))
 //                    .orElseThrow(IllegalStateException::new);
@@ -92,6 +93,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
     }
 
     public Authentication getAuthentication(SecurityUserDto user){
+
         return new UsernamePasswordAuthenticationToken(user, "",
                 List.of(new SimpleGrantedAuthority(user.getRole()))
         );
