@@ -5,6 +5,7 @@ import com.example.api.auth.filter.JwtAuthFilter;
 import com.example.api.auth.filter.JwtExceptionFIlter;
 import com.example.api.auth.handler.MyAuthenticationFailureHandler;
 import com.example.api.auth.handler.MyAuthenticationSuccessHandler;
+import com.example.api.auth.repository.OAuth2AuthorizationRequestBasedOnCookieRepository;
 import com.example.api.auth.service.CustomOAuth2UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -25,7 +26,7 @@ import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 @Configuration
-@EnableWebSecurity
+@EnableWebSecurity(debug = true)
 @EnableMethodSecurity(securedEnabled = true)
 @RequiredArgsConstructor
 public class SecurityConfig{
@@ -43,13 +44,11 @@ public class SecurityConfig{
     public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
         httpSecurity.formLogin(AbstractHttpConfigurer::disable)
                     .httpBasic(AbstractHttpConfigurer::disable)
-                .securityContext((securityContext) -> securityContext
-                        .requireExplicitSave(false)
-                )
                     .sessionManagement(httpSecuritySessionManagementConfigurer ->
                             httpSecuritySessionManagementConfigurer.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                     .cors(httpSecurityCorsConfigurer -> httpSecurityCorsConfigurer.configurationSource(corsConfigurationSource()))
                     .logout(AbstractHttpConfigurer::disable)
+//                .securityContext(s->s.requireExplicitSave(false))
                     .csrf(AbstractHttpConfigurer::disable);
 //        httpSecurity.securityContext(httpSecuritySecurityContextConfigurer -> httpSecuritySecurityContextConfigurer.securityContextRepository(securityContextRepository()));
 //        httpSecurity.sessionManagement(AbstractSession)
@@ -67,6 +66,7 @@ public class SecurityConfig{
             oauth2.userInfoEndpoint( // oauth2 로그인 시 사용자 정보를 가져오는 엔드포인트와 사용자 서비스 설정
                     userInfoEndpointConfig ->
                             userInfoEndpointConfig.userService(customOAuth2UserService));
+//            oauth2.tokenEndpoint()
 //            oauth2.authorizedClientRepository(oauth2)
             oauth2.failureHandler(oAuth2LoginFailureHandler);//핸들러
             oauth2.successHandler(oAUth2LoginSuccessHandler);
@@ -95,12 +95,12 @@ public class SecurityConfig{
         return source;
     }
 
-    @Bean
-    public HttpSessionSecurityContextRepository securityContextRepository() {
-        HttpSessionSecurityContextRepository repository = new HttpSessionSecurityContextRepository();
-        repository.setAllowSessionCreation(false);
-        return repository;
-    }
+//    @Bean
+//    public HttpSessionSecurityContextRepository securityContextRepository() {
+//        HttpSessionSecurityContextRepository repository = new HttpSessionSecurityContextRepository();
+//        repository.setAllowSessionCreation(false);
+//        return repository;
+//    }
     //쿠키 기반 인가 repository, 인가 응답을 연계 하고 검증할 때 사용
 //    @Bean
 //    public OAuth2AuthorizationRequestBasedOnCookieRepository oAuth2AuthorizationRequestbasedOnCookieRepository() {
