@@ -43,13 +43,13 @@ public class ComparePreferenceDto {
 
     @NotNull
     private Integer preferSmoke;
+
+    @NotNull
+    private Integer slang;
     
     @NotNull
     private LocalDateTime createdAt;
     
     @NotNull
     private LocalDateTime updatedAt;
-
-    @NotNull
-    private Integer slang;
 }

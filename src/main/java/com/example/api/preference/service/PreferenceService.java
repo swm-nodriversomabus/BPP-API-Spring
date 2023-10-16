@@ -16,6 +16,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -55,6 +56,22 @@ public class PreferenceService implements SavePreferenceUsecase, FindPreferenceU
     @Override
     public ComparePreferenceDto getUserPreference(String userId) {
         Long preferenceId = comparePreferencePort.getUserPreferenceId(UUID.fromString(userId));
+        if (preferenceId == 0L) {
+            return ComparePreferenceDto.builder()
+                    .preferenceId(0L)
+                    .alcoholAmount(2)
+                    .mateAllowedAlcohol(2)
+                    .taste(4)
+                    .allowedMoveTime(60)
+                    .allowedPeople(4)
+                    .preferGender(0)
+                    .smoke(false)
+                    .preferSmoke(0)
+                    .slang(2)
+                    .createdAt(LocalDateTime.now())
+                    .updatedAt(LocalDateTime.now())
+                    .build();
+        }
         return this.getPreferenceByPreferenceId(preferenceId).orElseThrow();
     }
     

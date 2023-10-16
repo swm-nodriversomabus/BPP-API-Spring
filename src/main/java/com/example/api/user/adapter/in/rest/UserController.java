@@ -84,7 +84,7 @@ public class UserController {
      * @param userId (ID)
      * @return List<FindMatchingDto>
      */
-    @Operation(summary = "Get recommended matching list of a user", description = "사용자의 추천 매칭 목록을 조회한다..")
+    @Operation(summary = "Get recommended matching list of a user", description = "사용자의 추천 매칭 목록을 조회한다.")
     @GetMapping("/user/{userId}/recommendedmatching")
     public List<FindMatchingDto> getRecommendedMatchingList(@PathVariable String userId) {
         return recommendedMatchingUsecase.getRecommendedMatchingList(userId);

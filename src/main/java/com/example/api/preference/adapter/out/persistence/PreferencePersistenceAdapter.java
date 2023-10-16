@@ -52,6 +52,9 @@ public class PreferencePersistenceAdapter implements
     @Override
     public Long getUserPreferenceId(UUID userId) {
         UserPreferenceEntity userPreferenceData = userPreferenceRepository.getByUserId(userId);
+        if (userPreferenceData == null) {
+            return 0L;
+        }
         return userPreferenceData.getPreferenceId();
     }
     
@@ -65,6 +68,9 @@ public class PreferencePersistenceAdapter implements
     @Override
     public  Long getMatchingPreferenceId(Long matchingId) {
         MatchingPreferenceEntity matchingPreferenceData = matchingPreferenceRepository.getMatchingPreferenceId(matchingId);
+        if (matchingPreferenceData == null) {
+            return 0L;
+        }
         return matchingPreferenceData.getPreferenceId();
     }
 }
