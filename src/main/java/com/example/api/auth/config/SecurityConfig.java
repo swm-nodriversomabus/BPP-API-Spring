@@ -17,9 +17,6 @@ import org.springframework.security.config.annotation.web.configurers.AbstractHt
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.oauth2.client.web.OAuth2LoginAuthenticationFilter;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
-import org.springframework.security.web.context.SecurityContextPersistenceFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
@@ -33,7 +30,7 @@ public class SecurityConfig {
     private final MyAuthenticationFailureHandler oAuth2LoginFailureHandler;
     private final MyAuthenticationSuccessHandler oAUth2LoginSuccessHandler;
     private final JwtAuthFilter jwtAuthFilter;
-    private final JwtExceptionFilter jwtExceptionFIlter;
+    private final JwtExceptionFilter jwtExceptionFilter;
     private final OAuth2AuthorizationRequestBasedOnCookieRepository oAuth2AuthorizationRequestBasedOnCookieRepository;
     private static final String[] PERMIT_URL_ARRAY = {
             // swagger
@@ -43,7 +40,6 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
-
         httpSecurity.formLogin(AbstractHttpConfigurer::disable)
                 .httpBasic(AbstractHttpConfigurer::disable)
                 .sessionManagement(httpSecuritySessionManagementConfigurer ->
@@ -79,7 +75,7 @@ public class SecurityConfig {
         return httpSecurity
                 .addFilterBefore(jwtAuthFilter, OAuth2LoginAuthenticationFilter.class)
 //                .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
-                .addFilterBefore(jwtExceptionFIlter, JwtAuthFilter.class) // jwt AuthFilter 앞에 추가
+                .addFilterBefore(jwtExceptionFilter, JwtAuthFilter.class) // jwt AuthFilter 앞에 추가
                 .build();
     }
 
