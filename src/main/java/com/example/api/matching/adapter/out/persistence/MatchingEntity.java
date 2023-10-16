@@ -1,13 +1,13 @@
 package com.example.api.matching.adapter.out.persistence;
 
 import com.example.api.common.entity.BaseEntity;
-import com.example.api.matching.dto.FindMatchingDto;
 import com.example.api.matching.type.MatchingTypeEnum;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Entity
 @EntityListeners(AuditingEntityListener.class)
@@ -23,7 +23,7 @@ public class MatchingEntity extends BaseEntity {
     private Long matchingId;
 
     @Column(nullable = false)
-    private Long writerId;
+    private UUID writerId;
     
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
@@ -58,24 +58,4 @@ public class MatchingEntity extends BaseEntity {
     
     @Column(nullable = false)
     private Boolean isActive;
-    
-    public FindMatchingDto toDto() {
-        return FindMatchingDto.builder()
-                .matchingId(matchingId)
-                .writerId(writerId)
-                .type(type)
-                .title(title)
-                .place(place)
-                .content(content)
-                .startDate(startDate)
-                .endDate(endDate)
-                .maxMember(maxMember)
-                .minusAge(minusAge)
-                .plusAge(plusAge)
-                .readCount(readCount)
-                .createdAt(getCreatedAt())
-                .updatedAt(getUpdatedAt())
-                .isActive(isActive)
-                .build();
-    }
 }

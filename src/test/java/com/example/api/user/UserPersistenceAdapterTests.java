@@ -1,6 +1,5 @@
 package com.example.api.user;
 
-import com.example.api.user.adapter.out.persistence.UserEntity;
 import com.example.api.user.adapter.out.persistence.UserMapperInterface;
 import com.example.api.user.adapter.out.persistence.UserPersistenceAdapter;
 import com.example.api.user.domain.CreateUser;
@@ -17,7 +16,7 @@ import org.springframework.boot.autoconfigure.AutoConfigurationPackage;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.context.ContextConfiguration;
 
-import java.util.List;
+import java.util.UUID;
 
 import static org.mockito.Mockito.*;
 
@@ -34,6 +33,7 @@ public class UserPersistenceAdapterTests {
     private UserRepository userRepository = mock(UserRepository.class);
     private CreateUser user1, user2, user3;
     private User newUser;
+    private final UUID userUUID = UUID.fromString("09a46fb0-2ae0-4a35-8aad-0a9e4311a1a3");
     
     @BeforeEach
     void beforeEach() {
@@ -93,34 +93,34 @@ public class UserPersistenceAdapterTests {
     
     @Test
     void getAllByTest() {
-        List<UserEntity> userList = userPersistenceAdapter.getAllBy();
+        userPersistenceAdapter.getAllBy();
         verify(userRepository, times(1)).getAllBy();
     }
     
     @Test
     void getUserByUserIdTest() {
-        UserEntity userEntity = userPersistenceAdapter.getUserByUserId(2L).orElse(userMapper.toEntity(user2));
-        verify(userRepository, times(1)).getByUserId(2L);
+        userPersistenceAdapter.getByUserId(userUUID).orElse(userMapper.toEntity(user2));
+        verify(userRepository, times(1)).getByUserId(userUUID);
     }
     
     @Test
     void updateUserTest() {
         user3.setMannerScore(71);
-        User user = userPersistenceAdapter.updateUser(3L, newUser);
+        userPersistenceAdapter.updateUser(userUUID, newUser);
         verify(userRepository, times(1)).save(userMapper.toEntity(newUser));
     }
 
     @Test
     void deleteByUserIdTest() {
-        userPersistenceAdapter.deleteByUserId(1L);
-        List<UserEntity> userList = userPersistenceAdapter.getAllBy();
-        verify(userRepository, times(1)).deleteByUserId(1L);
+        userPersistenceAdapter.deleteByUserId(userUUID);
+        userPersistenceAdapter.getAllBy();
+        verify(userRepository, times(1)).deleteByUserId(userUUID);
     }
     
     @Test
     void deleteAllByTest() {
         userPersistenceAdapter.deleteAllBy();
-        List<UserEntity> userList = userPersistenceAdapter.getAllBy();
+        userPersistenceAdapter.getAllBy();
         verify(userRepository, times(1)).deleteAllBy();
     }
 }

@@ -13,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 @Service
 @Slf4j
@@ -31,7 +32,7 @@ public class MemberService implements AddMemberChatRoomUsecase {
     public void addMember(AddMemberDto addMemberDto) {
         List<Member> members = new ArrayList<>();
         ChatRoom chatRoom = retrieveChatRoomPort.retrieveChatRoom(addMemberDto.getChatroomId());
-        for(Long userId: addMemberDto.getMemberIds()) {
+        for (UUID userId: addMemberDto.getMemberIds()) {
             Member member = Member.builder()
                     .chatroomId(chatRoom.getChatroomId())
                     .userId(userId)

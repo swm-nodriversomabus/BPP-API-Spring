@@ -1,13 +1,11 @@
 package com.example.api.matching.service;
 
-import com.example.api.chatroom.service.ChatRoomService;
 import com.example.api.common.type.Pair;
 import com.example.api.matching.adapter.out.persistence.MatchingMapperInterface;
 import com.example.api.matching.application.port.in.DeleteMatchingUsecase;
 import com.example.api.matching.application.port.in.FindMatchingUsecase;
 import com.example.api.matching.application.port.in.LikeUsecase;
 import com.example.api.matching.domain.Matching;
-import com.example.api.matching.adapter.out.persistence.MatchingEntity;
 import com.example.api.matching.application.port.in.SaveMatchingUsecase;
 import com.example.api.matching.application.port.out.DeleteMatchingPort;
 import com.example.api.matching.application.port.out.FindMatchingPort;
@@ -22,10 +20,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -50,32 +45,32 @@ public class MatchingService implements
     @Override
     public List<FindMatchingDto> getAll() {
         return findMatchingPort.getAllBy().stream()
-                .map(MatchingEntity::toDto)
+                .map(matchingMapper::toDto)
                 .collect(Collectors.toList());
     }
 
     @Override
     public Optional<FindMatchingDto> getMatchingById(Long matchingId) {
-        return findMatchingPort.getMatchingByMatchingId(matchingId)
-                .map(MatchingEntity::toDto);
+        return findMatchingPort.getByMatchingId(matchingId)
+                .map(matchingMapper::toDto);
     }
     
     @Override
-    public List<FindMatchingDto> getMatchingByWriterId(Long userId) {
-        return findMatchingPort.getMatchingByWriterId(userId).stream()
-                .map(MatchingEntity::toDto)
+    public List<FindMatchingDto> getMatchingByWriterId(String userId) {
+        return findMatchingPort.getByWriterId(UUID.fromString(userId)).stream()
+                .map(matchingMapper::toDto)
                 .collect(Collectors.toList());
     }
     
     @Override
     public List<FindMatchingDto> getMatchingByIsActive(Boolean isActive) {
-        return findMatchingPort.getMatchingByIsActive(isActive).stream()
-                .map(MatchingEntity::toDto)
+        return findMatchingPort.getByIsActive(isActive).stream()
+                .map(matchingMapper::toDto)
                 .collect(Collectors.toList());
     }
     
     @Override
-    public List<FindMatchingDto> getRecommendedMatchingList(Long userId) {
+    public List<FindMatchingDto> getRecommendedMatchingList(String userId) {
         List<FindMatchingDto> activeMatchingList = this.getMatchingByIsActive(true);
         List<Pair<Long, Integer>> matchingScoreList = new ArrayList<>();
         for (FindMatchingDto matchingData: activeMatchingList) {
@@ -108,7 +103,7 @@ public class MatchingService implements
     @Override
     @Transactional
     public void toggleLike(LikeDto likeDto) {
-        likePort.toggleLike(likeDto.toEntity());
+        likePort.toggleLike(matchingMapper.toEntity(likeDto));
     }
 
     @Override

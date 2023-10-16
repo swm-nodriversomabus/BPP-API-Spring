@@ -7,6 +7,8 @@ import jakarta.validation.constraints.NotEmpty;
 import lombok.*;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+import java.util.UUID;
+
 @Entity
 @EntityListeners(AuditingEntityListener.class)
 @Getter
@@ -18,7 +20,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 @Table(name="matchingApplication")
 public class MatchingApplicationEntity extends BaseEntity {
     @Id
-    private Long userId;
+    private UUID userId;
     
     @Id
     private Long matchingId;

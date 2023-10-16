@@ -14,5 +14,5 @@ public class AddMemberDto {
     private UUID chatroomId;
 
     @NotNull
-    private List<Long> memberIds;
+    private List<UUID> memberIds;
 }

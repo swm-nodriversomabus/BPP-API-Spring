@@ -10,6 +10,7 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Repository
 @RequiredArgsConstructor
@@ -30,7 +31,7 @@ public class MatchingApplicationPersistenceAdapter implements MatchingApplicatio
     }
     
     @Override
-    public List<MatchingApplicationEntity> getByUserIdIsAndStateEquals(Long userId, ApplicationStateEnum state) {
+    public List<MatchingApplicationEntity> getByUserIdIsAndStateEquals(UUID userId, ApplicationStateEnum state) {
         return matchingApplicationRepository.getByUserIdIsAndStateEquals(userId, state);
     }
     

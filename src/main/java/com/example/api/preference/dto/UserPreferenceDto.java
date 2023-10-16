@@ -4,6 +4,7 @@ import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Getter
 @Setter
@@ -13,7 +14,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 public class UserPreferenceDto {
     @NotNull
-    private Long userId;
+    private UUID userId;
     
     @NotNull
     private Long preferenceId;

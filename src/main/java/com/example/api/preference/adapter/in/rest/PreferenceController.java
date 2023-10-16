@@ -59,7 +59,7 @@ public class PreferenceController {
      */
     @Operation(summary = "Get user preference", description = "사용자 선호도를 조회한다.")
     @GetMapping("/user/{userId}/preference")
-    public ComparePreferenceDto findUserPreference(@PathVariable Long userId) {
+    public ComparePreferenceDto findUserPreference(@PathVariable String userId) {
         return comparePreferenceUsecase.getUserPreference(userId);
     }
 
@@ -82,7 +82,7 @@ public class PreferenceController {
      */
     @Operation(summary = "Update user preference", description = "사용자 선호도를 변경한다.")
     @PatchMapping("/user/{userId}/preference")
-    public FindPreferenceDto updateUserPreference(@PathVariable Long userId, @RequestBody SavePreferenceDto savePreferenceDto) {
+    public FindPreferenceDto updateUserPreference(@PathVariable String userId, @RequestBody SavePreferenceDto savePreferenceDto) {
         return userPreferenceUsecase.updateUserPreference(userId, savePreferenceDto);
     }
 

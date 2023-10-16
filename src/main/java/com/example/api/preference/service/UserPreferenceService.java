@@ -13,6 +13,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.UUID;
+
 @Service
 @RequiredArgsConstructor
 @Transactional
@@ -29,8 +31,8 @@ public class UserPreferenceService implements UserPreferenceUsecase {
     }
     
     @Override
-    public FindPreferenceDto updateUserPreference(Long userId, SavePreferenceDto savePreferenceDto) {
-        Long preferenceId = comparePreferencePort.getUserPreferenceId(userId);
+    public FindPreferenceDto updateUserPreference(String userId, SavePreferenceDto savePreferenceDto) {
+        Long preferenceId = comparePreferencePort.getUserPreferenceId(UUID.fromString(userId));
         return preferenceMapper.toDto(savePreferencePort.updatePreference(preferenceId, preferenceMapper.toDomain(savePreferenceDto)));
     }
 }

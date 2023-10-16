@@ -7,5 +7,5 @@ import java.util.Optional;
 
 public interface FindUserUsecase {
     List<FindUserDto> getAll();
-    Optional<FindUserDto> getUserById(Long userId);
+    Optional<FindUserDto> getUserById(String userId);
 }

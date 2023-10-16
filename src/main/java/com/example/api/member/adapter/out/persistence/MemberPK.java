@@ -9,5 +9,5 @@ import java.util.UUID;
 @Data
 public class MemberPK implements Serializable {
     private ChatRoomEntity chatroom;
-    private Long userId;
+    private UUID userId;
 }

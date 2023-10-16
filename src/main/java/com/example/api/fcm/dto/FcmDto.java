@@ -3,6 +3,8 @@ package com.example.api.fcm.dto;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
+import java.util.UUID;
+
 @Getter
 @Setter
 @Builder
@@ -11,7 +13,7 @@ import lombok.*;
 @AllArgsConstructor
 public class FcmDto {
     @NotNull
-    private Long userId;
+    private UUID userId;
     
     private String title;
     

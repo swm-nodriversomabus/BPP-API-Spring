@@ -5,5 +5,5 @@ import com.example.api.matching.dto.FindMatchingDto;
 import java.util.List;
 
 public interface RecommendedMatchingUsecase {
-    List<FindMatchingDto> getRecommendedMatchingList(Long userId);
+    List<FindMatchingDto> getRecommendedMatchingList(String userId);
 }

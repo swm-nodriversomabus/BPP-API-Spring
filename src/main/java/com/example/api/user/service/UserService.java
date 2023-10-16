@@ -25,6 +25,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
@@ -54,15 +55,15 @@ public class UserService implements SaveUserUsecase, FindUserUsecase, DeleteUser
     }
     
     @Override
-    public Optional<FindUserDto> getUserById(Long userId) {
-        return findUserPort.getUserByUserId(userId)
+    public Optional<FindUserDto> getUserById(String userId) {
+        return findUserPort.getByUserId(UUID.fromString(userId))
                 .map(userMapper::toDto);
     }
 
     @Override
     @Transactional
-    public FindUserDto updateUser(Long userId, UpdateUserDto userDto) {
-        User user = saveUserPort.updateUser(userId, userMapper.toDomain(userDto));
+    public FindUserDto updateUser(String userId, UpdateUserDto userDto) {
+        User user = saveUserPort.updateUser(UUID.fromString(userId), userMapper.toDomain(userDto));
         return userMapper.toDto(user);
     }
     
@@ -74,8 +75,8 @@ public class UserService implements SaveUserUsecase, FindUserUsecase, DeleteUser
     
     @Override
     @Transactional
-    public void deleteUser(Long userId) {
-        deleteUserPort.deleteByUserId(userId);
+    public void deleteUser(String userId) {
+        deleteUserPort.deleteByUserId(UUID.fromString(userId));
     }
     
     // Social

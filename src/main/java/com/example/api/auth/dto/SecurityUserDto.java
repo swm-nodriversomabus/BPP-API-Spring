@@ -4,11 +4,13 @@ import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
 import lombok.Getter;
 
+import java.util.UUID;
+
 @Builder
 @Getter
 public class SecurityUserDto {
     @NotNull
-    private Long userId;
+    private UUID userId;
 
     private String naverId;
 

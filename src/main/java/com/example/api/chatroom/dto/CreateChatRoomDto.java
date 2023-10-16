@@ -6,11 +6,13 @@ import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
 import lombok.Data;
 
+import java.util.UUID;
+
 @Data
 @Builder
 public class CreateChatRoomDto {
     @NotNull
-    private Long masterId; // TODO 추후 jwt에서 얻을 수 있어 삭제 가능
+    private UUID masterId; // TODO 추후 jwt에서 얻을 수 있어 삭제 가능
     
     @NotBlank
     private String chatroomName;

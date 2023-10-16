@@ -9,6 +9,7 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.stereotype.Repository;
 
 import java.util.NoSuchElementException;
+import java.util.UUID;
 
 @Repository
 @RequiredArgsConstructor
@@ -24,7 +25,7 @@ public class FcmTokenPersistenceAdapter implements SaveFcmTokenPort, FindFcmToke
     }
     
     @Override
-    public String findUserFcmToken(Long userId) {
+    public String findUserFcmToken(UUID userId) {
         FcmTokenEntity fcmTokenEntity = fcmTokenRepository.getByUserId(userId)
                 .orElseThrow(NoSuchElementException::new);
         return fcmTokenEntity.getFcmToken();

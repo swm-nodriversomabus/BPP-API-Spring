@@ -1,7 +1,6 @@
 package com.example.api.matching;
 
 import com.example.api.matching.adapter.out.persistence.LikeEntity;
-import com.example.api.matching.adapter.out.persistence.MatchingEntity;
 import com.example.api.matching.adapter.out.persistence.MatchingMapperInterface;
 import com.example.api.matching.adapter.out.persistence.MatchingPersistenceAdapter;
 import com.example.api.matching.domain.Matching;
@@ -18,7 +17,7 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.context.ContextConfiguration;
 
 import java.time.LocalDateTime;
-import java.util.List;
+import java.util.UUID;
 
 import static org.mockito.Mockito.*;
 
@@ -83,7 +82,7 @@ public class MatchingPersistenceAdapterTests {
                 .isActive(true)
                 .build();
         like = LikeEntity.builder()
-                .userId(3L)
+                .userId(UUID.fromString("09a46fb0-2ae0-4a35-8aad-0a9e4311a1a3"))
                 .matchingId(3L)
                 .build();
     }
@@ -98,32 +97,32 @@ public class MatchingPersistenceAdapterTests {
 
     @Test
     void getAllTest() {
-        List<MatchingEntity> matchingList = matchingPersistenceAdapter.getAllBy();
+        matchingPersistenceAdapter.getAllBy();
         verify(matchingRepository, times(1)).getAllBy();
     }
 
     @Test
     void getMatchingByIdTest() {
-        MatchingEntity matching = matchingPersistenceAdapter.getMatchingByMatchingId(2L).orElse(matchingMapper.toEntity(matching2));
+        matchingPersistenceAdapter.getByMatchingId(2L).orElse(matchingMapper.toEntity(matching2));
         verify(matchingRepository, times(1)).getByMatchingId(2L);
     }
 
     @Test
     void getMatchingByIsActiveTest() {
-        List<MatchingEntity> matchingList = matchingPersistenceAdapter.getMatchingByIsActive(true);
+        matchingPersistenceAdapter.getByIsActive(true);
         verify(matchingRepository, times(1)).getByIsActive(true);
     }
 
     @Test
     void getLikeCountTest() {
-        int likeCount = matchingPersistenceAdapter.getLikeCount(3L);
+        matchingPersistenceAdapter.getLikeCount(3L);
         verify(likeRepository, times(1)).countByMatchingId(3L);
     }
 
     @Test
     void updateMatchingTest() {
         matching3.setReadCount(11);
-        Matching matching = matchingPersistenceAdapter.updateMatching(3L, matching3);
+        matchingPersistenceAdapter.updateMatching(3L, matching3);
         verify(matchingRepository, times(1)).save(matchingMapper.toEntity(matching3));
     }
 

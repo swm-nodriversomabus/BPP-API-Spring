@@ -2,6 +2,7 @@ package com.example.api.matching.adapter.out.persistence;
 
 import com.example.api.matching.domain.Matching;
 import com.example.api.matching.domain.MatchingApplication;
+import com.example.api.matching.dto.LikeDto;
 import com.example.api.matching.dto.MatchingApplicationDto;
 import com.example.api.matching.dto.FindMatchingDto;
 import com.example.api.matching.dto.SaveMatchingDto;
@@ -17,9 +18,11 @@ public interface MatchingMapperInterface {
     MatchingApplication toDomain(MatchingApplicationDto matchingApplicationDto);
     MatchingEntity toEntity(Matching matching);
     MatchingApplicationEntity toEntity(MatchingApplication matchingApplication);
+    LikeEntity toEntity(LikeDto likeDto);
     Matching toDomain(MatchingEntity matchingEntity);
     MatchingApplication toDomain(MatchingApplicationEntity matchingApplicationEntity);
     FindMatchingDto toDto(Matching matching);
     MatchingApplicationDto toDto(MatchingApplication matchingApplication);
     FindMatchingDto toDto(MatchingEntity matchingEntity);
+    LikeDto toDto(LikeEntity likeEntity);
 }

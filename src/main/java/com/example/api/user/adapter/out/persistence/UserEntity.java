@@ -8,6 +8,8 @@ import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+import java.util.UUID;
+
 @Entity
 @EntityListeners(AuditingEntityListener.class)
 @Getter
@@ -18,8 +20,9 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 @Table(name="users")
 public class UserEntity extends BaseEntity {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long userId;
+    @GeneratedValue(strategy = GenerationType.UUID)
+    @Column(columnDefinition = "BINARY(24)")
+    private UUID userId;
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(nullable = false, name="social_id", foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))

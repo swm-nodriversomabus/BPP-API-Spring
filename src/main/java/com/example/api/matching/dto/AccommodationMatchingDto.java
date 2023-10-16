@@ -1,6 +1,5 @@
 package com.example.api.matching.dto;
 
-import com.example.api.matching.adapter.out.persistence.AccommodationMatchingEntity;
 import jakarta.validation.constraints.Min;
 import lombok.*;
 
@@ -17,12 +16,4 @@ public class AccommodationMatchingDto {
     private Integer price;
     
     private String room;
-    
-    public AccommodationMatchingEntity toEntity() {
-        return AccommodationMatchingEntity.builder()
-                .accommodationMatchingId(accommodationMatchingId)
-                .price(price)
-                .room(room)
-                .build();
-    }
 }

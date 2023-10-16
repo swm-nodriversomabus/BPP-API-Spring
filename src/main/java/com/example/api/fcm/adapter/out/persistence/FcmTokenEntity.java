@@ -5,6 +5,8 @@ import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+import java.util.UUID;
+
 @Entity
 @EntityListeners(AuditingEntityListener.class)
 @Getter
@@ -17,7 +19,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 @Table(name="fcmToken")
 public class FcmTokenEntity extends BaseEntity {
     @Id
-    private Long userId;
+    private UUID userId;
     
     @Column(nullable = false)
     private String fcmToken;

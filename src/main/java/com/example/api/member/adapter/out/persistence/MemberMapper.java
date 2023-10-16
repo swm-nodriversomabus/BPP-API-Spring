@@ -15,7 +15,7 @@ public class MemberMapper {
      * @param member
      * @return memberentity
      */
-    public MemberEntity fromDomainToEntity(Member member, ChatRoomEntity chatRoomEntity){
+    public MemberEntity fromDomainToEntity(Member member, ChatRoomEntity chatRoomEntity) {
         return MemberEntity.builder()
                 .chatroom(chatRoomEntity)
                 .userId(member.getUserId())
@@ -23,7 +23,7 @@ public class MemberMapper {
                 .build();
     }
 
-    public List<Member> fromListEntityToDomain(List<MemberEntity> membersList){
+    public List<Member> fromListEntityToDomain(List<MemberEntity> membersList) {
         List<Member> memberList = new ArrayList<>();
         membersList.forEach(memberEntity -> {
             ChatRoomEntity chatRoomEntity = memberEntity.getChatroom();
@@ -43,9 +43,9 @@ public class MemberMapper {
      * @param members
      * @return List<MemberEntity>
      */
-    public List<MemberEntity> fromListDomainToEntity(List<Member> members, ChatRoomEntity chatRoomEntity){
+    public List<MemberEntity> fromListDomainToEntity(List<Member> members, ChatRoomEntity chatRoomEntity) {
         List<MemberEntity> memberEntities = new ArrayList<>();
-        for(Member member: members){
+        for (Member member: members) {
             memberEntities.add(
                     MemberEntity.builder()
                             .chatroom(chatRoomEntity)
@@ -57,7 +57,7 @@ public class MemberMapper {
         return memberEntities;
     }
 
-    public Member fromEntityToDomain(MemberEntity memberEntity, ChatRoom chatRoom){
+    public Member fromEntityToDomain(MemberEntity memberEntity, ChatRoom chatRoom) {
         return Member.builder()
                 .chatroomId(chatRoom.getChatroomId())
                 .userId(memberEntity.getUserId())

@@ -3,6 +3,8 @@ package com.example.api.friend.dto;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
+import java.util.UUID;
+
 @Getter
 @Setter
 @Builder
@@ -11,8 +13,8 @@ import lombok.*;
 @AllArgsConstructor
 public class FriendDto {
     @NotNull
-    private Long userId;
+    private UUID userId;
     
     @NotNull
-    private Long friendId;
+    private UUID friendId;
 }

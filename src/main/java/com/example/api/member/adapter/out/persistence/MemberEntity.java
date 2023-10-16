@@ -26,7 +26,7 @@ public class MemberEntity extends BaseEntity {
 //    @ManyToOne(fetch = FetchType.LAZY)
 //    @JoinColumn(nullable = false, name="user_id", foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
     @Id
-    private Long userId;
+    private UUID userId;
 
     @Temporal(TemporalType.TIMESTAMP)
     private LocalDateTime outAt;

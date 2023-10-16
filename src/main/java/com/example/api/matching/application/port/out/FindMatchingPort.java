@@ -4,10 +4,11 @@ import com.example.api.matching.adapter.out.persistence.MatchingEntity;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 public interface FindMatchingPort {
     List<MatchingEntity> getAllBy();
-    Optional<MatchingEntity> getMatchingByMatchingId(Long matchingId);
-    List<MatchingEntity> getMatchingByWriterId(Long userId);
-    List<MatchingEntity> getMatchingByIsActive(Boolean isActive);
+    Optional<MatchingEntity> getByMatchingId(Long matchingId);
+    List<MatchingEntity> getByWriterId(UUID userId);
+    List<MatchingEntity> getByIsActive(Boolean isActive);
 }

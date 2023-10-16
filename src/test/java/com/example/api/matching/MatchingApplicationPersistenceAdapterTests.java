@@ -1,7 +1,6 @@
 package com.example.api.matching;
 
 import com.example.api.common.type.ApplicationStateEnum;
-import com.example.api.matching.adapter.out.persistence.MatchingApplicationEntity;
 import com.example.api.matching.adapter.out.persistence.MatchingApplicationPersistenceAdapter;
 import com.example.api.matching.adapter.out.persistence.MatchingMapperInterface;
 import com.example.api.matching.domain.MatchingApplication;
@@ -15,7 +14,7 @@ import org.springframework.boot.autoconfigure.AutoConfigurationPackage;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.context.ContextConfiguration;
 
-import java.util.List;
+import java.util.UUID;
 
 import static org.mockito.Mockito.*;
 
@@ -31,11 +30,12 @@ public class MatchingApplicationPersistenceAdapterTests {
     @InjectMocks
     private MatchingApplicationRepository matchingApplicationRepository = mock(MatchingApplicationRepository.class);
     private MatchingApplication matchingApplication;
+    private final UUID userUUID = UUID.fromString("09a46fb0-2ae0-4a35-8aad-0a9e4311a1a3");
     
     @BeforeEach
     void beforeEach() {
         matchingApplication = MatchingApplication.builder()
-                .userId(2L)
+                .userId(userUUID)
                 .matchingId(2L)
                 .state(ApplicationStateEnum.Pending)
                 .isActive(true)
@@ -50,20 +50,20 @@ public class MatchingApplicationPersistenceAdapterTests {
 
     @Test
     void getByUserIdIsAndStateEqualsTest() {
-        List<MatchingApplicationEntity> matchingList = matchingApplicationPersistenceAdapter.getByUserIdIsAndStateEquals(3L, ApplicationStateEnum.Pending);
-        verify(matchingApplicationRepository, times(1)).getByUserIdIsAndStateEquals(3L, ApplicationStateEnum.Pending);
+        matchingApplicationPersistenceAdapter.getByUserIdIsAndStateEquals(userUUID, ApplicationStateEnum.Pending);
+        verify(matchingApplicationRepository, times(1)).getByUserIdIsAndStateEquals(userUUID, ApplicationStateEnum.Pending);
     }
 
     @Test
     void getByMatchingIdIsAndStateEqualsTest() {
-        List<MatchingApplicationEntity> userList = matchingApplicationPersistenceAdapter.getByMatchingIdIsAndStateEquals(1L, ApplicationStateEnum.Approved);
+        matchingApplicationPersistenceAdapter.getByMatchingIdIsAndStateEquals(1L, ApplicationStateEnum.Approved);
         verify(matchingApplicationRepository, times(1)).getByMatchingIdAndStateEquals(1L, ApplicationStateEnum.Approved);
     }
 
     @Test
     void updateMatchingApplicationTest() {
         matchingApplication.setState(ApplicationStateEnum.Approved);
-        MatchingApplication matchingApplicationData = matchingApplicationPersistenceAdapter.updateMatchingApplication(matchingApplication);
+        matchingApplicationPersistenceAdapter.updateMatchingApplication(matchingApplication);
         verify(matchingApplicationRepository, times(1)).save(matchingMapper.toEntity(matchingApplication));
     }
 }

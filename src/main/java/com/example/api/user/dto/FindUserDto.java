@@ -14,8 +14,6 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 public class FindUserDto {
-    private Long userId;
-    
     @NotBlank
     private String username;
     

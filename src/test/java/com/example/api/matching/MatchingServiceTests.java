@@ -15,7 +15,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDateTime;
-import java.util.List;
+import java.util.UUID;
 
 import static org.mockito.Mockito.*;
 
@@ -36,6 +36,7 @@ public class MatchingServiceTests {
     private SaveMatchingDto matching1, matching2, matching3;
     private FindMatchingDto mockMatching2;
     private LikeDto like;
+    private final String userUUID = "09a46fb0-2ae0-4a35-8aad-0a9e4311a1a3";
     
     @BeforeEach
     void beforeEach() {
@@ -93,7 +94,7 @@ public class MatchingServiceTests {
                 .isActive(true)
                 .build();
         like = LikeDto.builder()
-                .userid(3L)
+                .userid(UUID.fromString(userUUID))
                 .matchingId(3L)
                 .build();
     }
@@ -108,44 +109,44 @@ public class MatchingServiceTests {
     
     @Test
     void getAllTest() {
-        List<FindMatchingDto> matchingList = matchingService.getAll();
+        matchingService.getAll();
         verify(findMatchingPort, times(1)).getAllBy();
     }
     
     @Test
     void getMatchingByIdTest() {
-        FindMatchingDto matching = matchingService.getMatchingById(2L).orElse(mockMatching2);
-        verify(findMatchingPort, times(1)).getMatchingByMatchingId(2L);
+        matchingService.getMatchingById(2L).orElse(mockMatching2);
+        verify(findMatchingPort, times(1)).getByMatchingId(2L);
     }
     
     @Test
     void getMatchingByIsActiveTest() {
-        List<FindMatchingDto> matchingList = matchingService.getMatchingByIsActive(true);
-        verify(findMatchingPort, times(1)).getMatchingByIsActive(true);
+        matchingService.getMatchingByIsActive(true);
+        verify(findMatchingPort, times(1)).getByIsActive(true);
     }
     
     @Test
     void getRecommendedMatchingListTest() {
-        List<FindMatchingDto> matchingList = matchingService.getRecommendedMatchingList(1L);
+        matchingService.getRecommendedMatchingList(userUUID);
     }
     
     @Test
     void getLikeCountTest() {
-        int likeCount = matchingService.getLikeCount(3L);
+        matchingService.getLikeCount(3L);
         verify(likePort, times(1)).getLikeCount(3L);
     }
     
     @Test
     void updateMatchingTest() {
         matching3.setReadCount(11);
-        FindMatchingDto matchingDto = matchingService.updateMatching(3L, matching3);
+        matchingService.updateMatching(3L, matching3);
         verify(saveMatchingPort, times(1)).updateMatching(3L, matchingMapper.toDomain(matching3));
     }
     
     @Test
     void toggleLikeTest() {
         matchingService.toggleLike(like);
-        verify(likePort, times(1)).toggleLike(refEq(like.toEntity()));
+        verify(likePort, times(1)).toggleLike(refEq(matchingMapper.toEntity(like)));
     }
 
     @Test

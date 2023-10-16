@@ -75,7 +75,7 @@ public class UserController {
      */
     @Operation(summary = "Get user", description = "ID가 userId인 사용자를 조회한다.")
     @GetMapping("/user/{userId}")
-    public Optional<FindUserDto> getUserById(@PathVariable Long userId) {
+    public Optional<FindUserDto> getUserById(@PathVariable String userId) {
         return findUserUsecase.getUserById(userId);
     }
 
@@ -86,7 +86,7 @@ public class UserController {
      */
     @Operation(summary = "Get recommended matching list of a user", description = "사용자의 추천 매칭 목록을 조회한다.")
     @GetMapping("/user/{userId}/recommendedmatching")
-    public List<FindMatchingDto> getRecommendedMatchingList(@PathVariable Long userId) {
+    public List<FindMatchingDto> getRecommendedMatchingList(@PathVariable String userId) {
         return recommendedMatchingUsecase.getRecommendedMatchingList(userId);
     }
 
@@ -97,7 +97,7 @@ public class UserController {
      */
     @Operation(summary = "Get own matching list of user", description = "사용자가 작성한 매칭 목록을 조회한다.")
     @GetMapping("/user/{userId}/matching/own")
-    public List<FindMatchingDto> getOwnMatchingList(@PathVariable Long userId) {
+    public List<FindMatchingDto> getOwnMatchingList(@PathVariable String userId) {
         return findMatchingUsecase.getMatchingByWriterId(userId);
     }
 
@@ -108,7 +108,7 @@ public class UserController {
      */
     @Operation(summary = "Get pending matching list of user", description = "사용자가 대기 중인 매칭 목록을 조회한다.")
     @GetMapping("/user/{userId}/pending")
-    public List<FindMatchingDto> getPendingMatchingList(@PathVariable Long userId) {
+    public List<FindMatchingDto> getPendingMatchingList(@PathVariable String userId) {
         return matchingApplicationUsecase.getByUserIdIsAndStateEquals(userId, ApplicationStateEnum.Pending);
     }
 
@@ -119,7 +119,7 @@ public class UserController {
      */
     @Operation(summary = "Get approved matching list of user", description = "사용자가 참가한 매칭 목록을 조회한다.")
     @GetMapping("/user/{userId}/approved")
-    public List<FindMatchingDto> getApprovedMatchingList(@PathVariable Long userId) {
+    public List<FindMatchingDto> getApprovedMatchingList(@PathVariable String userId) {
         return matchingApplicationUsecase.getByUserIdIsAndStateEquals(userId, ApplicationStateEnum.Approved);
     }
 
@@ -131,7 +131,7 @@ public class UserController {
      */
     @Operation(summary = "Update user information", description = "사용자 정보를 변경한다.")
     @PatchMapping("/user/{userId}")
-    public FindUserDto updateUser(@PathVariable Long userId, @RequestBody UpdateUserDto userDto) {
+    public FindUserDto updateUser(@PathVariable String userId, @RequestBody UpdateUserDto userDto) {
         return saveUserUsecase.updateUser(userId, userDto);
     }
 
@@ -150,7 +150,7 @@ public class UserController {
      */
     @Operation(summary = "Delete user", description = "ID가 userId인 사용자를 삭제한다.")
     @DeleteMapping("/user/{userId}")
-    public void deleteUser(@PathVariable Long userId) {
+    public void deleteUser(@PathVariable String userId) {
         deleteUserUsecase.deleteUser(userId);
     }
 }
