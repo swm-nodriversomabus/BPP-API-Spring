@@ -17,16 +17,13 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.FieldError;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @RestController
 @RequiredArgsConstructor
@@ -87,7 +84,7 @@ public class UserController {
      * @param userId (ID)
      * @return List<FindMatchingDto>
      */
-    @Operation(summary = "Get recommended matching list of a user", description = "사용자의 추천 매칭 목록을 조회한다..")
+    @Operation(summary = "Get recommended matching list of a user", description = "사용자의 추천 매칭 목록을 조회한다.")
     @GetMapping("/user/{userId}/recommendedmatching")
     public List<FindMatchingDto> getRecommendedMatchingList(@PathVariable Long userId) {
         return recommendedMatchingUsecase.getRecommendedMatchingList(userId);
