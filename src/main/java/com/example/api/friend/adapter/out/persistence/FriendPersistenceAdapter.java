@@ -10,6 +10,7 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.UUID;
 
 @Repository
 @RequiredArgsConstructor
@@ -25,8 +26,8 @@ public class FriendPersistenceAdapter implements AddFriendPort, FindFriendPort, 
     }
     
     @Override
-    public List<FriendEntity> getFriendList(Long userId) {
-        return friendRepository.getByUserIdIs(userId);
+    public List<FriendEntity> getFriendList(UUID userId) {
+        return friendRepository.getByUserId(userId);
     }
     
     @Override

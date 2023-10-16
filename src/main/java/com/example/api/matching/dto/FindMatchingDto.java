@@ -8,6 +8,7 @@ import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Getter
 @Setter
@@ -19,8 +20,7 @@ public class FindMatchingDto {
     private Long matchingId;
     
     @NotNull
-    @Min(1L)
-    private Long writerId;
+    private UUID writerId;
     
     @NotNull
     private MatchingTypeEnum type;

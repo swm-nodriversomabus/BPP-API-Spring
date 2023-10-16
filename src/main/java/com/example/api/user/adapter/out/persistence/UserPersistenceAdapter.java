@@ -13,6 +13,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @RequiredArgsConstructor
 @Repository
@@ -24,7 +25,7 @@ public class UserPersistenceAdapter implements SaveUserPort, FindUserPort, Delet
     
     @Override
     public void createUser(CreateUser user) {
-        UserEntity userData = userRepository.save(userMapper.toEntity(user));
+        userRepository.save(userMapper.toEntity(user));
     }
     
     @Override
@@ -33,12 +34,12 @@ public class UserPersistenceAdapter implements SaveUserPort, FindUserPort, Delet
     }
     
     @Override
-    public Optional<UserEntity> getUserByUserId(Long userId) {
+    public Optional<UserEntity> getByUserId(UUID userId) {
         return userRepository.getByUserId(userId);
     }
     
     @Override
-    public User updateUser(Long userId, User user) {
+    public User updateUser(UUID userId, User user) {
         user.setUserId(userId);
         UserEntity userData = userRepository.save(userMapper.toEntity(user));
         return userMapper.toDomain(userData);
@@ -50,7 +51,7 @@ public class UserPersistenceAdapter implements SaveUserPort, FindUserPort, Delet
     }
     
     @Override
-    public void deleteByUserId(Long userId) {
+    public void deleteByUserId(UUID userId) {
         userRepository.deleteByUserId(userId);
     }
     

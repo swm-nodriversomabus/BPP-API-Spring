@@ -7,11 +7,12 @@ import com.example.api.matching.domain.MatchingApplication;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 public interface MatchingApplicationPort {
     MatchingApplication createMatchingApplication(MatchingApplication matchingApplication);
     Optional<MatchingApplicationEntity> getByMatchingApplicationPK(MatchingApplicationPK matchingApplicationPK);
-    List<MatchingApplicationEntity> getByUserIdIsAndStateEquals(Long userId, ApplicationStateEnum state);
+    List<MatchingApplicationEntity> getByUserIdIsAndStateEquals(UUID userId, ApplicationStateEnum state);
     List<MatchingApplicationEntity> getByMatchingIdIsAndStateEquals(Long matchingId, ApplicationStateEnum state);
     MatchingApplication updateMatchingApplication(MatchingApplication matchingApplication);
 }

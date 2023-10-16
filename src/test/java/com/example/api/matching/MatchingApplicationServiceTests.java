@@ -4,9 +4,7 @@ import com.example.api.common.type.ApplicationStateEnum;
 import com.example.api.matching.adapter.out.persistence.MatchingMapperInterface;
 import com.example.api.matching.application.port.out.MatchingApplicationPort;
 import com.example.api.matching.dto.MatchingApplicationDto;
-import com.example.api.matching.dto.FindMatchingDto;
 import com.example.api.matching.service.MatchingApplicationService;
-import com.example.api.user.dto.FindUserDto;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -14,7 +12,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.util.List;
+import java.util.UUID;
 
 import static org.mockito.Mockito.*;
 
@@ -27,11 +25,12 @@ public class MatchingApplicationServiceTests {
     @Mock
     private MatchingApplicationPort matchingApplicationPort;
     private MatchingApplicationDto matchingApplication;
+    private final String userUUID = "09a46fb0-2ae0-4a35-8aad-0a9e4311a1a3";
     
     @BeforeEach
     void beforeEach() {
         matchingApplication = MatchingApplicationDto.builder()
-                .userId(2L)
+                .userId(UUID.fromString(userUUID))
                 .matchingId(2L)
                 .state(ApplicationStateEnum.Pending)
                 .isActive(true)
@@ -46,20 +45,20 @@ public class MatchingApplicationServiceTests {
 
     @Test
     void getByUserIdIsAndStateEqualsTest() {
-        List<FindMatchingDto> matchingList = matchingApplicationService.getByUserIdIsAndStateEquals(3L, ApplicationStateEnum.Pending);
-        verify(matchingApplicationPort, times(1)).getByUserIdIsAndStateEquals(3L, ApplicationStateEnum.Pending);
+        matchingApplicationService.getByUserIdIsAndStateEquals(userUUID, ApplicationStateEnum.Pending);
+        verify(matchingApplicationPort, times(1)).getByUserIdIsAndStateEquals(UUID.fromString(userUUID), ApplicationStateEnum.Pending);
     }
 
     @Test
     void getByMatchingIdIsAndStateEqualsTest() {
-        List<FindUserDto> userList = matchingApplicationService.getByMatchingIdIsAndStateEquals(1L, ApplicationStateEnum.Approved);
+        matchingApplicationService.getByMatchingIdIsAndStateEquals(1L, ApplicationStateEnum.Approved);
         verify(matchingApplicationPort, times(1)).getByMatchingIdIsAndStateEquals(1L, ApplicationStateEnum.Approved);
     }
 
     @Test
     void updateMatchingApplicationTest() {
         matchingApplication.setState(ApplicationStateEnum.Approved);
-        MatchingApplicationDto matchingApplicationDto = matchingApplicationService.updateMatchingApplication(matchingApplication);
+        matchingApplicationService.updateMatchingApplication(matchingApplication);
         verify(matchingApplicationPort, times(1)).updateMatchingApplication(matchingMapper.toDomain(matchingApplication));
     }
 }

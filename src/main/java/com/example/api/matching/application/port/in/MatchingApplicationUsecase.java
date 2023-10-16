@@ -10,7 +10,7 @@ import java.util.List;
 
 public interface MatchingApplicationUsecase {
     ChatRoom createMatchingApplication(MatchingApplicationDto matchingApplicationDto);
-    List<FindMatchingDto> getByUserIdIsAndStateEquals(Long userId, ApplicationStateEnum state);
+    List<FindMatchingDto> getByUserIdIsAndStateEquals(String userId, ApplicationStateEnum state);
     List<FindUserDto> getByMatchingIdIsAndStateEquals(Long matchingId, ApplicationStateEnum state);
     MatchingApplicationDto updateMatchingApplication(MatchingApplicationDto matchingApplicationDto);
 }

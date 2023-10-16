@@ -6,5 +6,5 @@ import com.example.api.preference.dto.UserPreferenceDto;
 
 public interface UserPreferenceUsecase {
     UserPreferenceDto createUserPreference(UserPreferenceDto userPreferenceDto);
-    FindPreferenceDto updateUserPreference(Long userId, SavePreferenceDto savePreferenceDto);
+    FindPreferenceDto updateUserPreference(String userId, SavePreferenceDto savePreferenceDto);
 }

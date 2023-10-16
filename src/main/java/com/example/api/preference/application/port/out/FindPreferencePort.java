@@ -5,5 +5,5 @@ import com.example.api.preference.adapter.out.persistence.PreferenceEntity;
 import java.util.Optional;
 
 public interface FindPreferencePort {
-    Optional<PreferenceEntity> getPreferenceByPreferenceId(Long preferenceId);
+    Optional<PreferenceEntity> getByPreferenceId(Long preferenceId);
 }

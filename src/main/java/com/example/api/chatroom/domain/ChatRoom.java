@@ -16,13 +16,13 @@ import java.util.UUID;
 public class ChatRoom {
     private UUID chatroomId;
     private ChatRoomEnum type;
-    private Long masterId;
+    private UUID masterId;
     private String chatroomName;
     private Boolean isActive;
     private List<Member> members;
     
     @Builder
-    public ChatRoom(UUID chatroomId, ChatRoomEnum type, String chatroomName, Boolean isActive, Long masterId, List<Member> members){
+    public ChatRoom(UUID chatroomId, ChatRoomEnum type, String chatroomName, Boolean isActive, UUID masterId, List<Member> members){
         this.chatroomId = chatroomId;
         this.type = type;
         this.masterId = masterId;

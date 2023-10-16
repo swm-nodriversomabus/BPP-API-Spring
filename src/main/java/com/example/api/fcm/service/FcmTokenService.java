@@ -9,6 +9,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.UUID;
+
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
@@ -22,7 +24,7 @@ public class FcmTokenService {
         return fcmTokenMapper.toDto(fcmToken);
     }
     
-    public String findUserFcmToken(Long userId) {
-        return findFcmTokenPort.findUserFcmToken(userId);
+    public String findUserFcmToken(String userId) {
+        return findFcmTokenPort.findUserFcmToken(UUID.fromString(userId));
     }
 }

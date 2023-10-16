@@ -6,12 +6,13 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 public interface UserRepository extends JpaRepository<UserEntity, Long> {
     List<UserEntity> getAllBy();
-    Optional<UserEntity> getByUserId(Long userId);
+    Optional<UserEntity> getByUserId(UUID userId);
     void deleteAllBy();
-    void deleteByUserId(Long userId);
+    void deleteByUserId(UUID userId);
     @EntityGraph(attributePaths = {"userId"})
     Optional<UserEntity> getBySocialId_NaverId(String naverId);
     @EntityGraph(attributePaths = {"userId"})

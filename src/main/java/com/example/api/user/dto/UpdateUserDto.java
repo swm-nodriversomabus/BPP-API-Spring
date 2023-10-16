@@ -11,7 +11,7 @@ import lombok.*;
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor
-public class UpdateUserDto { // 추후 UpdateUserDto로 바꾸기
+public class UpdateUserDto {
     @NotBlank
     private String username;
     

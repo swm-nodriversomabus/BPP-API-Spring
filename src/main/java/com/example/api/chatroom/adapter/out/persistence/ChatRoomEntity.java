@@ -33,7 +33,7 @@ public class ChatRoomEntity extends BaseEntity {
     private String chatroomName;
 
     @Column(nullable = false)
-    private Long masterId;
+    private UUID masterId;
 
     @Column(nullable = false)
     private Boolean isActive;

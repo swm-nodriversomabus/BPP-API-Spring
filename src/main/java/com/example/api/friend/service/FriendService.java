@@ -19,6 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -39,11 +40,11 @@ public class FriendService implements AddFriendUsecase, FindFriendUsecase, Delet
     }
     
     @Override
-    public List<FindUserDto> getFriendList(Long userId) {
-        List<FriendEntity> friendPairList = findFriendPort.getFriendList(userId);
+    public List<FindUserDto> getFriendList(String userId) {
+        List<FriendEntity> friendPairList = findFriendPort.getFriendList(UUID.fromString(userId));
         List<FindUserDto> friendList = new ArrayList<>();
         for (FriendEntity friendPair: friendPairList) {
-            friendList.add(userMapper.toDto(findUserPort.getUserByUserId(friendPair.getUserId()).orElseThrow()));
+            friendList.add(userMapper.toDto(findUserPort.getByUserId(friendPair.getUserId()).orElseThrow()));
         }
         return friendList;
     }

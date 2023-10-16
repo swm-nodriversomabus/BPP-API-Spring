@@ -3,6 +3,7 @@ package com.example.api.fcm.domain;
 import lombok.*;
 
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Getter
 @Setter
@@ -10,7 +11,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 public class FcmToken {
-    private Long userId;
+    private UUID userId;
     private String fcmToken;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;

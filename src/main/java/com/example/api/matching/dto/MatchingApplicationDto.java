@@ -7,6 +7,7 @@ import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Getter
 @Setter
@@ -16,8 +17,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 public class MatchingApplicationDto {
     @NotNull
-    @Min(1)
-    private Long userId;
+    private UUID userId;
     
     @NotNull
     @Min(1)

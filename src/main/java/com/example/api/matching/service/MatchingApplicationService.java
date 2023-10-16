@@ -28,6 +28,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -55,9 +56,9 @@ public class MatchingApplicationService implements MatchingApplicationUsecase {
                 .build();
         ChatRoom chatRoom = chatRoomService.createRoom(createChatRoomDto);
         
-        List<Long> memberIds = new ArrayList<>();
+        List<UUID> memberIds = new ArrayList<>();
         memberIds.add(matchingApplicationDto.getUserId());
-        Long matchingWriterId = findMatchingPort.getMatchingByMatchingId(matchingApplicationDto.getMatchingId())
+        UUID matchingWriterId = findMatchingPort.getByMatchingId(matchingApplicationDto.getMatchingId())
                 .orElseThrow(NoSuchElementException::new)
                 .getWriterId();
         memberIds.add(matchingWriterId);
@@ -72,11 +73,11 @@ public class MatchingApplicationService implements MatchingApplicationUsecase {
     }
     
     @Override
-    public List<FindMatchingDto> getByUserIdIsAndStateEquals(Long userId, ApplicationStateEnum state) {
-        List<MatchingApplicationEntity> matchingPairList = matchingApplicationPort.getByUserIdIsAndStateEquals(userId, state);
+    public List<FindMatchingDto> getByUserIdIsAndStateEquals(String userId, ApplicationStateEnum state) {
+        List<MatchingApplicationEntity> matchingPairList = matchingApplicationPort.getByUserIdIsAndStateEquals(UUID.fromString(userId), state);
         List<FindMatchingDto> matchingData = new ArrayList<>();
         for (MatchingApplicationEntity matchingPair: matchingPairList) {
-            matchingData.add(matchingMapper.toDto(findMatchingPort.getMatchingByMatchingId(matchingPair.getMatchingId()).orElseThrow()));
+            matchingData.add(matchingMapper.toDto(findMatchingPort.getByMatchingId(matchingPair.getMatchingId()).orElseThrow()));
         }
         return matchingData;
     }
@@ -86,7 +87,7 @@ public class MatchingApplicationService implements MatchingApplicationUsecase {
         List<MatchingApplicationEntity> matchingPairList = matchingApplicationPort.getByMatchingIdIsAndStateEquals(matchingId, state);
         List<FindUserDto> userData = new ArrayList<>();
         for (MatchingApplicationEntity matchingPair: matchingPairList) {
-            userData.add(userMapper.toDto(findUserPort.getUserByUserId(matchingPair.getUserId()).orElseThrow()));
+            userData.add(userMapper.toDto(findUserPort.getByUserId(matchingPair.getUserId()).orElseThrow()));
         }
         return userData;
     }

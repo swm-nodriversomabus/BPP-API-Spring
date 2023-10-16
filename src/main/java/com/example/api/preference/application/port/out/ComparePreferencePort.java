@@ -1,6 +1,8 @@
 package com.example.api.preference.application.port.out;
 
+import java.util.UUID;
+
 public interface ComparePreferencePort {
-    Long getUserPreferenceId(Long userId);
+    Long getUserPreferenceId(UUID userId);
     Long getMatchingPreferenceId(Long matchingId);
 }

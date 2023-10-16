@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -38,7 +39,7 @@ public class PreferenceService implements SavePreferenceUsecase, FindPreferenceU
     
     @Override
     public Optional<ComparePreferenceDto> getPreferenceByPreferenceId(Long preferenceId) {
-        return findPreferencePort.getPreferenceByPreferenceId(preferenceId)
+        return findPreferencePort.getByPreferenceId(preferenceId)
                 .map(PreferenceEntity::toCompareDto);
     }
     
@@ -52,8 +53,8 @@ public class PreferenceService implements SavePreferenceUsecase, FindPreferenceU
     // ComparePreference
     
     @Override
-    public ComparePreferenceDto getUserPreference(Long userId) {
-        Long preferenceId = comparePreferencePort.getUserPreferenceId(userId);
+    public ComparePreferenceDto getUserPreference(String userId) {
+        Long preferenceId = comparePreferencePort.getUserPreferenceId(UUID.fromString(userId));
         return this.getPreferenceByPreferenceId(preferenceId).orElseThrow();
     }
     
@@ -64,7 +65,7 @@ public class PreferenceService implements SavePreferenceUsecase, FindPreferenceU
     }
     
     @Override
-    public Integer getMatchingScore(Long userId, Long matchingId) {
+    public Integer getMatchingScore(String userId, Long matchingId) {
         ComparePreferenceDto userPreference = this.getUserPreference(userId);
         ComparePreferenceDto matchingPreference = this.getMatchingPreference(matchingId);
         Integer score = 0;

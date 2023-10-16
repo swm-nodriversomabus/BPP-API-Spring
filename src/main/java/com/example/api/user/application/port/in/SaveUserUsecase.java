@@ -6,5 +6,5 @@ import com.example.api.user.dto.UpdateUserDto;
 
 public interface SaveUserUsecase {
     void createUser(CreateUserDto userDto);
-    FindUserDto updateUser(Long userId, UpdateUserDto userDto);
+    FindUserDto updateUser(String userId, UpdateUserDto userDto);
 }

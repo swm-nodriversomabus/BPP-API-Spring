@@ -4,6 +4,7 @@ import com.example.api.matching.type.MatchingTypeEnum;
 import lombok.*;
 
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Getter
 @Setter
@@ -12,7 +13,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 public class Matching {
     private Long matchingId;
-    private Long writerId;
+    private UUID writerId;
     private MatchingTypeEnum type;
     private String title;
     private String place;

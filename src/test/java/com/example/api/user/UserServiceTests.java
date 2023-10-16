@@ -18,7 +18,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.util.List;
+import java.util.UUID;
 
 import static org.mockito.Mockito.*;
 
@@ -39,6 +39,7 @@ public class UserServiceTests {
     private CreateUserDto user1, user2, user3;
     private FindUserDto mockUser;
     private UpdateUserDto newUser;
+    private final String userUUID = "09a46fb0-2ae0-4a35-8aad-0a9e4311a1a3";
     
     @BeforeEach
     void beforeEach() {
@@ -77,7 +78,6 @@ public class UserServiceTests {
                 .isActive(true)
                 .build();
         mockUser = FindUserDto.builder()
-                .userId(1L)
                 .username("Andrew")
                 .gender(UserGenderEnum.Male)
                 .age(24)
@@ -111,34 +111,32 @@ public class UserServiceTests {
     
     @Test
     void getAllTest() {
-        List<FindUserDto> userList = userService.getAll();
+        userService.getAll();
         verify(findUserPort, times(1)).getAllBy();
     }
     
     @Test
     void getUserByIdTest() {
-        FindUserDto userDto = userService.getUserById(1L).orElse(mockUser);
-        verify(findUserPort, times(1)).getUserByUserId(1L);
+        userService.getUserById(userUUID).orElse(mockUser);
+        verify(findUserPort, times(1)).getByUserId(UUID.fromString(userUUID));
     }
     
     @Test
     void updateUserTest() {
         user1.setMannerScore(77);
-        FindUserDto userDto = userService.updateUser(1L, newUser);
-        verify(saveUserPort, times(1)).updateUser(1L, userMapper.toDomain(newUser));
+        userService.updateUser(userUUID, newUser);
+        verify(saveUserPort, times(1)).updateUser(UUID.fromString(userUUID), userMapper.toDomain(newUser));
     }
     
     @Test
     void deleteUserTest() {
-        userService.deleteUser(1L);
-        verify(deleteUserPort, times(1)).deleteByUserId(1L);
-        List<FindUserDto> userList = userService.getAll();
+        userService.deleteUser(userUUID);
+        verify(deleteUserPort, times(1)).deleteByUserId(UUID.fromString(userUUID));
     }
 
     @Test
     void deleteAllTest() {
         userService.deleteAll();
         verify(deleteUserPort, times(1)).deleteAllBy();
-        List<FindUserDto> userList = userService.getAll();
     }
 }

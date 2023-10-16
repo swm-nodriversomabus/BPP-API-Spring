@@ -10,6 +10,7 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
+import java.util.UUID;
 
 @Repository
 @RequiredArgsConstructor
@@ -30,7 +31,7 @@ public class PreferencePersistenceAdapter implements
     }
     
     @Override
-    public Optional<PreferenceEntity> getPreferenceByPreferenceId(Long preferenceId) {
+    public Optional<PreferenceEntity> getByPreferenceId(Long preferenceId) {
         return preferenceRepository.getPreferenceByPreferenceId(preferenceId);
     }
     
@@ -49,8 +50,8 @@ public class PreferencePersistenceAdapter implements
     }
     
     @Override
-    public Long getUserPreferenceId(Long userId) {
-        UserPreferenceEntity userPreferenceData = userPreferenceRepository.getUserPreferenceId(userId);
+    public Long getUserPreferenceId(UUID userId) {
+        UserPreferenceEntity userPreferenceData = userPreferenceRepository.getByUserId(userId);
         return userPreferenceData.getPreferenceId();
     }
     

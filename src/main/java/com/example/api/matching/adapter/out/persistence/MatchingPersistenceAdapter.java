@@ -10,6 +10,7 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Repository
 @RequiredArgsConstructor
@@ -31,17 +32,17 @@ public class MatchingPersistenceAdapter implements SaveMatchingPort, FindMatchin
     }
     
     @Override
-    public Optional<MatchingEntity> getMatchingByMatchingId(Long matchingId) {
+    public Optional<MatchingEntity> getByMatchingId(Long matchingId) {
         return matchingRepository.getByMatchingId(matchingId);
     }
     
     @Override
-    public List<MatchingEntity> getMatchingByWriterId(Long userId) {
+    public List<MatchingEntity> getByWriterId(UUID userId) {
         return matchingRepository.getByWriterId(userId);
     }
     
     @Override
-    public List<MatchingEntity> getMatchingByIsActive(Boolean isActive) {
+    public List<MatchingEntity> getByIsActive(Boolean isActive) {
         return matchingRepository.getByIsActive(isActive);
     }
     
