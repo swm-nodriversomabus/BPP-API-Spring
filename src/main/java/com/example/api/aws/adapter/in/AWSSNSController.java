@@ -6,10 +6,13 @@ import com.example.api.aws.dto.SendSMSDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
+@RequestMapping("/aws/sns")
 @Validated
 public class AWSSNSController {
     private final SendSMSUsecase sendSMSUsecase;
@@ -19,9 +22,9 @@ public class AWSSNSController {
      * 핸드폰 인증에 사용
      * @param sendSMSDto
      */
-    @GetMapping("/aws/sns/code")
-    public void sendCertificationPhone(@Validated SendSMSDto sendSMSDto){
-        sendSMSUsecase.send(sendSMSDto);
+    @GetMapping("/code/{phone}")
+    public void sendCertificationPhone(@PathVariable String phone){
+        sendSMSUsecase.send(phone);
     }
 
 

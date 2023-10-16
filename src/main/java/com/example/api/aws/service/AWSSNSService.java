@@ -27,9 +27,11 @@ import java.util.Random;
 public class AWSSNSService implements SendSMSUsecase {
     private final AWSConfig awsConfig;
     @Override
-    public PublishResult send(SendSMSDto senderDto) {
+    public PublishResult send(String phone) {
 
         PublishResult result = null;
+        StringBuilder koreaPhone = new StringBuilder("+82");
+        koreaPhone.append(phone);
         String region = awsConfig.getAwsRegion();
         try {
 
@@ -48,14 +50,14 @@ public class AWSSNSService implements SendSMSUsecase {
                     .withStringValue("BPP").withDataType("String"));
 
             smsAttributes.put("AWS.SNS.SMS.MaxPrice", new MessageAttributeValue()
-                    .withStringValue("30").withDataType("String"));
+                    .withStringValue("0.50").withDataType("String"));
 
             smsAttributes.put("AWS.SNS.SMS.SMSType", new MessageAttributeValue()
                     .withStringValue("Promotional").withDataType("String"));
 
             result = this.sendSMSMessage(sns,
                     generateRandomSixDigitNumber(),
-                    senderDto.getPhone(),
+                    koreaPhone.toString(),
                     smsAttributes);
         } catch (Exception ex) {
 
@@ -73,10 +75,11 @@ public class AWSSNSService implements SendSMSUsecase {
      */
     private String generateRandomSixDigitNumber() {
         Random random = new Random();
-
+        String message = "[여행파티]인증번호입니다 아래 6글자를 입력해주세요\n";
+        StringBuilder newMessage = new StringBuilder(message);
         int randomNumber = random.nextInt(1000000); // 0~ 999999 사이 랜덤 숫자
-
-        return String.format("%06d", randomNumber);
+        newMessage.append(String.format("%06d", randomNumber));
+        return newMessage.toString();
     }
 
     private PublishResult sendSMSMessage(AmazonSNS sns, String message, String phone, Map<String, MessageAttributeValue> messageAttributeValueMap) {

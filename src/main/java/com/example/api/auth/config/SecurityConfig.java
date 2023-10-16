@@ -56,6 +56,7 @@ public class SecurityConfig {
                         .requestMatchers("/auth/**").permitAll() // auth로 오는 애들은 일단 인증 없이 가능
                         .requestMatchers("/actuator/**").permitAll()
                         .requestMatchers(HttpMethod.POST, "/user/**").permitAll()
+                        .requestMatchers("/aws/**").permitAll()
                         .requestMatchers("/login/**").permitAll()
                         .requestMatchers(PERMIT_URL_ARRAY).permitAll()
                         .anyRequest().authenticated()); // 그 외는 전부 인증 필요
