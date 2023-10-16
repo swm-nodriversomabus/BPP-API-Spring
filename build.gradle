@@ -30,6 +30,13 @@ dependencies {
 	implementation 'com.google.guava:guava:32.1.2-jre' // google core library 사용
 	implementation 'org.springframework.boot:spring-boot-starter-security' // security
 	implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
+
+//	implementation(platform("software.amazon.awssdk:bom:2.20.54"))
+//	implementation 'software.amazon.awssdk:sns' // SNS 모듈 추가
+	implementation 'com.amazonaws:aws-java-sdk-core:1.11.927'
+	implementation 'com.amazonaws:aws-java-sdk-sns:1.11.927'
+// Spring Boot SNS Starter
+//	implementation 'org.springframework.boot:spring-boot-starter-aws'
 //	implementation 'org.springframework.boot:spring-boot-starter-oauth2-client:2.7.11' // oauth2
 //	implementation 'io.jsonwebtoken:jjwt:0.9.1'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
