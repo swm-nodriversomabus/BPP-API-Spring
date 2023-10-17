@@ -15,6 +15,7 @@ public interface PreferenceMapperInterface {
     UserPreferenceEntity toEntity(UserPreferenceDto userPreferenceDto);
     MatchingPreferenceEntity toEntity(MatchingPreferenceDto matchingPreferenceDto);
     Preference toDomain(PreferenceEntity preferenceEntity);
+    FindPreferenceDto toDto(SavePreferenceDto savePreferenceDto);
     FindPreferenceDto toDto(Preference preference);
     FindPreferenceDto toDto(PreferenceEntity preferenceEntity);
     UserPreferenceDto toDto(UserPreferenceEntity userPreferenceEntity);

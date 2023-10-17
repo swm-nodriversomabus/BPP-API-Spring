@@ -14,6 +14,7 @@ import com.example.api.user.adapter.out.persistence.UserMapperInterface;
 import com.example.api.user.application.port.out.FindUserPort;
 import com.example.api.user.dto.FindUserDto;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,6 +23,7 @@ import java.util.List;
 import java.util.UUID;
 
 @Service
+@Slf4j
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
 public class FriendService implements AddFriendUsecase, FindFriendUsecase, DeleteFriendUsecase {
@@ -41,10 +43,14 @@ public class FriendService implements AddFriendUsecase, FindFriendUsecase, Delet
     
     @Override
     public List<FindUserDto> getFriendList(String userId) {
-        List<FriendEntity> friendPairList = findFriendPort.getFriendList(UUID.fromString(userId));
         List<FindUserDto> friendList = new ArrayList<>();
-        for (FriendEntity friendPair: friendPairList) {
-            friendList.add(userMapper.toDto(findUserPort.getByUserId(friendPair.getUserId()).orElseThrow()));
+        try {
+            List<FriendEntity> friendPairList = findFriendPort.getFriendList(UUID.fromString(userId));
+            for (FriendEntity friendPair: friendPairList) {
+                friendList.add(userMapper.toDto(findUserPort.getByUserId(friendPair.getUserId()).orElseThrow()));
+            }
+        } catch (IllegalArgumentException e) {
+            log.warn("Invalid userId: UUID transform failed.");
         }
         return friendList;
     }

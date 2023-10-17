@@ -13,6 +13,7 @@ import com.example.api.preference.dto.ComparePreferenceDto;
 import com.example.api.preference.dto.FindPreferenceDto;
 import com.example.api.preference.dto.SavePreferenceDto;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,6 +22,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Service
+@Slf4j
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
 public class PreferenceService implements SavePreferenceUsecase, FindPreferenceUsecase, ComparePreferenceUsecase {
@@ -39,7 +41,7 @@ public class PreferenceService implements SavePreferenceUsecase, FindPreferenceU
     }
     
     @Override
-    public Optional<ComparePreferenceDto> getPreferenceByPreferenceId(Long preferenceId) {
+    public Optional<ComparePreferenceDto> getByPreferenceId(Long preferenceId) {
         return findPreferencePort.getByPreferenceId(preferenceId)
                 .map(PreferenceEntity::toCompareDto);
     }
@@ -55,8 +57,14 @@ public class PreferenceService implements SavePreferenceUsecase, FindPreferenceU
     
     @Override
     public ComparePreferenceDto getUserPreference(String userId) {
-        Long preferenceId = comparePreferencePort.getUserPreferenceId(UUID.fromString(userId));
-        if (preferenceId == 0L) {
+        try {
+            Long preferenceId = comparePreferencePort.getUserPreferenceId(UUID.fromString(userId));
+            if (preferenceId == 0L) {
+                throw new IllegalArgumentException();
+            }
+            return this.getByPreferenceId(preferenceId).orElseThrow();
+        } catch (IllegalArgumentException e) {
+            log.warn("Preference data was not found. Used default preference settings.");
             return ComparePreferenceDto.builder()
                     .preferenceId(0L)
                     .alcoholAmount(2)
@@ -72,13 +80,12 @@ public class PreferenceService implements SavePreferenceUsecase, FindPreferenceU
                     .updatedAt(LocalDateTime.now())
                     .build();
         }
-        return this.getPreferenceByPreferenceId(preferenceId).orElseThrow();
     }
     
     @Override
     public ComparePreferenceDto getMatchingPreference(Long matchingId) {
         Long preferenceId = comparePreferencePort.getMatchingPreferenceId(matchingId);
-        return this.getPreferenceByPreferenceId(preferenceId).orElseThrow();
+        return this.getByPreferenceId(preferenceId).orElseThrow();
     }
     
     @Override

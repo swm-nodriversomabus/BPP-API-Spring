@@ -16,8 +16,8 @@ import java.util.Optional;
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
 public class SocialService {
-    private final FindSocialPort findSocialPort;
     private final SaveSocialPort saveSocialPort;
+    private final FindSocialPort findSocialPort;
 
     public Optional<SocialEntity> findSocialInfo(String id, String provider) {
         return findSocialPort.findSocialUser(id, provider);
@@ -27,6 +27,4 @@ public class SocialService {
     public void saveSocialInfo(AddSocialDto addSocialDto) {
         saveSocialPort.saveSocial(addSocialDto);
     }
-
 }
-

@@ -17,6 +17,7 @@ import com.example.api.matching.dto.SaveMatchingDto;
 import com.example.api.preference.service.PreferenceService;
 import com.example.api.user.application.port.in.RecommendedMatchingUsecase;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -24,6 +25,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
+@Slf4j
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
 public class MatchingService implements
@@ -57,9 +59,14 @@ public class MatchingService implements
     
     @Override
     public List<FindMatchingDto> getMatchingByWriterId(String userId) {
-        return findMatchingPort.getByWriterId(UUID.fromString(userId)).stream()
-                .map(matchingMapper::toDto)
-                .collect(Collectors.toList());
+        try {
+            return findMatchingPort.getByWriterId(UUID.fromString(userId)).stream()
+                    .map(matchingMapper::toDto)
+                    .collect(Collectors.toList());
+        } catch (IllegalArgumentException e) {
+            log.warn("Invalid userId: UUID transform failed.");
+            return new ArrayList<>();
+        }
     }
     
     @Override
@@ -71,16 +78,16 @@ public class MatchingService implements
     
     @Override
     public List<FindMatchingDto> getRecommendedMatchingList(String userId) {
-        List<FindMatchingDto> activeMatchingList = this.getMatchingByIsActive(true);
+        List<FindMatchingDto> activeMatchingList = this.getMatchingByIsActive(true); // 유효한 매칭만 뽑아옴
         List<Pair<Long, Integer>> matchingScoreList = new ArrayList<>();
-        for (FindMatchingDto matchingData: activeMatchingList) {
+        for (FindMatchingDto matchingData: activeMatchingList) { // 매칭별로 유사도 점수를 계산함
             Long matchingId = matchingData.getMatchingId();
             Integer matchingScore = preferenceService.getMatchingScore(userId, matchingId);
             matchingScoreList.add(new Pair<>(matchingId, matchingScore));
         }
         matchingScoreList.sort(Comparator.comparing(Pair::getSecond));
         List<FindMatchingDto> sortedMatchingList = new ArrayList<>();
-        for (Pair<Long, Integer> matchingData: matchingScoreList) {
+        for (Pair<Long, Integer> matchingData: matchingScoreList) { // 유사도가 높은 순서로 정렬한 후 반환
             sortedMatchingList.add(this.getMatchingById(matchingData.getFirst()).orElseThrow());
         }
         return sortedMatchingList;
