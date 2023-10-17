@@ -24,5 +24,4 @@ public class RefreshToken implements Serializable { // 직렬화, 역 직렬화 
     public void updateAccessToken(String accessToken) {
         this.accessToken = accessToken;
     }
-
 }
