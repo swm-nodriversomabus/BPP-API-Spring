@@ -31,7 +31,7 @@ public class AuthController {
     public ResponseEntity<StatusResponseDto> logout(@CookieValue String access_token, HttpServletResponse response) {
         logoutUsecase.removeToken(access_token);
 
-        Cookie cookie = new Cookie("accessToken", null);
+        Cookie cookie = new Cookie("access_token", null);
         cookie.setMaxAge(0);
         response.addCookie(cookie);
         return ResponseEntity.ok(StatusResponseDto.addStatus(200));

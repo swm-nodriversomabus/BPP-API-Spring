@@ -1,4 +1,4 @@
-package com.example.api.aws.service;
+package com.example.api.sms.service;
 
 import com.amazonaws.AmazonClientException;
 import com.amazonaws.auth.AWSStaticCredentialsProvider;
@@ -9,9 +9,13 @@ import com.amazonaws.services.sns.AmazonSNSClientBuilder;
 import com.amazonaws.services.sns.model.MessageAttributeValue;
 import com.amazonaws.services.sns.model.PublishRequest;
 import com.amazonaws.services.sns.model.PublishResult;
-import com.example.api.aws.application.port.in.SendSMSUsecase;
-import com.example.api.aws.config.AWSConfig;
-import com.example.api.aws.dto.SendSMSDto;
+import com.example.api.common.exception.CustomException;
+import com.example.api.common.type.ErrorCodeEnum;
+import com.example.api.sms.application.port.in.SendCertificationCodeUsecase;
+import com.example.api.sms.application.port.in.VerifyCodeUsecase;
+import com.example.api.sms.application.port.out.CertificationCodePort;
+import com.example.api.common.config.AWSConfig;
+import com.example.api.sms.dto.CheckSMSDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -24,17 +28,40 @@ import java.util.Random;
 @Slf4j
 @RequiredArgsConstructor
 @Service
-public class AWSSNSService implements SendSMSUsecase {
+public class SMSService implements SendCertificationCodeUsecase, VerifyCodeUsecase {
     private final AWSConfig awsConfig;
+    private final CertificationCodePort certificationCodePort;
+
+    @Override
+    public void verifyCertificationCode(CheckSMSDto checkSMSDto) {
+        String phone = checkSMSDto.getPhone();
+        String code = checkSMSDto.getCode();
+
+        String originalCode = certificationCodePort.findCode(phone).getCode();
+        if (code.equals(originalCode)) {
+            // 이제 그 redis에 저장 => 인증 redis
+        }else{
+            throw new CustomException(ErrorCodeEnum.CODE_IS_NOT_VALID); // 코드가 일치 하지 않음
+        }
+
+    }
+
+    /**
+     * 코드 발급 받고, 전송
+     * @param phone
+     * @return
+     */
     @Override
     public PublishResult send(String phone) {
 
         PublishResult result = null;
         StringBuilder koreaPhone = new StringBuilder("+82");
         koreaPhone.append(phone);
-        String region = awsConfig.getAwsRegion();
         try {
-
+            String message = "[여행파티]인증번호입니다 아래 6글자를 입력해주세요\n";
+            String code = generateRandomSixDigitNumber();
+            StringBuilder newMessage = new StringBuilder(message);
+            newMessage.append(code);
             BasicAWSCredentials awsCreds = new BasicAWSCredentials(awsConfig.getAwsAccessKey(), awsConfig.getAwsSecretKey());
 
             AmazonSNSClientBuilder builder =
@@ -56,9 +83,10 @@ public class AWSSNSService implements SendSMSUsecase {
                     .withStringValue("Promotional").withDataType("String"));
 
             result = this.sendSMSMessage(sns,
-                    generateRandomSixDigitNumber(),
+                    newMessage.toString(),
                     koreaPhone.toString(),
                     smsAttributes);
+            certificationCodePort.saveCode(phone,code);
         } catch (Exception ex) {
 
             log.error("The sms was not sent.");
@@ -75,11 +103,11 @@ public class AWSSNSService implements SendSMSUsecase {
      */
     private String generateRandomSixDigitNumber() {
         Random random = new Random();
-        String message = "[여행파티]인증번호입니다 아래 6글자를 입력해주세요\n";
-        StringBuilder newMessage = new StringBuilder(message);
+
         int randomNumber = random.nextInt(1000000); // 0~ 999999 사이 랜덤 숫자
-        newMessage.append(String.format("%06d", randomNumber));
-        return newMessage.toString();
+        return String.format("%06d", randomNumber);
+//        newMessage.append();
+//        return newMessage.toString();
     }
 
     private PublishResult sendSMSMessage(AmazonSNS sns, String message, String phone, Map<String, MessageAttributeValue> messageAttributeValueMap) {

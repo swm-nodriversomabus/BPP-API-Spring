@@ -59,7 +59,6 @@ public class MyAuthenticationSuccessHandler extends SimpleUrlAuthenticationSucce
                     .encode(StandardCharsets.UTF_8)
                     .toUriString();
             log.info("success redirecting");
-            log.info(targetUrl);
             CookieUtils.addCookie(response, "access_token",token.getAccessToken(), 1000 * 60 * 60);
             clearAuthenticationAttributes(request, response);
 //            response.addCookie(CookieUtils.addCookie(););
