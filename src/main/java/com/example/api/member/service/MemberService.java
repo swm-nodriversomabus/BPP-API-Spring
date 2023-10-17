@@ -24,7 +24,7 @@ public class MemberService implements AddMemberChatRoomUsecase {
     private final RetrieveChatRoomPort retrieveChatRoomPort;
     
     /**
-     * chatroom에 해당 멤버 추가
+     * 채팅방에 멤버 추가
      * @param addMemberDto (Data)
      */
     @Override

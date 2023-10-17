@@ -5,5 +5,5 @@ import com.example.api.preference.dto.ComparePreferenceDto;
 import java.util.Optional;
 
 public interface FindPreferenceUsecase {
-    Optional<ComparePreferenceDto> getPreferenceByPreferenceId(Long preferenceId);
+    Optional<ComparePreferenceDto> getByPreferenceId(Long preferenceId);
 }

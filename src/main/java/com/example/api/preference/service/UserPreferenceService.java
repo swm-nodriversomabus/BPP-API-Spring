@@ -10,12 +10,14 @@ import com.example.api.preference.dto.FindPreferenceDto;
 import com.example.api.preference.dto.SavePreferenceDto;
 import com.example.api.preference.dto.UserPreferenceDto;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.UUID;
 
 @Service
+@Slf4j
 @RequiredArgsConstructor
 @Transactional
 public class UserPreferenceService implements UserPreferenceUsecase {
@@ -32,7 +34,12 @@ public class UserPreferenceService implements UserPreferenceUsecase {
     
     @Override
     public FindPreferenceDto updateUserPreference(String userId, SavePreferenceDto savePreferenceDto) {
-        Long preferenceId = comparePreferencePort.getUserPreferenceId(UUID.fromString(userId));
-        return preferenceMapper.toDto(savePreferencePort.updatePreference(preferenceId, preferenceMapper.toDomain(savePreferenceDto)));
+        try {
+            Long preferenceId = comparePreferencePort.getUserPreferenceId(UUID.fromString(userId));
+            return preferenceMapper.toDto(savePreferencePort.updatePreference(preferenceId, preferenceMapper.toDomain(savePreferenceDto)));
+        } catch (IllegalArgumentException e) {
+            log.warn("Invalid userId: UUID transform failed.");
+            return preferenceMapper.toDto(savePreferenceDto);
+        }
     }
 }

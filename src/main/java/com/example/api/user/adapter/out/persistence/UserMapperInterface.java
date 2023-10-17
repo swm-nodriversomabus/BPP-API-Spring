@@ -23,4 +23,5 @@ public interface UserMapperInterface {
     User toDomain(UserEntity userEntity);
     FindUserDto toDto(UserEntity userEntity);
     FindUserDto toDto(User user);
+    FindUserDto toDto(UpdateUserDto updateUserDto);
 }

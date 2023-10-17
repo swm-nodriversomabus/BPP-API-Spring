@@ -22,6 +22,7 @@ import com.example.api.user.adapter.out.persistence.UserMapperInterface;
 import com.example.api.user.application.port.out.FindUserPort;
 import com.example.api.user.dto.FindUserDto;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -31,6 +32,7 @@ import java.util.NoSuchElementException;
 import java.util.UUID;
 
 @Service
+@Slf4j
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
 public class MatchingApplicationService implements MatchingApplicationUsecase {
@@ -49,7 +51,7 @@ public class MatchingApplicationService implements MatchingApplicationUsecase {
         MatchingApplication matchingApplication = matchingApplicationPort.createMatchingApplication(matchingMapper.toDomain(matchingApplicationDto));
         
         CreateChatRoomDto createChatRoomDto = CreateChatRoomDto.builder()
-                .masterId(matchingApplicationDto.getUserId())
+                .masterId(matchingApplication.getUserId())
                 .chatroomName("매칭 신청") // 이거 바꿔야 함
                 .type(ChatRoomEnum.Normal)
                 .isActive(true)
@@ -57,8 +59,8 @@ public class MatchingApplicationService implements MatchingApplicationUsecase {
         ChatRoom chatRoom = chatRoomService.createRoom(createChatRoomDto);
         
         List<UUID> memberIds = new ArrayList<>();
-        memberIds.add(matchingApplicationDto.getUserId());
-        UUID matchingWriterId = findMatchingPort.getByMatchingId(matchingApplicationDto.getMatchingId())
+        memberIds.add(matchingApplication.getUserId());
+        UUID matchingWriterId = findMatchingPort.getByMatchingId(matchingApplication.getMatchingId())
                 .orElseThrow(NoSuchElementException::new)
                 .getWriterId();
         memberIds.add(matchingWriterId);
@@ -74,12 +76,17 @@ public class MatchingApplicationService implements MatchingApplicationUsecase {
     
     @Override
     public List<FindMatchingDto> getByUserIdIsAndStateEquals(String userId, ApplicationStateEnum state) {
-        List<MatchingApplicationEntity> matchingPairList = matchingApplicationPort.getByUserIdIsAndStateEquals(UUID.fromString(userId), state);
-        List<FindMatchingDto> matchingData = new ArrayList<>();
-        for (MatchingApplicationEntity matchingPair: matchingPairList) {
-            matchingData.add(matchingMapper.toDto(findMatchingPort.getByMatchingId(matchingPair.getMatchingId()).orElseThrow()));
+        try {
+            List<MatchingApplicationEntity> matchingPairList = matchingApplicationPort.getByUserIdIsAndStateEquals(UUID.fromString(userId), state);
+            List<FindMatchingDto> matchingData = new ArrayList<>();
+            for (MatchingApplicationEntity matchingPair: matchingPairList) {
+                matchingData.add(matchingMapper.toDto(findMatchingPort.getByMatchingId(matchingPair.getMatchingId()).orElseThrow()));
+            }
+            return matchingData;
+        } catch (IllegalArgumentException e) {
+            log.warn("Invalid userId: UUID transform failed.");
+            return new ArrayList<>();
         }
-        return matchingData;
     }
 
     @Override

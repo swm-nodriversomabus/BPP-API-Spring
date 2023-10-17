@@ -56,15 +56,25 @@ public class UserService implements SaveUserUsecase, FindUserUsecase, DeleteUser
     
     @Override
     public Optional<FindUserDto> getUserById(String userId) {
-        return findUserPort.getByUserId(UUID.fromString(userId))
-                .map(userMapper::toDto);
+        try {
+            return findUserPort.getByUserId(UUID.fromString(userId))
+                    .map(userMapper::toDto);
+        } catch (IllegalArgumentException e) {
+            log.warn("Invalid userId: UUID transform failed.");
+            return Optional.empty();
+        }
     }
 
     @Override
     @Transactional
     public FindUserDto updateUser(String userId, UpdateUserDto userDto) {
-        User user = saveUserPort.updateUser(UUID.fromString(userId), userMapper.toDomain(userDto));
-        return userMapper.toDto(user);
+        try {
+            User user = saveUserPort.updateUser(UUID.fromString(userId), userMapper.toDomain(userDto));
+            return userMapper.toDto(user);
+        } catch (IllegalArgumentException e) {
+            log.warn("Invalid userId: UUID transform failed.");
+            return userMapper.toDto(userDto);
+        }
     }
     
     @Override
@@ -76,7 +86,11 @@ public class UserService implements SaveUserUsecase, FindUserUsecase, DeleteUser
     @Override
     @Transactional
     public void deleteUser(String userId) {
-        deleteUserPort.deleteByUserId(UUID.fromString(userId));
+        try {
+            deleteUserPort.deleteByUserId(UUID.fromString(userId));
+        } catch (IllegalArgumentException e) {
+            log.warn("Invalid userId: UUID transform failed.");
+        }
     }
     
     // Social
