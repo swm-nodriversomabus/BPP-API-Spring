@@ -4,6 +4,7 @@ import com.example.api.auth.dto.SecurityUserDto;
 import com.example.api.common.exception.CustomException;
 import com.example.api.common.type.ErrorCodeEnum;
 import com.example.api.common.utils.CustomBase64Utils;
+import com.example.api.sms.application.port.out.CheckVerifiedPhonePort;
 import com.example.api.social.adapter.out.persistence.SocialEntity;
 import com.example.api.user.adapter.out.persistence.UserEntity;
 import com.example.api.user.adapter.out.persistence.UserMapperInterface;
@@ -37,10 +38,11 @@ public class UserService implements SaveUserUsecase, FindUserUsecase, DeleteUser
     private final FindUserPort findUserPort;
     private final DeleteUserPort deleteUserPort;
     private final FindSocialPort findSocialPort;
-    
+    private final CheckVerifiedPhonePort checkVerifiedPhonePort;
     @Override
     @Transactional
     public void createUser(CreateUserDto userDto) {
+        checkVerifiedPhonePort.findCheckedPhone(userDto.getPhone()); // 인증여부 검증 추가
         SocialEntity social = findSocialPort.findSocialUser(CustomBase64Utils.getBase64DecodeString(userDto.getSocialEmail()), CustomBase64Utils.getBase64DecodeString(userDto.getProvider())).orElseThrow(()->new CustomException(ErrorCodeEnum.LOGIN_IS_NOT_DONE));
         userDto.setSocialId(social.getSocialId());
         saveUserPort.createUser(userMapper.toDomain(userDto));

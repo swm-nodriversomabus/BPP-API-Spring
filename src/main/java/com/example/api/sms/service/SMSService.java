@@ -15,6 +15,7 @@ import com.example.api.sms.application.port.in.SendCertificationCodeUsecase;
 import com.example.api.sms.application.port.in.VerifyCodeUsecase;
 import com.example.api.sms.application.port.out.CertificationCodePort;
 import com.example.api.common.config.AWSConfig;
+import com.example.api.sms.application.port.out.CheckVerifiedPhonePort;
 import com.example.api.sms.dto.CheckSMSDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -31,6 +32,7 @@ import java.util.Random;
 public class SMSService implements SendCertificationCodeUsecase, VerifyCodeUsecase {
     private final AWSConfig awsConfig;
     private final CertificationCodePort certificationCodePort;
+    private final CheckVerifiedPhonePort checkVerifiedPhonePort;
 
     @Override
     public void verifyCertificationCode(CheckSMSDto checkSMSDto) {
@@ -40,6 +42,7 @@ public class SMSService implements SendCertificationCodeUsecase, VerifyCodeUseca
         String originalCode = certificationCodePort.findCode(phone).getCode();
         if (code.equals(originalCode)) {
             // 이제 그 redis에 저장 => 인증 redis
+            checkVerifiedPhonePort.saveCheckedPhone(phone);
         }else{
             throw new CustomException(ErrorCodeEnum.CODE_IS_NOT_VALID); // 코드가 일치 하지 않음
         }
