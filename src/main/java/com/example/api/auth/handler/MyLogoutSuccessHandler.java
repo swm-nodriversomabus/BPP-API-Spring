@@ -26,10 +26,12 @@ public class MyLogoutSuccessHandler implements LogoutSuccessHandler {
     @Override
     public void onLogoutSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
         //로그 아웃 성공시 ok 보내자
+        log.info("welcome logout success handler");
         Cookie[] cookies = request.getCookies();
         if(cookies != null) {
             for (Cookie cookie : request.getCookies()) {
                 String cookieName = cookie.getName();
+                log.info(cookieName);
                 if(cookieName.equals("access_token")){
                     String accessToken = cookie.getValue();
                     log.info("access_token : {}", accessToken);
