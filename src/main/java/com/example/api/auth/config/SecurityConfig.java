@@ -83,9 +83,6 @@ public class SecurityConfig {
                         logout
                                 .logoutUrl("/logout")
                                 .clearAuthentication(true)
-                                .addLogoutHandler(((request, response, authentication) -> {
-
-                                }))
                                 .logoutSuccessHandler(myLogoutSuccessHandler)
                                 .permitAll()
 
