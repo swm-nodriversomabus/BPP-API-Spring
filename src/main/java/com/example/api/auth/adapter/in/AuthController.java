@@ -55,19 +55,4 @@ public class AuthController {
 
         return ResponseEntity.badRequest().body(TokenResponseStatus.addStatus(400,null));
     }
-
-    @GetMapping("/test")
-    public User test(Principal principal){
-        User user = AuthenticationUtils.getCurrentUserAuthentication();
-//        UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        log.info("안녕");
-        log.info(user.toString());
-        log.info(user.getUserId().toString() );
-//        log.info(userDetails.getUsername());
-//        log.info(userDetails.getPassword());
-        if(user != null){
-            log.info(user.getUserId().toString());
-        }
-        return user;
-    }
 }
