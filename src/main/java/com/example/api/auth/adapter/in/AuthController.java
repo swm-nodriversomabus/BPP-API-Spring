@@ -3,6 +3,7 @@ package com.example.api.auth.adapter.in;
 
 import com.example.api.auth.application.port.in.LogoutUsecase;
 import com.example.api.auth.application.port.in.FindRefreshUsecase;
+import com.example.api.auth.domain.SecurityUser;
 import com.example.api.auth.service.JwtUtilService;
 import com.example.api.auth.type.RefreshToken;
 import com.example.api.auth.type.TokenResponseStatus;
@@ -69,20 +70,5 @@ public class AuthController {
         CookieUtils.addCookie(response, "access_token",null, 1000 * 60 * 60);
 
         return ResponseEntity.badRequest().body(TokenResponseStatus.addStatus(400,null));
-    }
-
-    @GetMapping("/test")
-    public User test(Principal principal){
-        User user = AuthenticationUtils.getCurrentUserAuthentication();
-//        UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        log.info("안녕");
-        log.info(user.toString());
-        log.info(user.getUserId().toString() );
-//        log.info(userDetails.getUsername());
-//        log.info(userDetails.getPassword());
-        if(user != null){
-            log.info(user.getUserId().toString());
-        }
-        return user;
     }
 }
