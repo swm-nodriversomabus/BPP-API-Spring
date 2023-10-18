@@ -78,29 +78,18 @@ public class SecurityConfig {
             oauth2.failureHandler(oAuth2LoginFailureHandler);//핸들러
             oauth2.successHandler(oAUth2LoginSuccessHandler);
         });
-        httpSecurity.logout(logout -> logout
-                .logoutUrl("/logout")
-                .addLogoutHandler(((request, response, authentication) -> {
-                    Cookie[] cookies = request.getCookies();
-                    if(cookies != null) {
-                        for (Cookie cookie : request.getCookies()) {
-                            String cookieName = cookie.getName();
-                            CookieUtils.addCookie(response, cookieName, null, 0);
-                        }
-                    }
-                }))
+        httpSecurity.logout(
+                logout ->
+                        logout
+                                .logoutUrl("/logout")
+                                .clearAuthentication(true)
+                                .addLogoutHandler(((request, response, authentication) -> {
+
+                                }))
+                                .logoutSuccessHandler(myLogoutSuccessHandler)
+                                .permitAll()
+
         );
-//        httpSecurity.logout(
-//                httpSecurityLogoutConfigurer ->
-//                        httpSecurityLogoutConfigurer
-//                                .logoutRequestMatcher(new AntPathRequestMatcher("/auth/logout"))
-//                                .invalidateHttpSession(true)
-//                                .deleteCookies("access_token")
-//                                .clearAuthentication(true)
-//                                .logoutSuccessHandler(myLogoutSuccessHandler)
-//                                .permitAll()
-//
-//        );
 //        httpSecurity.logout(logout -> logout.logoutSuccessUrl("/"));
 
         return httpSecurity
