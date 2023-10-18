@@ -8,15 +8,21 @@ import com.example.api.auth.type.RefreshToken;
 import com.example.api.auth.type.TokenResponseStatus;
 import com.example.api.auth.utils.CookieUtils;
 import com.example.api.common.dto.StatusResponseDto;
+import com.example.api.common.utils.AuthenticationUtils;
+import com.example.api.user.domain.User;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
 import java.util.Optional;
+import java.util.UUID;
 
 @Slf4j
 @RestController
@@ -63,5 +69,20 @@ public class AuthController {
         CookieUtils.addCookie(response, "access_token",null, 1000 * 60 * 60);
 
         return ResponseEntity.badRequest().body(TokenResponseStatus.addStatus(400,null));
+    }
+
+    @GetMapping("/auth/test")
+    public User test(Principal principal){
+        User user = AuthenticationUtils.getCurrentUserAuthentication();
+//        UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        log.info("안녕");
+        log.info(user.toString());
+        log.info(user.getUserId().toString() );
+//        log.info(userDetails.getUsername());
+//        log.info(userDetails.getPassword());
+        if(user != null){
+            log.info(user.getUserId().toString());
+        }
+        return user;
     }
 }

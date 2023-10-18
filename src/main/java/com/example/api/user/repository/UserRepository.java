@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-public interface UserRepository extends JpaRepository<UserEntity, Long> {
+public interface UserRepository extends JpaRepository<UserEntity, UUID> {
     List<UserEntity> getAllBy();
     Optional<UserEntity> getByUserId(UUID userId);
     void deleteAllBy();

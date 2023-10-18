@@ -11,6 +11,7 @@ public enum ErrorCodeEnum {
     INVALID_PERMISSION(HttpStatus.UNAUTHORIZED, "권한이 없습니다"),
     DATABASE_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "데이터베이스 오류"),
     CODE_IS_NOT_VALID(HttpStatus.BAD_REQUEST, "잘못된 인증번호입니다"),
+    USER_NOT_FOUND(HttpStatus.BAD_REQUEST, "유저 정보가 없습니다"),
     CODE_IS_EXPIRED(HttpStatus.BAD_REQUEST, "휴대전화를 인증해주세요");
     private final HttpStatus httpStatus;
     private final String message;
