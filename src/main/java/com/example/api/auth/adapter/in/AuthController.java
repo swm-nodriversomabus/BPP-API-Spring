@@ -71,7 +71,7 @@ public class AuthController {
         return ResponseEntity.badRequest().body(TokenResponseStatus.addStatus(400,null));
     }
 
-    @GetMapping("/auth/test")
+    @GetMapping("/test")
     public User test(Principal principal){
         User user = AuthenticationUtils.getCurrentUserAuthentication();
 //        UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
