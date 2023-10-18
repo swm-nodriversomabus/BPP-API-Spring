@@ -4,6 +4,7 @@ import com.example.api.auth.filter.JwtAuthFilter;
 import com.example.api.auth.filter.JwtExceptionFilter;
 import com.example.api.auth.handler.MyAuthenticationFailureHandler;
 import com.example.api.auth.handler.MyAuthenticationSuccessHandler;
+import com.example.api.auth.handler.MyLogoutSuccessHandler;
 import com.example.api.auth.repository.OAuth2AuthorizationRequestBasedOnCookieRepository;
 import com.example.api.auth.service.CustomOAuth2UserService;
 import lombok.RequiredArgsConstructor;
@@ -17,6 +18,8 @@ import org.springframework.security.config.annotation.web.configurers.AbstractHt
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.oauth2.client.web.OAuth2LoginAuthenticationFilter;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+import org.springframework.util.AntPathMatcher;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
@@ -31,6 +34,7 @@ public class SecurityConfig {
     private final MyAuthenticationSuccessHandler oAUth2LoginSuccessHandler;
     private final JwtAuthFilter jwtAuthFilter;
     private final JwtExceptionFilter jwtExceptionFilter;
+    private final MyLogoutSuccessHandler myLogoutSuccessHandler;
     private final OAuth2AuthorizationRequestBasedOnCookieRepository oAuth2AuthorizationRequestBasedOnCookieRepository;
     private static final String[] PERMIT_URL_ARRAY = {
             // swagger
@@ -45,7 +49,7 @@ public class SecurityConfig {
                 .sessionManagement(httpSecuritySessionManagementConfigurer ->
                         httpSecuritySessionManagementConfigurer.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .cors(httpSecurityCorsConfigurer -> httpSecurityCorsConfigurer.configurationSource(corsConfigurationSource()))
-                .logout(AbstractHttpConfigurer::disable)
+//                .logout(AbstractHttpConfigurer::disable)
                 .csrf(AbstractHttpConfigurer::disable);
         httpSecurity.authorizeHttpRequests(authorizeRequests -> // 인증 설정
                 authorizeRequests.requestMatchers("/admin/**").hasRole("ADMIN") // 이 URL로 오는 요청들은 admin 권한만 접근 가능
@@ -63,6 +67,7 @@ public class SecurityConfig {
                             .baseUri("/oauth2/authorization")
                             .authorizationRequestRepository(oAuth2AuthorizationRequestBasedOnCookieRepository)
             );
+
             oauth2.redirectionEndpoint(redirectionEndpointConfig -> redirectionEndpointConfig.baseUri("/*/oauth2/code/*"));
             oauth2.userInfoEndpoint( // oauth2 로그인 시 사용자 정보를 가져오는 엔드포인트와 사용자 서비스 설정
                     userInfoEndpointConfig ->
@@ -71,6 +76,17 @@ public class SecurityConfig {
             oauth2.failureHandler(oAuth2LoginFailureHandler);//핸들러
             oauth2.successHandler(oAUth2LoginSuccessHandler);
         });
+        httpSecurity.logout(
+                httpSecurityLogoutConfigurer ->
+                        httpSecurityLogoutConfigurer
+                                .logoutRequestMatcher(new AntPathRequestMatcher("/auth/logout"))
+                                .invalidateHttpSession(true)
+                                .deleteCookies("access_token")
+                                .clearAuthentication(true)
+                                .logoutSuccessHandler(myLogoutSuccessHandler)
+                                .permitAll()
+
+        );
 //        httpSecurity.logout(logout -> logout.logoutSuccessUrl("/"));
 
         return httpSecurity

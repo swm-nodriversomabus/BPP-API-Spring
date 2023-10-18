@@ -97,17 +97,17 @@ public class UserService implements SaveUserUsecase, FindUserUsecase, DeleteUser
     
     // Social
     
-    public SecurityUserDto findSocialUser(String id, String provider) {
-        User user = userMapper.toDomain(findUserPort.findSocialUser(id, provider).orElseThrow(IllegalStateException::new));
-        return SecurityUserDto.builder()
-                .userId(user.getUserId())
-                .naverId(user.getSocialId().getNaverId())
-                .appleId(user.getSocialId().getAppleId())
-                .kakaoId(user.getSocialId().getKakaoId())
-                .googleId(user.getSocialId().getGoogleId())
-                .instaId(user.getSocialId().getInstaId())
-                .role(user.getRole().getRole())
-                .build();
+    public User findSocialUser(String id, String provider) {
+        return userMapper.toDomain(findUserPort.findSocialUser(id, provider).orElseThrow(IllegalStateException::new));
+//        return SecurityUserDto.builder()
+//                .userId(user.getUserId())
+//                .naverId(user.getSocialId().getNaverId())
+//                .appleId(user.getSocialId().getAppleId())
+//                .kakaoId(user.getSocialId().getKakaoId())
+//                .googleId(user.getSocialId().getGoogleId())
+//                .instaId(user.getSocialId().getInstaId())
+//                .role(user.getRole().getRole())
+//                .build();
     }
     
     public Optional<UserEntity> findUserSigned(Long id) {

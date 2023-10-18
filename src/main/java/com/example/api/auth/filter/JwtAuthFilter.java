@@ -6,6 +6,7 @@ import com.example.api.auth.service.JwtUtilService;
 import com.example.api.chat.exception.JwtException;
 import com.example.api.user.adapter.out.persistence.UserEntity;
 import com.example.api.user.adapter.out.persistence.UserPersistenceAdapter;
+import com.example.api.user.domain.User;
 import com.example.api.user.service.UserService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -82,20 +83,21 @@ public class JwtAuthFilter extends OncePerRequestFilter {
 //            UserEntity user = userService.findSocialUser(jwtUtilService.getId(atc), jwtUtilService.getProvider(atc))
 //                    .orElseThrow(IllegalStateException::new);
             // Security Context에 등록할 user 객체 생성
-            SecurityUserDto securityUserDto = userService.findSocialUser(jwtUtilService.getId(atc), jwtUtilService.getProvider(atc));
+            User userinfo = userService.findSocialUser(jwtUtilService.getId(atc), jwtUtilService.getProvider(atc));
 
             // Security Context에 인증 객체 등록
-            Authentication authentication = getAuthentication(securityUserDto);
+            Authentication authentication = getAuthentication(userinfo);
+
             SecurityContextHolder.getContext().setAuthentication(authentication);
         }
 
         filterChain.doFilter(request, response);
     }
 
-    public Authentication getAuthentication(SecurityUserDto user){
+    public Authentication getAuthentication(User user){
 
         return new UsernamePasswordAuthenticationToken(user, "",
-                List.of(new SimpleGrantedAuthority(user.getRole()))
+                List.of(new SimpleGrantedAuthority(user.getRole().toString()))
         );
     }
 }
