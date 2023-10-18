@@ -9,6 +9,6 @@ import java.util.UUID;
 public interface FindUserPort {
     List<UserEntity> getAllBy();
     Optional<UserEntity> getByUserId(UUID userId);
-    Optional<UserEntity> findUserSigned(Long socialId); // 로그인시 처리 - OAuth용
     Optional<UserEntity> findSocialUser(String id, String provider);
+    Optional<UserEntity> findUserSigned(Long socialId); // 로그인시 처리 - OAuth용
 }

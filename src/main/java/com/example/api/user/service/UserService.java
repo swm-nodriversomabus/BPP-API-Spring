@@ -1,6 +1,5 @@
 package com.example.api.user.service;
 
-import com.example.api.auth.dto.SecurityUserDto;
 import com.example.api.common.exception.CustomException;
 import com.example.api.common.type.ErrorCodeEnum;
 import com.example.api.common.utils.CustomBase64Utils;
@@ -21,6 +20,9 @@ import com.example.api.user.dto.UpdateUserDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import com.example.api.user.dto.FindUserDto;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -40,6 +42,7 @@ public class UserService implements SaveUserUsecase, FindUserUsecase, DeleteUser
     private final DeleteUserPort deleteUserPort;
     private final FindSocialPort findSocialPort;
     private final CheckVerifiedPhonePort checkVerifiedPhonePort;
+    
     @Override
     @Transactional
     public void createUser(CreateUserDto userDto) {
@@ -96,6 +99,14 @@ public class UserService implements SaveUserUsecase, FindUserUsecase, DeleteUser
     }
     
     // Social
+    
+    public String getCurrentUser() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication.getPrincipal() instanceof UserDetails) {
+            return ((UserDetails) authentication.getPrincipal()).getUsername();
+        }
+        return "Anonymous";
+    }
     
     public User findSocialUser(String id, String provider) {
         return userMapper.toDomain(findUserPort.findSocialUser(id, provider).orElseThrow(IllegalStateException::new));
