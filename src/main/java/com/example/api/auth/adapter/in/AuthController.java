@@ -30,22 +30,7 @@ import java.util.UUID;
 @RefreshScope
 public class AuthController {
     private final JwtUtilService jwtUtilService;
-    private final LogoutUsecase logoutUsecase;
     private final FindRefreshUsecase findRefreshUsecase;
-
-    @PostMapping("/auth/logout")
-    public ResponseEntity<StatusResponseDto> logout(@CookieValue String access_token, HttpServletResponse response) {
-        log.info("wow come to logout");
-        log.info(access_token);
-        logoutUsecase.removeToken(access_token);
-        Cookie cookie = new Cookie("access_token", null);
-        cookie.setMaxAge(0);
-        response.addCookie(cookie);
-//        CookieUtils.addCookie(response, "access_token", null, 0);
-        log.info("쿠키 삭제");
-//
-        return ResponseEntity.ok(StatusResponseDto.addStatus(200));
-    }
 
     @PostMapping("/auth/refresh")
     public ResponseEntity<TokenResponseStatus> refresh(@CookieValue String access_token, HttpServletResponse response) {
