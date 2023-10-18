@@ -1,6 +1,5 @@
 package com.example.api.user.service;
 
-import com.example.api.auth.dto.SecurityUserDto;
 import com.example.api.common.exception.CustomException;
 import com.example.api.common.type.ErrorCodeEnum;
 import com.example.api.common.utils.CustomBase64Utils;
@@ -18,12 +17,15 @@ import com.example.api.user.domain.User;
 import com.example.api.user.application.port.in.SaveUserUsecase;
 import com.example.api.user.dto.CreateUserDto;
 import com.example.api.user.dto.UpdateUserDto;
+import com.example.api.user.type.UserGenderEnum;
+import com.example.api.user.type.UserRoleEnum;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import com.example.api.user.dto.FindUserDto;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -57,13 +59,27 @@ public class UserService implements SaveUserUsecase, FindUserUsecase, DeleteUser
     }
     
     @Override
-    public Optional<FindUserDto> getUserById(String userId) {
+    public FindUserDto getUserById(String userId) {
+        FindUserDto defaultUser = FindUserDto.builder()
+                .username("익명")
+                .gender(UserGenderEnum.None)
+                .age(30)
+                .phone("010-0000-0000")
+                .role(UserRoleEnum.User)
+                .blacklist(false)
+                .stateMessage("")
+                .mannerScore(30)
+                .createdAt(LocalDateTime.now())
+                .updatedAt(LocalDateTime.now())
+                .isActive(false)
+                .build();
         try {
             return findUserPort.getByUserId(UUID.fromString(userId))
-                    .map(userMapper::toDto);
+                    .map(userMapper::toDto)
+                    .orElse(defaultUser);
         } catch (IllegalArgumentException e) {
             log.warn("Invalid userId: UUID transform failed.");
-            return Optional.empty();
+            return defaultUser;
         }
     }
 
