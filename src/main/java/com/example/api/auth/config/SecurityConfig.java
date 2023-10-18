@@ -7,6 +7,8 @@ import com.example.api.auth.handler.MyAuthenticationSuccessHandler;
 import com.example.api.auth.handler.MyLogoutSuccessHandler;
 import com.example.api.auth.repository.OAuth2AuthorizationRequestBasedOnCookieRepository;
 import com.example.api.auth.service.CustomOAuth2UserService;
+import com.example.api.auth.utils.CookieUtils;
+import jakarta.servlet.http.Cookie;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -76,17 +78,29 @@ public class SecurityConfig {
             oauth2.failureHandler(oAuth2LoginFailureHandler);//핸들러
             oauth2.successHandler(oAUth2LoginSuccessHandler);
         });
-        httpSecurity.logout(
-                httpSecurityLogoutConfigurer ->
-                        httpSecurityLogoutConfigurer
-                                .logoutRequestMatcher(new AntPathRequestMatcher("/auth/logout"))
-                                .invalidateHttpSession(true)
-                                .deleteCookies("access_token")
-                                .clearAuthentication(true)
-                                .logoutSuccessHandler(myLogoutSuccessHandler)
-                                .permitAll()
-
+        httpSecurity.logout(logout -> logout
+                .logoutUrl("/logout")
+                .addLogoutHandler(((request, response, authentication) -> {
+                    Cookie[] cookies = request.getCookies();
+                    if(cookies != null) {
+                        for (Cookie cookie : request.getCookies()) {
+                            String cookieName = cookie.getName();
+                            CookieUtils.addCookie(response, cookieName, null, 0);
+                        }
+                    }
+                }))
         );
+//        httpSecurity.logout(
+//                httpSecurityLogoutConfigurer ->
+//                        httpSecurityLogoutConfigurer
+//                                .logoutRequestMatcher(new AntPathRequestMatcher("/auth/logout"))
+//                                .invalidateHttpSession(true)
+//                                .deleteCookies("access_token")
+//                                .clearAuthentication(true)
+//                                .logoutSuccessHandler(myLogoutSuccessHandler)
+//                                .permitAll()
+//
+//        );
 //        httpSecurity.logout(logout -> logout.logoutSuccessUrl("/"));
 
         return httpSecurity
