@@ -48,8 +48,8 @@ public class JwtUtilService {
     }
 
     public String generateAccessToken(String id, String role, String provider) {
-        long tokenPeriod = 1000L * 60L * 60L; // 1시간 유효성
-//        long tokenPeriod = 1000L; // 1시간 유효성
+//        long tokenPeriod = 1000L * 60L * 60L; // 1시간 유효성
+        long tokenPeriod = 1000L; // 1시간 유효성
         return getToken(id, role, provider, tokenPeriod);
     }
 

@@ -1,12 +1,12 @@
 package com.example.api.user;
 
+import com.example.api.sms.application.port.out.CheckVerifiedPhonePort;
 import com.example.api.social.application.port.out.FindSocialPort;
 import com.example.api.user.adapter.out.persistence.UserMapperInterface;
 import com.example.api.user.application.port.out.DeleteUserPort;
 import com.example.api.user.application.port.out.FindUserPort;
 import com.example.api.user.application.port.out.SaveUserPort;
 import com.example.api.user.dto.CreateUserDto;
-import com.example.api.user.dto.FindUserDto;
 import com.example.api.user.dto.UpdateUserDto;
 import com.example.api.user.service.UserService;
 import com.example.api.user.type.UserGenderEnum;
@@ -36,14 +36,15 @@ public class UserServiceTests {
     private DeleteUserPort deleteUserPort;
     @Mock
     private FindSocialPort findSocialPort;
+    @Mock
+    private CheckVerifiedPhonePort checkVerifiedPhonePort;
     private CreateUserDto user1, user2, user3;
-    private FindUserDto mockUser;
     private UpdateUserDto newUser;
     private final String userUUID = "09a46fb0-2ae0-4a35-8aad-0a9e4311a1a3";
     
     @BeforeEach
     void beforeEach() {
-        userService = new UserService(userMapper, saveUserPort, findUserPort, deleteUserPort, findSocialPort);
+        userService = new UserService(userMapper, saveUserPort, findUserPort, deleteUserPort, findSocialPort, checkVerifiedPhonePort);
         user1 = CreateUserDto.builder()
                 .username("Andrew")
                 .gender(UserGenderEnum.Male)
@@ -77,17 +78,6 @@ public class UserServiceTests {
                 .mannerScore(73)
                 .isActive(true)
                 .build();
-        mockUser = FindUserDto.builder()
-                .username("Andrew")
-                .gender(UserGenderEnum.Male)
-                .age(24)
-                .phone("010-9876-5432")
-                .role(UserRoleEnum.User)
-                .blacklist(false)
-                .stateMessage(" ")
-                .mannerScore(75)
-                .isActive(true)
-                .build();
         newUser = UpdateUserDto.builder()
                 .username("Andrew")
                 .gender(UserGenderEnum.Male)
@@ -117,7 +107,7 @@ public class UserServiceTests {
     
     @Test
     void getUserByIdTest() {
-        userService.getUserById(userUUID).orElse(mockUser);
+        userService.getUserById(userUUID);
         verify(findUserPort, times(1)).getByUserId(UUID.fromString(userUUID));
     }
     

@@ -20,7 +20,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequiredArgsConstructor
@@ -67,11 +66,11 @@ public class UserController {
     /**
      * ID가 userId인 사용자 조회
      * @param userId (ID)
-     * @return Optional<FindUserDto>
+     * @return FindUserDto
      */
     @Operation(summary = "Get user", description = "ID가 userId인 사용자를 조회한다.")
     @GetMapping("/user/{userId}")
-    public Optional<FindUserDto> getUserById(@PathVariable String userId) {
+    public FindUserDto getUserById(@PathVariable String userId) {
         return findUserUsecase.getUserById(userId);
     }
 

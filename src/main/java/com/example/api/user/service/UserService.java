@@ -78,13 +78,27 @@ public class UserService implements SaveUserUsecase, FindUserUsecase, DeleteUser
     }
     
     @Override
-    public Optional<FindUserDto> getUserById(String userId) {
+    public FindUserDto getUserById(String userId) {
+        FindUserDto defaultUser = FindUserDto.builder()
+                .username("익명")
+                .gender(UserGenderEnum.None)
+                .age(30)
+                .phone("010-0000-0000")
+                .role(UserRoleEnum.User)
+                .blacklist(false)
+                .stateMessage("")
+                .mannerScore(30)
+                .createdAt(LocalDateTime.now())
+                .updatedAt(LocalDateTime.now())
+                .isActive(false)
+                .build();
         try {
             return findUserPort.getByUserId(UUID.fromString(userId))
-                    .map(userMapper::toDto);
+                    .map(userMapper::toDto)
+                    .orElse(defaultUser);
         } catch (IllegalArgumentException e) {
             log.warn("UserService::getUserById: UUID transform failed.");
-            return Optional.empty();
+            return defaultUser;
         }
     }
 
