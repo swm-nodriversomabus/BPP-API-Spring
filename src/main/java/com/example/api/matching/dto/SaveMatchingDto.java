@@ -16,10 +16,6 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 public class SaveMatchingDto {
-    
-    @NotNull
-    private UUID writerId;
-    
     @NotNull
     private MatchingTypeEnum type;
     
