@@ -1,6 +1,5 @@
 package com.example.api.common.config;
 
-
 import com.amazonaws.auth.AWSStaticCredentialsProvider;
 import com.amazonaws.auth.BasicAWSCredentials;
 import com.amazonaws.services.sns.AmazonSNSClient;
@@ -15,7 +14,6 @@ import org.springframework.context.annotation.Primary;
 @Getter
 @Configuration
 public class AWSConfig {
-
     @Value("${aws.accessKey}")
     private String awsAccessKey;
 
@@ -27,7 +25,7 @@ public class AWSConfig {
 
     @Primary
     @Bean
-    public AmazonSNSClient getAWSSNSClient(){
+    public AmazonSNSClient getAWSSNSClient() {
         return (AmazonSNSClient) AmazonSNSClientBuilder.standard()
                 .withRegion(awsRegion)
                 .withCredentials(

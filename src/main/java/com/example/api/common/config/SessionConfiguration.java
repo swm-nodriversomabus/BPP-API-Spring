@@ -11,12 +11,11 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import java.util.Collections;
 
-
 @Configuration
 public class SessionConfiguration implements WebMvcConfigurer {
     //j-session 삭제
     @Bean
-    public ServletContextInitializer clearJsession() {
+    public ServletContextInitializer clearJSession() {
         return new ServletContextInitializer() {
             @Override
             public void onStartup(ServletContext servletContext) throws ServletException {
