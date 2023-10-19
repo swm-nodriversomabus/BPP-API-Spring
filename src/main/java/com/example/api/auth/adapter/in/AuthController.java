@@ -1,14 +1,10 @@
 package com.example.api.auth.adapter.in;
 
-
-import com.example.api.auth.application.port.in.LogoutUsecase;
 import com.example.api.auth.application.port.in.FindRefreshUsecase;
 import com.example.api.auth.service.JwtUtilService;
 import com.example.api.auth.type.RefreshToken;
 import com.example.api.auth.type.TokenResponseStatus;
 import com.example.api.auth.utils.CookieUtils;
-import com.example.api.common.dto.StatusResponseDto;
-import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
