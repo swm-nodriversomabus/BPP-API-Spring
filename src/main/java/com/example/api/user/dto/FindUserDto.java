@@ -33,7 +33,7 @@ public class FindUserDto {
     @NotNull
     private Boolean blacklist;
     
-    @NotEmpty
+    @NotNull
     private String stateMessage;
     
     @NotNull
