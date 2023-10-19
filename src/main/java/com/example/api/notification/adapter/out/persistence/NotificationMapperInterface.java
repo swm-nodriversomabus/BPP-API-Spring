@@ -17,5 +17,6 @@ public interface NotificationMapperInterface {
     UserNotificationEntity toEntity(UserNotificationDto userNotificationDto);
     Notification toDomain(NotificationEntity notificationEntity);
     FindNotificationDto toDto(Notification notification);
+    FindNotificationDto toDto(NotificationEntity notificationEntity);
     UserNotificationDto toDto(UserNotificationEntity userNotificationEntity);
 }

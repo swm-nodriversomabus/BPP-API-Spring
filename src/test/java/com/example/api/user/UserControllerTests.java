@@ -4,7 +4,6 @@ import com.example.api.matching.application.port.in.MatchingApplicationUsecase;
 import com.example.api.user.adapter.in.rest.UserController;
 import com.example.api.user.application.port.in.DeleteUserUsecase;
 import com.example.api.user.application.port.in.FindUserUsecase;
-import com.example.api.user.application.port.in.RecommendedMatchingUsecase;
 import com.example.api.user.application.port.in.SaveUserUsecase;
 import com.example.api.user.type.UserGenderEnum;
 import com.example.api.user.type.UserRoleEnum;
@@ -35,8 +34,6 @@ public class UserControllerTests {
     private FindUserUsecase findUserUsecase;
     @MockBean
     private DeleteUserUsecase deleteUserUsecase;
-    @MockBean
-    private RecommendedMatchingUsecase recommendedMatchingUsecase;
     @MockBean
     private MatchingApplicationUsecase matchingApplicationUsecase;
     

@@ -33,13 +33,12 @@ public class FriendController {
 
     /**
      * 친구 목록 조회
-     * @param userId (ID)
      * @return List<UserDto>
      */
     @Operation(summary = "Get friend list", description = "사용자의 친구 목록을 조회한다.")
-    @GetMapping("/user/{userId}/friend")
-    public List<FindUserDto> getFriendList(@PathVariable String userId) {
-        return findFriendUsecase.getFriendList(userId);
+    @GetMapping("/user/friend")
+    public List<FindUserDto> getFriendList() {
+        return findFriendUsecase.getFriendList();
     }
 
     /**

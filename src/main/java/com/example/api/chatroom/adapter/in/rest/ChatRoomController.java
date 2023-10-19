@@ -16,9 +16,9 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.UUID;
-@Slf4j
+
 @RestController
-@RequestMapping("/chatroom")
+@Slf4j
 @RequiredArgsConstructor
 @Tag(name = "ChatRoom", description = "ChatRoom API")
 public class ChatRoomController {
@@ -26,11 +26,11 @@ public class ChatRoomController {
     private final FindChatRomListUsecase findChatRomListUsecase;
     /**
      * 채팅방 생성
-     * @param createChatRoomDto (Data)
-     * @return 채팅 방 ID 값
+     * @param createChatRoomDto (데이터)
+     * @return UUID
      */
     @Operation(summary = "Create chatroom", description = "새로운 채팅방을 생성한다.")
-    @PostMapping
+    @PostMapping("/chatroom")
     public UUID createChatroom(@RequestBody @Valid CreateChatRoomDto createChatRoomDto){
         ChatRoom chatRoom = createChatRoomUsecase.createRoom(createChatRoomDto);
         return chatRoom.getChatroomId();
@@ -42,13 +42,13 @@ public class ChatRoomController {
      * @return List<ChatRoom>
      */
     @Operation(summary = "Get chatroom list", description = "사용자의 채팅방 목록을 불러온다.")
-    @GetMapping
+    @GetMapping("/chatroom")
     public List<ChatRoom> chatRoomList(@RequestParam Long userid, @PageableDefault(sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable) { //추후 바꾸자함
         return findChatRomListUsecase.chatRoomList(pageable, userid);
     }
 
     @Operation(summary = "Delete chatroom", description = "채팅방을 삭제한다.")
-    @DeleteMapping(value = "/{chatRoomId}")
+    @DeleteMapping("/chatroom/{chatRoomId}")
     public void outChatRoom(@PathVariable UUID chatRoomId){
         log.info("chatroom = {}", chatRoomId);
     }

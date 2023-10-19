@@ -1,6 +1,8 @@
 package com.example.api.matching.service;
 
+import com.example.api.auth.domain.SecurityUser;
 import com.example.api.common.type.Pair;
+import com.example.api.common.utils.AuthenticationUtils;
 import com.example.api.matching.adapter.out.persistence.MatchingMapperInterface;
 import com.example.api.matching.application.port.in.DeleteMatchingUsecase;
 import com.example.api.matching.application.port.in.FindMatchingUsecase;
@@ -15,7 +17,6 @@ import com.example.api.matching.dto.FindMatchingDto;
 import com.example.api.matching.dto.LikeDto;
 import com.example.api.matching.dto.SaveMatchingDto;
 import com.example.api.preference.service.PreferenceService;
-import com.example.api.user.application.port.in.RecommendedMatchingUsecase;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -28,8 +29,7 @@ import java.util.stream.Collectors;
 @Slf4j
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
-public class MatchingService implements
-        SaveMatchingUsecase, FindMatchingUsecase, DeleteMatchingUsecase, LikeUsecase, RecommendedMatchingUsecase {
+public class MatchingService implements SaveMatchingUsecase, FindMatchingUsecase, DeleteMatchingUsecase, LikeUsecase {
     private final PreferenceService preferenceService;
     private final MatchingMapperInterface matchingMapper;
     private final SaveMatchingPort saveMatchingPort;
@@ -58,15 +58,16 @@ public class MatchingService implements
     }
     
     @Override
-    public List<FindMatchingDto> getMatchingByWriterId(String userId) {
-        try {
-            return findMatchingPort.getByWriterId(UUID.fromString(userId)).stream()
-                    .map(matchingMapper::toDto)
-                    .collect(Collectors.toList());
-        } catch (IllegalArgumentException e) {
-            log.warn("Invalid userId: UUID transform failed.");
+    public List<FindMatchingDto> getMatchingByWriterId() {
+        SecurityUser securityUser = AuthenticationUtils.getCurrentUserAuthentication();
+        if (securityUser == null) {
+            log.error("MatchingService::getMatchingByWriterId: Authentication is needed.");
             return new ArrayList<>();
         }
+        UUID userId = securityUser.getUserId();
+        return findMatchingPort.getByWriterId(userId).stream()
+                .map(matchingMapper::toDto)
+                .collect(Collectors.toList());
     }
     
     @Override
@@ -77,12 +78,16 @@ public class MatchingService implements
     }
     
     @Override
-    public List<FindMatchingDto> getRecommendedMatchingList(String userId) {
+    public List<FindMatchingDto> getRecommendedMatchingList() {
+        SecurityUser securityUser = AuthenticationUtils.getCurrentUserAuthentication();
+        if (securityUser == null) {
+            return new ArrayList<>();
+        }
         List<FindMatchingDto> activeMatchingList = this.getMatchingByIsActive(true); // 유효한 매칭만 뽑아옴
         List<Pair<Long, Integer>> matchingScoreList = new ArrayList<>();
         for (FindMatchingDto matchingData: activeMatchingList) { // 매칭별로 유사도 점수를 계산함
             Long matchingId = matchingData.getMatchingId();
-            Integer matchingScore = preferenceService.getMatchingScore(userId, matchingId);
+            Integer matchingScore = preferenceService.getMatchingScore(matchingId);
             matchingScoreList.add(new Pair<>(matchingId, matchingScore));
         }
         matchingScoreList.sort(Comparator.comparing(Pair::getSecond));

@@ -5,6 +5,7 @@ import lombok.*;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Entity
 @EntityListeners(AuditingEntityListener.class)
@@ -20,7 +21,7 @@ public class UserNotificationEntity {
     private Long sequenceId;
     
     @Column(nullable = false)
-    private Long userId;
+    private UUID userId;
     
     @Column(nullable = false)
     private Long notificationId;

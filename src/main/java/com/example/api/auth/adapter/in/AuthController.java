@@ -3,30 +3,23 @@ package com.example.api.auth.adapter.in;
 
 import com.example.api.auth.application.port.in.LogoutUsecase;
 import com.example.api.auth.application.port.in.FindRefreshUsecase;
-import com.example.api.auth.domain.SecurityUser;
 import com.example.api.auth.service.JwtUtilService;
 import com.example.api.auth.type.RefreshToken;
 import com.example.api.auth.type.TokenResponseStatus;
 import com.example.api.auth.utils.CookieUtils;
 import com.example.api.common.dto.StatusResponseDto;
-import com.example.api.common.utils.AuthenticationUtils;
-import com.example.api.user.domain.User;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
-import java.security.Principal;
 import java.util.Optional;
-import java.util.UUID;
 
-@Slf4j
 @RestController
+@Slf4j
 @RequiredArgsConstructor
 @RefreshScope
 public class AuthController {

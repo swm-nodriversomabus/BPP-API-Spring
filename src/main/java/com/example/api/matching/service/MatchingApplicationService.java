@@ -1,10 +1,12 @@
 package com.example.api.matching.service;
 
+import com.example.api.auth.domain.SecurityUser;
 import com.example.api.chatroom.domain.ChatRoom;
 import com.example.api.chatroom.dto.CreateChatRoomDto;
 import com.example.api.chatroom.service.ChatRoomService;
 import com.example.api.chatroom.type.ChatRoomEnum;
 import com.example.api.common.type.ApplicationStateEnum;
+import com.example.api.common.utils.AuthenticationUtils;
 import com.example.api.fcm.dto.FcmDto;
 import com.example.api.fcm.service.FcmService;
 import com.example.api.matching.adapter.out.persistence.MatchingApplicationEntity;
@@ -75,18 +77,18 @@ public class MatchingApplicationService implements MatchingApplicationUsecase {
     }
     
     @Override
-    public List<FindMatchingDto> getByUserIdIsAndStateEquals(String userId, ApplicationStateEnum state) {
-        try {
-            List<MatchingApplicationEntity> matchingPairList = matchingApplicationPort.getByUserIdIsAndStateEquals(UUID.fromString(userId), state);
-            List<FindMatchingDto> matchingData = new ArrayList<>();
-            for (MatchingApplicationEntity matchingPair: matchingPairList) {
-                matchingData.add(matchingMapper.toDto(findMatchingPort.getByMatchingId(matchingPair.getMatchingId()).orElseThrow()));
-            }
-            return matchingData;
-        } catch (IllegalArgumentException e) {
-            log.warn("Invalid userId: UUID transform failed.");
+    public List<FindMatchingDto> getByUserIdIsAndStateEquals(ApplicationStateEnum state) {
+        SecurityUser securityUser = AuthenticationUtils.getCurrentUserAuthentication();
+        if (securityUser == null) {
+            log.error("MatchingApplicationService::getByUserIdAndStateEquals: Authentication is needed.");
             return new ArrayList<>();
         }
+        List<MatchingApplicationEntity> matchingPairList = matchingApplicationPort.getByUserIdIsAndStateEquals(securityUser.getUserId(), state);
+        List<FindMatchingDto> matchingData = new ArrayList<>();
+        for (MatchingApplicationEntity matchingPair: matchingPairList) {
+            matchingData.add(matchingMapper.toDto(findMatchingPort.getByMatchingId(matchingPair.getMatchingId()).orElseThrow()));
+        }
+        return matchingData;
     }
 
     @Override

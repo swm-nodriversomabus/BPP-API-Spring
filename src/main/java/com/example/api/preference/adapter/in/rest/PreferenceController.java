@@ -54,13 +54,12 @@ public class PreferenceController {
 
     /**
      * 사용자 선호도 조회
-     * @param userId (ID)
      * @return ComparePreferenceDto
      */
     @Operation(summary = "Get user preference", description = "사용자 선호도를 조회한다.")
-    @GetMapping("/user/{userId}/preference")
-    public ComparePreferenceDto findUserPreference(@PathVariable String userId) {
-        return comparePreferenceUsecase.getUserPreference(userId);
+    @GetMapping("/user/preference")
+    public ComparePreferenceDto findUserPreference() {
+        return comparePreferenceUsecase.getUserPreference();
     }
 
     /**
@@ -76,14 +75,13 @@ public class PreferenceController {
 
     /**
      * 사용자 선호도 변경
-     * @param userId (ID)
      * @param savePreferenceDto (데이터)
      * @return SavePreferenceDto
      */
     @Operation(summary = "Update user preference", description = "사용자 선호도를 변경한다.")
-    @PatchMapping("/user/{userId}/preference")
-    public FindPreferenceDto updateUserPreference(@PathVariable String userId, @RequestBody SavePreferenceDto savePreferenceDto) {
-        return userPreferenceUsecase.updateUserPreference(userId, savePreferenceDto);
+    @PatchMapping("/user/preference")
+    public FindPreferenceDto updateUserPreference(@RequestBody SavePreferenceDto savePreferenceDto) {
+        return userPreferenceUsecase.updateUserPreference(savePreferenceDto);
     }
 
     /**

@@ -1,5 +1,7 @@
 package com.example.api.friend.service;
 
+import com.example.api.auth.domain.SecurityUser;
+import com.example.api.common.utils.AuthenticationUtils;
 import com.example.api.friend.adapter.out.persistence.FriendEntity;
 import com.example.api.friend.adapter.out.persistence.FriendMapperInterface;
 import com.example.api.friend.application.port.in.AddFriendUsecase;
@@ -20,7 +22,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 @Service
 @Slf4j
@@ -42,15 +43,16 @@ public class FriendService implements AddFriendUsecase, FindFriendUsecase, Delet
     }
     
     @Override
-    public List<FindUserDto> getFriendList(String userId) {
+    public List<FindUserDto> getFriendList() {
+        SecurityUser securityUser = AuthenticationUtils.getCurrentUserAuthentication();
+        if (securityUser == null) {
+            log.error("FriendService::getFriendList: Authentication is needed.");
+            return new ArrayList<>();
+        }
         List<FindUserDto> friendList = new ArrayList<>();
-        try {
-            List<FriendEntity> friendPairList = findFriendPort.getFriendList(UUID.fromString(userId));
-            for (FriendEntity friendPair: friendPairList) {
-                friendList.add(userMapper.toDto(findUserPort.getByUserId(friendPair.getUserId()).orElseThrow()));
-            }
-        } catch (IllegalArgumentException e) {
-            log.warn("Invalid userId: UUID transform failed.");
+        List<FriendEntity> friendPairList = findFriendPort.getFriendList(securityUser.getUserId());
+        for (FriendEntity friendPair: friendPairList) {
+            friendList.add(userMapper.toDto(findUserPort.getByUserId(friendPair.getUserId()).orElseThrow()));
         }
         return friendList;
     }

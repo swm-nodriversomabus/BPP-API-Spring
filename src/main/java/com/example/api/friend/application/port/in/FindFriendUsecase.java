@@ -5,5 +5,5 @@ import com.example.api.user.dto.FindUserDto;
 import java.util.List;
 
 public interface FindFriendUsecase {
-    List<FindUserDto> getFriendList(String userId);
+    List<FindUserDto> getFriendList();
 }

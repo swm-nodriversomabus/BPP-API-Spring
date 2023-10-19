@@ -32,7 +32,6 @@ public class UserController {
     private final FindUserUsecase findUserUsecase;
     private final DeleteUserUsecase deleteUserUsecase;
     private final FindMatchingUsecase findMatchingUsecase;
-    private final RecommendedMatchingUsecase recommendedMatchingUsecase;
     private final MatchingApplicationUsecase matchingApplicationUsecase;
     private final CreateGenderValidator createGenderValidator; // enum validator
 
@@ -78,77 +77,71 @@ public class UserController {
 
     /**
      * ID가 userId인 사용자의 추천 매칭 목록 조회
-     * @param userId (ID)
      * @return List<FindMatchingDto>
      */
     @Operation(summary = "Get recommended matching list of a user", description = "사용자의 추천 매칭 목록을 조회한다.")
-    @GetMapping("/user/{userId}/recommendedmatching")
-    public List<FindMatchingDto> getRecommendedMatchingList(@PathVariable String userId) {
-        return recommendedMatchingUsecase.getRecommendedMatchingList(userId);
+    @GetMapping("/user/recommendedmatching")
+    public List<FindMatchingDto> getRecommendedMatchingList() {
+        return findMatchingUsecase.getRecommendedMatchingList();
     }
 
     /**
-     * ID가 userId인 사용자가 작성한 매칭 목록 조회
-     * @param userId (ID)
+     * 사용자가 작성한 매칭 목록 조회
      * @return List<FindMatchingDto>
      */
     @Operation(summary = "Get own matching list of user", description = "사용자가 작성한 매칭 목록을 조회한다.")
-    @GetMapping("/user/{userId}/matching/own")
-    public List<FindMatchingDto> getOwnMatchingList(@PathVariable String userId) {
-        return findMatchingUsecase.getMatchingByWriterId(userId);
+    @GetMapping("/user/matching/own")
+    public List<FindMatchingDto> getOwnMatchingList() {
+        return findMatchingUsecase.getMatchingByWriterId();
     }
 
     /**
-     * ID가 userId인 사용자가 대기 중인 매칭 목록 조회
-     * @param userId (ID)
+     * 사용자가 대기 중인 매칭 목록 조회
      * @return List<FindMatchingDto>
      */
     @Operation(summary = "Get pending matching list of user", description = "사용자가 대기 중인 매칭 목록을 조회한다.")
-    @GetMapping("/user/{userId}/pending")
-    public List<FindMatchingDto> getPendingMatchingList(@PathVariable String userId) {
-        return matchingApplicationUsecase.getByUserIdIsAndStateEquals(userId, ApplicationStateEnum.Pending);
+    @GetMapping("/user/pending")
+    public List<FindMatchingDto> getPendingMatchingList() {
+        return matchingApplicationUsecase.getByUserIdIsAndStateEquals(ApplicationStateEnum.Pending);
     }
 
     /**
-     * ID가 userId인 사용자가 참가한 매칭 목록 조회
-     * @param userId (ID)
+     * 사용자가 참가한 매칭 목록 조회
      * @return List<FindMatchingDto>
      */
     @Operation(summary = "Get approved matching list of user", description = "사용자가 참가한 매칭 목록을 조회한다.")
-    @GetMapping("/user/{userId}/approved")
-    public List<FindMatchingDto> getApprovedMatchingList(@PathVariable String userId) {
-        return matchingApplicationUsecase.getByUserIdIsAndStateEquals(userId, ApplicationStateEnum.Approved);
+    @GetMapping("/user/approved")
+    public List<FindMatchingDto> getApprovedMatchingList() {
+        return matchingApplicationUsecase.getByUserIdIsAndStateEquals(ApplicationStateEnum.Approved);
     }
 
     /**
-     * ID가 userId인 사용자 정보 수정
-     * @param userId (ID)
+     * 현재 로그인한 사용자 정보 수정
      * @param userDto (데이터)
      * @return FindUserDto
      */
     @Operation(summary = "Update user information", description = "사용자 정보를 변경한다.")
-    @PatchMapping("/user/{userId}")
-    public FindUserDto updateUser(@PathVariable String userId, @RequestBody UpdateUserDto userDto) {
-        return saveUserUsecase.updateUser(userId, userDto);
+    @PatchMapping("/user")
+    public FindUserDto updateUser(@RequestBody UpdateUserDto userDto) {
+        return saveUserUsecase.updateUser(userDto);
     }
 
     /**
      * 전체 사용자 삭제 (비상시 외 사용 금지)
      */
     @Operation(summary = "Delete all users", description = "모든 사용자를 삭제한다.")
-    @DeleteMapping("/user")
+    @DeleteMapping("/user/all")
     public void deleteAll() {
         deleteUserUsecase.deleteAll();
     }
 
     /**
-     * ID가 userId인 사용자 삭제
-     * @param userId (ID)
+     * 사용자 삭제 (회원탈퇴 시 사용)
      */
     @Operation(summary = "Delete user", description = "ID가 userId인 사용자를 삭제한다.")
-    @DeleteMapping("/user/{userId}")
-    public void deleteUser(@PathVariable String userId) {
-        deleteUserUsecase.deleteUser(userId);
+    @DeleteMapping("/user")
+    public void deleteUser() {
+        deleteUserUsecase.deleteUser();
     }
 
 

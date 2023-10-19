@@ -1,5 +1,7 @@
 package com.example.api.preference.service;
 
+import com.example.api.auth.domain.SecurityUser;
+import com.example.api.common.utils.AuthenticationUtils;
 import com.example.api.preference.adapter.out.persistence.PreferenceEntity;
 import com.example.api.preference.adapter.out.persistence.PreferenceMapperInterface;
 import com.example.api.preference.application.port.in.ComparePreferenceUsecase;
@@ -19,7 +21,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.Optional;
-import java.util.UUID;
 
 @Service
 @Slf4j
@@ -56,15 +57,20 @@ public class PreferenceService implements SavePreferenceUsecase, FindPreferenceU
     // ComparePreference
     
     @Override
-    public ComparePreferenceDto getUserPreference(String userId) {
+    public ComparePreferenceDto getUserPreference() {
         try {
-            Long preferenceId = comparePreferencePort.getUserPreferenceId(UUID.fromString(userId));
-            if (preferenceId == 0L) {
-                throw new IllegalArgumentException();
+            SecurityUser securityUser = AuthenticationUtils.getCurrentUserAuthentication();
+            if (securityUser == null) {
+                log.error("PreferenceService::getUserPreference: Authentication is needed.");
+                throw new Exception();
             }
-            return this.getByPreferenceId(preferenceId).orElseThrow();
-        } catch (IllegalArgumentException e) {
-            log.warn("Preference data was not found. Used default preference settings.");
+            Long preferenceId = comparePreferencePort.getUserPreferenceId(securityUser.getUserId());
+            if (preferenceId == 0L) {
+                throw new Exception();
+            }
+            return this.getByPreferenceId(preferenceId).orElseThrow(Exception::new);
+        } catch (Exception e) {
+            log.warn("PreferenceService::getUserPreference: Preference data was not found. Used default preference settings.");
             return ComparePreferenceDto.builder()
                     .preferenceId(0L)
                     .alcoholAmount(2)
@@ -88,9 +94,8 @@ public class PreferenceService implements SavePreferenceUsecase, FindPreferenceU
         return this.getByPreferenceId(preferenceId).orElseThrow();
     }
     
-    @Override
-    public Integer getMatchingScore(String userId, Long matchingId) {
-        ComparePreferenceDto userPreference = this.getUserPreference(userId);
+    public Integer getMatchingScore(Long matchingId) {
+        ComparePreferenceDto userPreference = this.getUserPreference();
         ComparePreferenceDto matchingPreference = this.getMatchingPreference(matchingId);
         Integer score = 0;
         score += Math.abs(userPreference.getAlcoholAmount() - matchingPreference.getAlcoholAmount());

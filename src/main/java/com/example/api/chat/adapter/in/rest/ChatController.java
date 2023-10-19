@@ -23,8 +23,8 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.List;
 import java.util.UUID;
 
-@Slf4j
 @RestController
+@Slf4j
 @RequiredArgsConstructor
 @Tag(name = "Chat", description = "Chat API")
 public class ChatController {
@@ -35,17 +35,17 @@ public class ChatController {
 
     /**
      * 추후에 jwt 인증을 통해 유저 데이터를 불러와 message에 추가할 예정
-     * @param roomNumber (ID)
+     * @param roomId (ID)
      * @param message (데이터)
      */
     @Operation(summary = "Send message", description = "채팅방에 메시지를 보낸다.")
-    @MessageMapping("/chat/{roomNumber}")
-    public void sendMessage(@DestinationVariable String roomNumber, AddChatDto message, String contentType, @RequestParam("file") MultipartFile file) {
-        log.info("roomNumber : {}", roomNumber);
+    @MessageMapping("/chat/{roomId}")
+    public void sendMessage(@DestinationVariable String roomId, AddChatDto message, String contentType, @RequestParam("file") MultipartFile file) {
+        log.info("roomId : {}", roomId);
         if (contentType.equals("image")) {
             message.setContent(uploadFileUsecase.uploadFile(file));
         }
-        sendChatUsecase.send(roomNumber, message);
+        sendChatUsecase.send(roomId, message);
     }
 
     /**

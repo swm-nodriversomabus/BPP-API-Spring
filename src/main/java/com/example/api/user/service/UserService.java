@@ -1,9 +1,9 @@
 package com.example.api.user.service;
 
 import com.example.api.auth.domain.SecurityUser;
-import com.example.api.auth.dto.SecurityUserDto;
 import com.example.api.common.exception.CustomException;
 import com.example.api.common.type.ErrorCodeEnum;
+import com.example.api.common.utils.AuthenticationUtils;
 import com.example.api.common.utils.CustomBase64Utils;
 import com.example.api.sms.application.port.out.CheckVerifiedPhonePort;
 import com.example.api.social.adapter.out.persistence.SocialEntity;
@@ -19,12 +19,15 @@ import com.example.api.user.domain.User;
 import com.example.api.user.application.port.in.SaveUserUsecase;
 import com.example.api.user.dto.CreateUserDto;
 import com.example.api.user.dto.UpdateUserDto;
+import com.example.api.user.type.UserGenderEnum;
+import com.example.api.user.type.UserRoleEnum;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import com.example.api.user.dto.FindUserDto;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -41,6 +44,23 @@ public class UserService implements SaveUserUsecase, FindUserUsecase, DeleteUser
     private final DeleteUserPort deleteUserPort;
     private final FindSocialPort findSocialPort;
     private final CheckVerifiedPhonePort checkVerifiedPhonePort;
+
+    public FindUserDto getDefaultUser() {
+        return FindUserDto.builder()
+                .username("Anonymous")
+                .gender(UserGenderEnum.None)
+                .age(30)
+                .phone("010-0000-0000")
+                .role(UserRoleEnum.User)
+                .blacklist(false)
+                .stateMessage("")
+                .mannerScore(60)
+                .createdAt(LocalDateTime.now())
+                .updatedAt(LocalDateTime.now())
+                .isActive(false)
+                .build();
+    }
+    
     @Override
     @Transactional
     public void createUser(CreateUserDto userDto) {
@@ -63,21 +83,21 @@ public class UserService implements SaveUserUsecase, FindUserUsecase, DeleteUser
             return findUserPort.getByUserId(UUID.fromString(userId))
                     .map(userMapper::toDto);
         } catch (IllegalArgumentException e) {
-            log.warn("Invalid userId: UUID transform failed.");
+            log.warn("UserService::getUserById: UUID transform failed.");
             return Optional.empty();
         }
     }
 
     @Override
     @Transactional
-    public FindUserDto updateUser(String userId, UpdateUserDto userDto) {
-        try {
-            User user = saveUserPort.updateUser(UUID.fromString(userId), userMapper.toDomain(userDto));
-            return userMapper.toDto(user);
-        } catch (IllegalArgumentException e) {
-            log.warn("Invalid userId: UUID transform failed.");
+    public FindUserDto updateUser(UpdateUserDto userDto) {
+        SecurityUser securityUser = AuthenticationUtils.getCurrentUserAuthentication();
+        if (securityUser == null) {
+            log.error("UserService::updateUser: Authentication is needed.");
             return userMapper.toDto(userDto);
         }
+        User user = saveUserPort.updateUser(securityUser.getUserId(), userMapper.toDomain(userDto));
+        return userMapper.toDto(user);
     }
     
     @Override
@@ -88,11 +108,16 @@ public class UserService implements SaveUserUsecase, FindUserUsecase, DeleteUser
     
     @Override
     @Transactional
-    public void deleteUser(String userId) {
+    public void deleteUser() {
+        SecurityUser securityUser = AuthenticationUtils.getCurrentUserAuthentication();
         try {
-            deleteUserPort.deleteByUserId(UUID.fromString(userId));
-        } catch (IllegalArgumentException e) {
-            log.warn("Invalid userId: UUID transform failed.");
+            if (securityUser == null) {
+                log.error("UserService::deleteUser: Authentication is needed.");
+                throw new Exception();
+            }
+            deleteUserPort.deleteByUserId(securityUser.getUserId());
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
     
@@ -110,7 +135,6 @@ public class UserService implements SaveUserUsecase, FindUserUsecase, DeleteUser
                 .instaId(user.getSocialId().getInstaId())
                 .role(user.getRole().getRole())
                 .build();
-
     }
     
     public Optional<UserEntity> findUserSigned(Long id) {
