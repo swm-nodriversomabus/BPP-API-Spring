@@ -32,6 +32,23 @@ public class PreferenceService implements SavePreferenceUsecase, FindPreferenceU
     private final FindPreferencePort findPreferencePort;
     private final ComparePreferencePort comparePreferencePort;
     
+    public ComparePreferenceDto getDefaultPreference() {
+        return ComparePreferenceDto.builder()
+                .preferenceId(0L)
+                .alcoholAmount(2)
+                .mateAllowedAlcohol(2)
+                .taste(4)
+                .allowedMoveTime(60)
+                .allowedPeople(4)
+                .preferGender(0)
+                .smoke(false)
+                .preferSmoke(0)
+                .slang(2)
+                .createdAt(LocalDateTime.now())
+                .updatedAt(LocalDateTime.now())
+                .build();
+    }
+    
     // CRUD
     
     @Override
@@ -71,27 +88,14 @@ public class PreferenceService implements SavePreferenceUsecase, FindPreferenceU
             return this.getByPreferenceId(preferenceId).orElseThrow(Exception::new);
         } catch (Exception e) {
             log.warn("PreferenceService::getUserPreference: Preference data was not found. Used default preference settings.");
-            return ComparePreferenceDto.builder()
-                    .preferenceId(0L)
-                    .alcoholAmount(2)
-                    .mateAllowedAlcohol(2)
-                    .taste(4)
-                    .allowedMoveTime(60)
-                    .allowedPeople(4)
-                    .preferGender(0)
-                    .smoke(false)
-                    .preferSmoke(0)
-                    .slang(2)
-                    .createdAt(LocalDateTime.now())
-                    .updatedAt(LocalDateTime.now())
-                    .build();
+            return this.getDefaultPreference();
         }
     }
     
     @Override
     public ComparePreferenceDto getMatchingPreference(Long matchingId) {
         Long preferenceId = comparePreferencePort.getMatchingPreferenceId(matchingId);
-        return this.getByPreferenceId(preferenceId).orElseThrow();
+        return this.getByPreferenceId(preferenceId).orElse(this.getDefaultPreference());
     }
     
     public Integer getMatchingScore(Long matchingId) {
