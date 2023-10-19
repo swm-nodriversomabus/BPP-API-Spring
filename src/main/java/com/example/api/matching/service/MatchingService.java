@@ -102,10 +102,12 @@ public class MatchingService implements SaveMatchingUsecase, FindMatchingUsecase
         List<FindMatchingDto> sortedMatchingList = new ArrayList<>();
         try {
             for (Pair<Long, Integer> matchingData: matchingScoreList) { // 유사도가 높은 순서로 정렬한 후 반환
-                sortedMatchingList.add(this.getMatchingById(matchingData.getFirst()).orElseThrow());
+                FindMatchingDto findMatchingDto = this.getMatchingById(matchingData.getFirst()).orElseThrow(Exception::new);
+                sortedMatchingList.add(findMatchingDto);
             }
         } catch (Exception e) {
             log.error("MatchingService::getRecommendedMatchingList: Cannot find matchingData");
+            return new ArrayList<>();
         }
         return sortedMatchingList;
     }
