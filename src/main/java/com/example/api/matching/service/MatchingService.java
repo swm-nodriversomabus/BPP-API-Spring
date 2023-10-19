@@ -40,7 +40,14 @@ public class MatchingService implements SaveMatchingUsecase, FindMatchingUsecase
     @Override
     @Transactional
     public FindMatchingDto createMatching(SaveMatchingDto matchingDto) {
-        Matching matching = saveMatchingPort.createMatching(matchingMapper.toDomain(matchingDto));
+        Matching matching = matchingMapper.toDomain(matchingDto);
+        SecurityUser securityUser = AuthenticationUtils.getCurrentUserAuthentication();
+        if (securityUser == null) {
+            log.error("MatchingService::createMatching: Authentication is needed.");
+            return matchingMapper.toDto(matching);
+        }
+        matching.setWriterId(securityUser.getUserId());
+        matching = saveMatchingPort.createMatching(matchingMapper.toDomain(matchingDto));
         return matchingMapper.toDto(matching);
     }
 

@@ -1,13 +1,8 @@
 package com.example.api.auth.filter;
 
-
 import com.example.api.auth.domain.SecurityUser;
-import com.example.api.auth.dto.SecurityUserDto;
 import com.example.api.auth.service.JwtUtilService;
 import com.example.api.chat.exception.JwtException;
-import com.example.api.user.adapter.out.persistence.UserEntity;
-import com.example.api.user.adapter.out.persistence.UserPersistenceAdapter;
-import com.example.api.user.domain.User;
 import com.example.api.user.service.UserService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -16,7 +11,6 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.hibernate.query.sql.internal.ParameterRecognizerImpl;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
