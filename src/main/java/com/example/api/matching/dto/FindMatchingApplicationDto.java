@@ -1,6 +1,5 @@
 package com.example.api.matching.dto;
 
-
 import com.example.api.common.type.ApplicationStateEnum;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
@@ -15,21 +14,21 @@ import java.util.UUID;
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor
-public class MatchingApplicationDto {
+public class FindMatchingApplicationDto {
     @NotNull
     private UUID userId;
-    
+
     @NotNull
     @Min(1)
     private Long matchingId;
-    
+
     @NotNull
     private ApplicationStateEnum state;
-    
+
     private LocalDateTime createdAt;
-    
+
     private LocalDateTime updatedAt;
-    
+
     @NotNull
     private Boolean isActive;
 }

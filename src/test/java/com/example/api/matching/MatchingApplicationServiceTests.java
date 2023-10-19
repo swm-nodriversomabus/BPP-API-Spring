@@ -3,7 +3,7 @@ package com.example.api.matching;
 import com.example.api.common.type.ApplicationStateEnum;
 import com.example.api.matching.adapter.out.persistence.MatchingMapperInterface;
 import com.example.api.matching.application.port.out.MatchingApplicationPort;
-import com.example.api.matching.dto.MatchingApplicationDto;
+import com.example.api.matching.dto.SaveMatchingApplicationDto;
 import com.example.api.matching.service.MatchingApplicationService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -24,13 +24,12 @@ public class MatchingApplicationServiceTests {
     private MatchingMapperInterface matchingMapper = mock(MatchingMapperInterface.class);
     @Mock
     private MatchingApplicationPort matchingApplicationPort;
-    private MatchingApplicationDto matchingApplication;
+    private SaveMatchingApplicationDto matchingApplication;
     private final String userUUID = "09a46fb0-2ae0-4a35-8aad-0a9e4311a1a3";
     
     @BeforeEach
     void beforeEach() {
-        matchingApplication = MatchingApplicationDto.builder()
-                .userId(UUID.fromString(userUUID))
+        matchingApplication = SaveMatchingApplicationDto.builder()
                 .matchingId(2L)
                 .state(ApplicationStateEnum.Pending)
                 .isActive(true)
@@ -45,7 +44,7 @@ public class MatchingApplicationServiceTests {
 
     @Test
     void getByUserIdIsAndStateEqualsTest() {
-        matchingApplicationService.getByUserIdIsAndStateEquals(userUUID, ApplicationStateEnum.Pending);
+        matchingApplicationService.getByUserIdIsAndStateEquals(ApplicationStateEnum.Pending);
         verify(matchingApplicationPort, times(1)).getByUserIdIsAndStateEquals(UUID.fromString(userUUID), ApplicationStateEnum.Pending);
     }
 
