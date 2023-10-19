@@ -2,7 +2,6 @@ package com.example.api.matching;
 
 import com.example.api.matching.adapter.out.persistence.MatchingMapperInterface;
 import com.example.api.matching.application.port.out.*;
-import com.example.api.matching.dto.FindMatchingDto;
 import com.example.api.matching.dto.LikeDto;
 import com.example.api.matching.dto.SaveMatchingDto;
 import com.example.api.matching.service.MatchingService;
@@ -34,7 +33,6 @@ public class MatchingServiceTests {
     @Mock
     private LikePort likePort;
     private SaveMatchingDto matching1, matching2, matching3;
-    private FindMatchingDto mockMatching2;
     private LikeDto like;
     private final String userUUID = "09a46fb0-2ae0-4a35-8aad-0a9e4311a1a3";
     
@@ -79,20 +77,6 @@ public class MatchingServiceTests {
                 .readCount(10)
                 .isActive(true)
                 .build();
-        mockMatching2 = FindMatchingDto.builder()
-                .matchingId(2L)
-                .type(MatchingTypeEnum.TravelMate)
-                .title("title2")
-                .place("Jeju")
-                .content("content2")
-                .startDate(LocalDateTime.of(2023, 9, 29, 10, 0, 0))
-                .endDate(LocalDateTime.of(2023, 10, 6, 20, 0, 0))
-                .maxMember(5)
-                .minusAge(0)
-                .plusAge(4)
-                .readCount(27)
-                .isActive(true)
-                .build();
         like = LikeDto.builder()
                 .userid(UUID.fromString(userUUID))
                 .matchingId(3L)
@@ -115,7 +99,7 @@ public class MatchingServiceTests {
     
     @Test
     void getMatchingByIdTest() {
-        matchingService.getMatchingById(2L).orElse(mockMatching2);
+        matchingService.getMatchingById(2L);
         verify(findMatchingPort, times(1)).getByMatchingId(2L);
     }
     
@@ -127,7 +111,7 @@ public class MatchingServiceTests {
     
     @Test
     void getRecommendedMatchingListTest() {
-        matchingService.getRecommendedMatchingList(userUUID);
+        matchingService.getRecommendedMatchingList();
     }
     
     @Test

@@ -47,7 +47,7 @@ public class MatchingService implements SaveMatchingUsecase, FindMatchingUsecase
             return matchingMapper.toDto(matching);
         }
         matching.setWriterId(securityUser.getUserId());
-        matching = saveMatchingPort.createMatching(matchingMapper.toDomain(matchingDto));
+        matching = saveMatchingPort.createMatching(matching);
         return matchingMapper.toDto(matching);
     }
 
