@@ -19,7 +19,7 @@ public class StatusResponseDto {
         return new StatusResponseDto(status);
     }
 
-    public static StatusResponseDto success(){
+    public static StatusResponseDto success() {
         return new StatusResponseDto(200);
     }
 

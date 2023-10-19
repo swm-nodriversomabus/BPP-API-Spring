@@ -4,6 +4,7 @@ import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Getter
 @Setter
@@ -15,7 +16,7 @@ public class UserNotificationDto {
     private Long sequenceId;
     
     @NotNull
-    private Long userId;
+    private UUID userId;
     
     @NotNull
     private Long notificationId;
