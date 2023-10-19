@@ -25,7 +25,7 @@ public class MemberService implements AddMemberChatRoomUsecase {
     
     /**
      * 채팅방에 멤버 추가
-     * @param addMemberDto (Data)
+     * @param addMemberDto (데이터)
      */
     @Override
     @Transactional

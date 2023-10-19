@@ -59,13 +59,12 @@ public class NotificationController {
 
     /**
      * 사용자의 알림 리스트 조회
-     * @param userId (ID)
      * @return List<NotificationDto>
      */
     @Operation(summary = "Ger notification list of user", description = "사용자의 알림 리스트를 조회한다.")
-    @GetMapping("/user/{userId}/notification")
-    public List<FindNotificationDto> getUserNotificationList(@PathVariable Long userId) {
-        return findNotificationUsecase.getUserNotificationList(userId);
+    @GetMapping("/user/notification")
+    public List<FindNotificationDto> getUserNotificationList() {
+        return findNotificationUsecase.getUserNotificationList();
     }
 
     /**

@@ -12,6 +12,7 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Repository
 @RequiredArgsConstructor
@@ -34,16 +35,16 @@ public class NotificationPersistenceAdapter implements SaveNotificationPort, Fin
     
     @Override
     public Optional<NotificationEntity> getNotificationById(Long notificationId) {
-        return notificationRepository.getNotificationEntityByNotificationId(notificationId);
+        return notificationRepository.getByNotificationId(notificationId);
     }
     
     @Override
-    public List<UserNotificationEntity> getUserNotificationList(Long userId) {
-        return userNotificationRepository.getUserNotificationEntitiesByUserId(userId);
+    public List<UserNotificationEntity> getUserNotificationList(UUID userId) {
+        return userNotificationRepository.getByUserId(userId);
     }
     
     @Override
     public UserNotificationEntity getUserNotificationEntity(UserNotificationEntity userNotificationEntity) {
-        return userNotificationRepository.getUserNotificationEntityByUserIdAndNotificationId(userNotificationEntity.getUserId(), userNotificationEntity.getNotificationId()).orElseThrow();
+        return userNotificationRepository.getByUserIdAndNotificationId(userNotificationEntity.getUserId(), userNotificationEntity.getNotificationId()).orElseThrow();
     }
 }

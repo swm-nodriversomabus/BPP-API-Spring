@@ -10,26 +10,23 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/sms")
 @Validated
 public class SmsController {
     private final SendCertificationCodeUsecase sendCertificationCodeUsecase;
     private final VerifyCodeUsecase verifyCodeUsecase;
 
     /**
-     * 핸드폰 인증에 사용
-     *
-     * @param phone
+     * 휴대폰 인증에 사용
+     * @param phone (전화번호)
      */
-    @Operation(summary = "certification phone", description = "핸드폰 인증")
-    @GetMapping("/code/{phone}")
+    @Operation(summary = "Certificate phone", description = "휴대폰 인증")
+    @GetMapping("/sms/code/{phone}")
     public void sendCertificationPhone(@PathVariable String phone){
         sendCertificationCodeUsecase.send(phone);
     }
 
-    @PostMapping("/code")
+    @PostMapping("/sms/code")
     public void certificatePhone(@RequestBody @Validated CheckSMSDto checkSMSDto){
         verifyCodeUsecase.verifyCertificationCode(checkSMSDto);
     }
-
 }

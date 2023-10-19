@@ -1,7 +1,9 @@
 package com.example.api.user.service;
 
+import com.example.api.auth.domain.SecurityUser;
 import com.example.api.common.exception.CustomException;
 import com.example.api.common.type.ErrorCodeEnum;
+import com.example.api.common.utils.AuthenticationUtils;
 import com.example.api.common.utils.CustomBase64Utils;
 import com.example.api.sms.application.port.out.CheckVerifiedPhonePort;
 import com.example.api.social.adapter.out.persistence.SocialEntity;
@@ -42,6 +44,23 @@ public class UserService implements SaveUserUsecase, FindUserUsecase, DeleteUser
     private final DeleteUserPort deleteUserPort;
     private final FindSocialPort findSocialPort;
     private final CheckVerifiedPhonePort checkVerifiedPhonePort;
+
+    public FindUserDto getDefaultUser() {
+        return FindUserDto.builder()
+                .username("Anonymous")
+                .gender(UserGenderEnum.None)
+                .age(30)
+                .phone("010-0000-0000")
+                .role(UserRoleEnum.User)
+                .blacklist(false)
+                .stateMessage("")
+                .mannerScore(60)
+                .createdAt(LocalDateTime.now())
+                .updatedAt(LocalDateTime.now())
+                .isActive(false)
+                .build();
+    }
+    
     @Override
     @Transactional
     public void createUser(CreateUserDto userDto) {
@@ -78,21 +97,21 @@ public class UserService implements SaveUserUsecase, FindUserUsecase, DeleteUser
                     .map(userMapper::toDto)
                     .orElse(defaultUser);
         } catch (IllegalArgumentException e) {
-            log.warn("Invalid userId: UUID transform failed.");
+            log.warn("UserService::getUserById: UUID transform failed.");
             return defaultUser;
         }
     }
 
     @Override
     @Transactional
-    public FindUserDto updateUser(String userId, UpdateUserDto userDto) {
-        try {
-            User user = saveUserPort.updateUser(UUID.fromString(userId), userMapper.toDomain(userDto));
-            return userMapper.toDto(user);
-        } catch (IllegalArgumentException e) {
-            log.warn("Invalid userId: UUID transform failed.");
+    public FindUserDto updateUser(UpdateUserDto userDto) {
+        SecurityUser securityUser = AuthenticationUtils.getCurrentUserAuthentication();
+        if (securityUser == null) {
+            log.error("UserService::updateUser: Authentication is needed.");
             return userMapper.toDto(userDto);
         }
+        User user = saveUserPort.updateUser(securityUser.getUserId(), userMapper.toDomain(userDto));
+        return userMapper.toDto(user);
     }
     
     @Override
@@ -103,27 +122,33 @@ public class UserService implements SaveUserUsecase, FindUserUsecase, DeleteUser
     
     @Override
     @Transactional
-    public void deleteUser(String userId) {
+    public void deleteUser() {
+        SecurityUser securityUser = AuthenticationUtils.getCurrentUserAuthentication();
         try {
-            deleteUserPort.deleteByUserId(UUID.fromString(userId));
-        } catch (IllegalArgumentException e) {
-            log.warn("Invalid userId: UUID transform failed.");
+            if (securityUser == null) {
+                log.error("UserService::deleteUser: Authentication is needed.");
+                throw new Exception();
+            }
+            deleteUserPort.deleteByUserId(securityUser.getUserId());
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
     
     // Social
     
-    public User findSocialUser(String id, String provider) {
-        return userMapper.toDomain(findUserPort.findSocialUser(id, provider).orElseThrow(IllegalStateException::new));
-//        return SecurityUserDto.builder()
-//                .userId(user.getUserId())
-//                .naverId(user.getSocialId().getNaverId())
-//                .appleId(user.getSocialId().getAppleId())
-//                .kakaoId(user.getSocialId().getKakaoId())
-//                .googleId(user.getSocialId().getGoogleId())
-//                .instaId(user.getSocialId().getInstaId())
-//                .role(user.getRole().getRole())
-//                .build();
+    public SecurityUser findSocialUser(String id, String provider) {
+        User user = userMapper.toDomain(findUserPort.findSocialUser(id, provider).orElseThrow(IllegalStateException::new));
+
+        return SecurityUser.builder()
+                .userId(user.getUserId())
+                .naverId(user.getSocialId().getNaverId())
+                .appleId(user.getSocialId().getAppleId())
+                .kakaoId(user.getSocialId().getKakaoId())
+                .googleId(user.getSocialId().getGoogleId())
+                .instaId(user.getSocialId().getInstaId())
+                .role(user.getRole().getRole())
+                .build();
     }
     
     public Optional<UserEntity> findUserSigned(Long id) {

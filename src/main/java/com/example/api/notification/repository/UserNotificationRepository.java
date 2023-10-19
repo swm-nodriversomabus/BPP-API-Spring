@@ -6,8 +6,9 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 public interface UserNotificationRepository extends JpaRepository<UserNotificationEntity, UserNotificationPK> {
-    Optional<UserNotificationEntity> getUserNotificationEntityByUserIdAndNotificationId(Long userId, Long notificationId);
-    List<UserNotificationEntity> getUserNotificationEntitiesByUserId(Long userId);
+    Optional<UserNotificationEntity> getByUserIdAndNotificationId(UUID userId, Long notificationId);
+    List<UserNotificationEntity> getByUserId(UUID userId);
 }

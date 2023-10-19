@@ -1,5 +1,7 @@
 package com.example.api.notification.service;
 
+import com.example.api.auth.domain.SecurityUser;
+import com.example.api.common.utils.AuthenticationUtils;
 import com.example.api.notification.adapter.out.persistence.NotificationEntity;
 import com.example.api.notification.adapter.out.persistence.NotificationMapperInterface;
 import com.example.api.notification.adapter.out.persistence.UserNotificationEntity;
@@ -11,6 +13,7 @@ import com.example.api.notification.domain.Notification;
 import com.example.api.notification.dto.FindNotificationDto;
 import com.example.api.notification.dto.SaveNotificationDto;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,6 +22,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
+@Slf4j
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
 public class NotificationService implements SaveNotificationUsecase, FindNotificationUsecase {
@@ -36,16 +40,21 @@ public class NotificationService implements SaveNotificationUsecase, FindNotific
     @Override
     public Optional<FindNotificationDto> getNotificationById(Long notificationId) {
         return findNotificationPort.getNotificationById(notificationId)
-                .map(NotificationEntity::toDto);
+                .map(notificationMapper::toDto);
     }
     
     @Override
-    public List<FindNotificationDto> getUserNotificationList(Long userId) {
-        List<UserNotificationEntity> notificationPairList = findNotificationPort.getUserNotificationList(userId);
+    public List<FindNotificationDto> getUserNotificationList() {
+        SecurityUser securityUser = AuthenticationUtils.getCurrentUserAuthentication();
+        if (securityUser == null) {
+            log.error("NotificationService::getUserNotificationList: Authentication is needed.");
+            return new ArrayList<>();
+        }
+        List<UserNotificationEntity> notificationPairList = findNotificationPort.getUserNotificationList(securityUser.getUserId());
         List<FindNotificationDto> userNotificationList = new ArrayList<>();
         for (UserNotificationEntity notificationPair: notificationPairList) {
             NotificationEntity notificationEntity = findNotificationPort.getNotificationById(notificationPair.getNotificationId()).orElseThrow();
-            userNotificationList.add(notificationEntity.toDto());
+            userNotificationList.add(notificationMapper.toDto(notificationEntity));
         }
         return userNotificationList;
     }
