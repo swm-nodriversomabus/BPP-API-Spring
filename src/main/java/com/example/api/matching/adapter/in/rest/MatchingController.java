@@ -5,7 +5,7 @@ import com.example.api.common.type.ApplicationStateEnum;
 import com.example.api.matching.application.port.in.*;
 import com.example.api.matching.dto.FindMatchingDto;
 import com.example.api.matching.dto.LikeDto;
-import com.example.api.matching.dto.MatchingApplicationDto;
+import com.example.api.matching.dto.SaveMatchingApplicationDto;
 import com.example.api.matching.dto.SaveMatchingDto;
 import com.example.api.user.dto.FindUserDto;
 import io.swagger.v3.oas.annotations.Operation;
@@ -46,7 +46,7 @@ public class MatchingController {
      */
     @Operation(summary = "Create matching application", description = "새로운 매칭 신청을 생성한다.")
     @PostMapping("/matching/application")
-    public ChatRoom createMatchingApplication(@RequestBody MatchingApplicationDto matchingApplicationDto) {
+    public ChatRoom createMatchingApplication(@RequestBody SaveMatchingApplicationDto matchingApplicationDto) {
         return matchingApplicationUsecase.createMatchingApplication(matchingApplicationDto);
     }
     

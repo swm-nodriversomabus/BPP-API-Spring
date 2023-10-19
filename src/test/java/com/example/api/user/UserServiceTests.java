@@ -114,13 +114,13 @@ public class UserServiceTests {
     @Test
     void updateUserTest() {
         user1.setMannerScore(77);
-        userService.updateUser(userUUID, newUser);
+        userService.updateUser(newUser);
         verify(saveUserPort, times(1)).updateUser(UUID.fromString(userUUID), userMapper.toDomain(newUser));
     }
     
     @Test
     void deleteUserTest() {
-        userService.deleteUser(userUUID);
+        userService.deleteUser();
         verify(deleteUserPort, times(1)).deleteByUserId(UUID.fromString(userUUID));
     }
 

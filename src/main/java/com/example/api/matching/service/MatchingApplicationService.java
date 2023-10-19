@@ -17,7 +17,7 @@ import com.example.api.matching.application.port.out.FindMatchingPort;
 import com.example.api.matching.application.port.out.MatchingApplicationPort;
 import com.example.api.matching.domain.MatchingApplication;
 import com.example.api.matching.dto.FindMatchingDto;
-import com.example.api.matching.dto.MatchingApplicationDto;
+import com.example.api.matching.dto.SaveMatchingApplicationDto;
 import com.example.api.member.dto.AddMemberDto;
 import com.example.api.member.service.MemberService;
 import com.example.api.user.adapter.out.persistence.UserMapperInterface;
@@ -49,8 +49,15 @@ public class MatchingApplicationService implements MatchingApplicationUsecase {
     
     @Override
     @Transactional
-    public ChatRoom createMatchingApplication(MatchingApplicationDto matchingApplicationDto) {
-        MatchingApplication matchingApplication = matchingApplicationPort.createMatchingApplication(matchingMapper.toDomain(matchingApplicationDto));
+    public ChatRoom createMatchingApplication(SaveMatchingApplicationDto matchingApplicationDto) {
+        SecurityUser securityUser = AuthenticationUtils.getCurrentUserAuthentication();
+        if (securityUser == null) {
+            log.error("MatchingApplicationService::createMatchingApplication: Authentication is needed.");
+            return ChatRoom.builder().build();
+        }
+        MatchingApplication matchingApplication = matchingMapper.toDomain(matchingApplicationDto);
+        matchingApplication.setUserId(securityUser.getUserId());
+        matchingApplication = matchingApplicationPort.createMatchingApplication(matchingApplication);
         
         CreateChatRoomDto createChatRoomDto = CreateChatRoomDto.builder()
                 .masterId(matchingApplication.getUserId())
@@ -103,7 +110,7 @@ public class MatchingApplicationService implements MatchingApplicationUsecase {
     
     @Override
     @Transactional
-    public MatchingApplicationDto updateMatchingApplication(MatchingApplicationDto matchingApplicationDto) {
+    public SaveMatchingApplicationDto updateMatchingApplication(SaveMatchingApplicationDto matchingApplicationDto) {
         MatchingApplication matchingApplication = matchingApplicationPort.updateMatchingApplication(matchingMapper.toDomain(matchingApplicationDto));
         return matchingMapper.toDto(matchingApplication);
     }
