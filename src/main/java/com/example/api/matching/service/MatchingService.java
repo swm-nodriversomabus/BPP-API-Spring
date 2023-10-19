@@ -88,6 +88,7 @@ public class MatchingService implements SaveMatchingUsecase, FindMatchingUsecase
     public List<FindMatchingDto> getRecommendedMatchingList() {
         SecurityUser securityUser = AuthenticationUtils.getCurrentUserAuthentication();
         if (securityUser == null) {
+            log.error("MatchingService::getRecommendedMatchingList: Authentication is needed.");
             return new ArrayList<>();
         }
         List<FindMatchingDto> activeMatchingList = this.getMatchingByIsActive(true); // 유효한 매칭만 뽑아옴
@@ -99,8 +100,12 @@ public class MatchingService implements SaveMatchingUsecase, FindMatchingUsecase
         }
         matchingScoreList.sort(Comparator.comparing(Pair::getSecond));
         List<FindMatchingDto> sortedMatchingList = new ArrayList<>();
-        for (Pair<Long, Integer> matchingData: matchingScoreList) { // 유사도가 높은 순서로 정렬한 후 반환
-            sortedMatchingList.add(this.getMatchingById(matchingData.getFirst()).orElseThrow());
+        try {
+            for (Pair<Long, Integer> matchingData: matchingScoreList) { // 유사도가 높은 순서로 정렬한 후 반환
+                sortedMatchingList.add(this.getMatchingById(matchingData.getFirst()).orElseThrow());
+            }
+        } catch (Exception e) {
+            log.error("MatchingService::getRecommendedMatchingList: Cannot find matchingData");
         }
         return sortedMatchingList;
     }
