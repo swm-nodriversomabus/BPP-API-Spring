@@ -92,6 +92,12 @@ public class MatchingController {
     public List<FindUserDto> getApprovedUserList(@PathVariable Long matchingId) {
         return matchingApplicationUsecase.getByMatchingIdIsAndStateEquals(matchingId, ApplicationStateEnum.Approved);
     }
+    
+    @Operation(summary = "Get user status of matching", description = "매칭의 사용자 상태를 조회한다.")
+    @GetMapping("/matching/{matchingId}/status")
+    public String getUserStatus(@PathVariable Long matchingId) {
+        return matchingApplicationUsecase.getUserStatus(matchingId);
+    }
 
     /**
      * ID가 matchingId인 매칭의 좋아요 수 조회 (미구현)

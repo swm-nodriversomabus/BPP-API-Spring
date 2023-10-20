@@ -28,10 +28,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.UUID;
+import java.util.*;
 
 @Service
 @Slf4j
@@ -106,6 +103,22 @@ public class MatchingApplicationService implements MatchingApplicationUsecase {
             userData.add(userMapper.toDto(findUserPort.getByUserId(matchingPair.getUserId()).orElseThrow()));
         }
         return userData;
+    }
+    
+    @Override
+    public String getUserStatus(Long matchingId) {
+        SecurityUser securityUser = AuthenticationUtils.getCurrentUserAuthentication();
+        if (securityUser == null) {
+            log.error("MatchingApplicationService::getUserStatus: Authentication is needed.");
+            return "Error";
+        }
+        MatchingApplicationPK matchingApplicationPK = new MatchingApplicationPK(securityUser.getUserId(), matchingId);
+        Optional<MatchingApplicationEntity> statusData = matchingApplicationPort.getByMatchingApplicationPK(matchingApplicationPK);
+        if (statusData.isPresent()) {
+            return statusData.get().getState().toString();
+        } else {
+            return "None";
+        }
     }
     
     @Override

@@ -12,5 +12,6 @@ public interface MatchingApplicationUsecase {
     ChatRoom createMatchingApplication(SaveMatchingApplicationDto matchingApplicationDto);
     List<FindMatchingDto> getByUserIdIsAndStateEquals(ApplicationStateEnum state);
     List<FindUserDto> getByMatchingIdIsAndStateEquals(Long matchingId, ApplicationStateEnum state);
+    String getUserStatus(Long matchingId);
     SaveMatchingApplicationDto updateMatchingApplication(SaveMatchingApplicationDto matchingApplicationDto);
 }
