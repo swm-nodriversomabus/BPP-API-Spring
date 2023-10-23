@@ -21,7 +21,7 @@ import java.util.UUID;
 public class UserEntity extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
-    @Column(columnDefinition = "BINARY(24)")
+    @Column(columnDefinition = "BINARY(16)")
     private UUID userId;
 
     @OneToOne(fetch = FetchType.LAZY)

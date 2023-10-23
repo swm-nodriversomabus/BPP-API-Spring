@@ -1,6 +1,5 @@
 package com.example.api.sms.adapter.out.persistence;
 
-
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.springframework.data.annotation.Id;
