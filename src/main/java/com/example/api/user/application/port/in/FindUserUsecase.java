@@ -6,5 +6,5 @@ import java.util.List;
 
 public interface FindUserUsecase {
     List<FindUserDto> getAll();
-    FindUserDto getUserById(String userId);
+    FindUserDto getUser();
 }
