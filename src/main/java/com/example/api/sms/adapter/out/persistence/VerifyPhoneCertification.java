@@ -7,7 +7,6 @@ import org.springframework.data.redis.core.RedisHash;
 
 import java.io.Serializable;
 
-
 /**
  * 핸드폰 인증 성공시 한시간 동안 유효하게 냅둠
  */

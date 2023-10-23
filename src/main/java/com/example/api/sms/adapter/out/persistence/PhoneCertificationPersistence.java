@@ -1,6 +1,5 @@
 package com.example.api.sms.adapter.out.persistence;
 
-
 import com.example.api.sms.application.port.out.CertificationCodePort;
 import com.example.api.sms.application.port.out.CheckVerifiedPhonePort;
 import com.example.api.sms.repository.PhoneCertificationRepository;
