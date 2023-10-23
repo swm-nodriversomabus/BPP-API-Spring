@@ -1,13 +1,9 @@
 package com.example.api.social.adapter.out.persistence;
 
-
-import com.example.api.user.adapter.out.persistence.UserEntity;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
-
-import java.util.List;
 
 @Entity
 @EntityListeners(AuditingEntityListener.class)
@@ -18,7 +14,6 @@ import java.util.List;
 @AllArgsConstructor
 @Table(name = "social")
 public class SocialEntity {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long socialId;
@@ -48,4 +43,3 @@ public class SocialEntity {
 //    @ToString.Exclude
 //    private List<UserEntity> users;
 }
-

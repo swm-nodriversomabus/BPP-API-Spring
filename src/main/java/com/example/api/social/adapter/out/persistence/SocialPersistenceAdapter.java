@@ -9,7 +9,6 @@ import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
 
-
 @RequiredArgsConstructor
 @Repository
 public class SocialPersistenceAdapter implements SaveSocialPort, FindSocialPort {
@@ -40,4 +39,3 @@ public class SocialPersistenceAdapter implements SaveSocialPort, FindSocialPort 
         };
     }
 }
-
