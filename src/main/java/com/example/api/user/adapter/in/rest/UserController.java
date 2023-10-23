@@ -46,10 +46,6 @@ public class UserController {
     @Operation(summary = "Create user", description = "새로운 사용자를 추가한다.")
     @PostMapping("/user")
     public void createUser(@Valid @RequestBody CreateUserDto userDto, BindingResult bindingResult) {
-//        if(bindingResult.hasErrors()){
-//            List<String> errors = bindingResult.getAllErrors().stream().map(e -> e.getDefaultMessage()).collect(Collectors.toList());
-//
-//        }
         saveUserUsecase.createUser(userDto);
     }
 
@@ -58,20 +54,19 @@ public class UserController {
      * @return List<FindUserDto>
      */
     @Operation(summary = "Get all users", description = "모든 사용자 목록을 조회한다.")
-    @GetMapping("/user")
+    @GetMapping("/user/all")
     public List<FindUserDto> getAll() {
         return findUserUsecase.getAll();
     }
 
     /**
-     * ID가 userId인 사용자 조회
-     * @param userId (ID)
+     * 개별 사용자 조회
      * @return FindUserDto
      */
-    @Operation(summary = "Get user", description = "ID가 userId인 사용자를 조회한다.")
-    @GetMapping("/user/{userId}")
-    public FindUserDto getUserById(@PathVariable String userId) {
-        return findUserUsecase.getUserById(userId);
+    @Operation(summary = "Get user", description = "사용자를 조회한다.")
+    @GetMapping("/user")
+    public FindUserDto getUser() {
+        return findUserUsecase.getUser();
     }
 
     /**
@@ -142,7 +137,4 @@ public class UserController {
     public void deleteUser() {
         deleteUserUsecase.deleteUser();
     }
-
-
-
 }
