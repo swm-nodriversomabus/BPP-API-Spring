@@ -14,8 +14,6 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 public class SaveMatchingApplicationDto {
-    private UUID userId;
-    
     @NotNull
     @Min(1)
     private Long matchingId;

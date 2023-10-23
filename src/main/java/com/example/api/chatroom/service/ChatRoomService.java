@@ -1,5 +1,6 @@
 package com.example.api.chatroom.service;
 
+import com.example.api.auth.domain.SecurityUser;
 import com.example.api.chat.config.KafkaConsumerConfig;
 import com.example.api.chatroom.application.port.in.CreateChatRoomUsecase;
 import com.example.api.chatroom.application.port.in.FindChatRomListUsecase;
@@ -7,6 +8,7 @@ import com.example.api.chatroom.application.port.out.CreateChatRoomPort;
 import com.example.api.chatroom.application.port.out.FindChatRoomListPort;
 import com.example.api.chatroom.domain.ChatRoom;
 import com.example.api.chatroom.dto.CreateChatRoomDto;
+import com.example.api.common.utils.AuthenticationUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.clients.admin.AdminClient;
@@ -45,8 +47,13 @@ public class ChatRoomService implements CreateChatRoomUsecase, FindChatRomListUs
     }
 
     @Override
-    public List<ChatRoom> chatRoomList(Pageable pageable, Long userId) {
-        return findChatRoomListPort.chatRoomList(pageable, userId);
+    public List<ChatRoom> chatRoomList(Pageable pageable) {
+        SecurityUser securityUser = AuthenticationUtils.getCurrentUserAuthentication();
+        if (securityUser == null) {
+            log.error("ChatRoomService::charRoomList: Authentication is needed.");
+            return new ArrayList<>();
+        }
+        return findChatRoomListPort.chatRoomList(pageable, securityUser.getUserId());
     }
 
     public void createTopic(String chatroomId){

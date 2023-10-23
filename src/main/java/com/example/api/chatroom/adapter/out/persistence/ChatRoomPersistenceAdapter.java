@@ -20,7 +20,6 @@ import java.util.UUID;
 public class ChatRoomPersistenceAdapter implements CreateChatRoomPort, FindChatRoomListPort, RetrieveChatRoomPort {
     private final ChatRoomRepository chatRoomRepository;
     private final ChatRoomMapper chatRoomMapper;
-    private final MemberRepository memberRepository;
 
     @Override
     public ChatRoom createChatRoom(ChatRoom chatRoom) {
@@ -36,9 +35,9 @@ public class ChatRoomPersistenceAdapter implements CreateChatRoomPort, FindChatR
     }
 
     @Override
-    public List<ChatRoom> chatRoomList(Pageable pageable, Long userId) {
+    public List<ChatRoom> chatRoomList(Pageable pageable, UUID userId) {
         Page<ChatRoomEntity> ret = chatRoomRepository.findAllByUserId(pageable, userId);
-        if(ret != null && ret.hasContent()) {
+        if (ret != null && ret.hasContent()) {
             return chatRoomMapper.fromEntityListToDomain(ret.getContent());
         }
         return new ArrayList<>();
