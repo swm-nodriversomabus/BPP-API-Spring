@@ -53,7 +53,6 @@ public class MatchingApplicationService implements MatchingApplicationUsecase {
             return ChatRoom.builder().build();
         }
         MatchingApplication matchingApplication = matchingMapper.toDomain(matchingApplicationDto);
-        log.info("securityUserId: {}", securityUser.getUserId());
         if (matchingApplication.getUserId() == null) {
             matchingApplication.setUserId(securityUser.getUserId());
         }

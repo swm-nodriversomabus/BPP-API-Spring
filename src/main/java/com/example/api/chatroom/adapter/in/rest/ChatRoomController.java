@@ -24,6 +24,7 @@ import java.util.UUID;
 public class ChatRoomController {
     private final CreateChatRoomUsecase createChatRoomUsecase;
     private final FindChatRomListUsecase findChatRomListUsecase;
+    
     /**
      * 채팅방 생성
      * @param createChatRoomDto (데이터)
@@ -43,8 +44,8 @@ public class ChatRoomController {
      */
     @Operation(summary = "Get chatroom list", description = "사용자의 채팅방 목록을 불러온다.")
     @GetMapping("/chatroom")
-    public List<ChatRoom> chatRoomList(@RequestParam Long userid, @PageableDefault(sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable) { //추후 바꾸자함
-        return findChatRomListUsecase.chatRoomList(pageable, userid);
+    public List<ChatRoom> chatRoomList(@PageableDefault(sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable) { //추후 바꾸자함
+        return findChatRomListUsecase.chatRoomList(pageable);
     }
 
     @Operation(summary = "Delete chatroom", description = "채팅방을 삭제한다.")
