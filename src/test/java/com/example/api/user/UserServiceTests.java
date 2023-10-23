@@ -107,7 +107,7 @@ public class UserServiceTests {
     
     @Test
     void getUserByIdTest() {
-        userService.getUserById(userUUID);
+        userService.getUser();
         verify(findUserPort, times(1)).getByUserId(UUID.fromString(userUUID));
     }
     

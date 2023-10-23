@@ -84,6 +84,7 @@ public class UserService implements SaveUserUsecase, FindUserUsecase, DeleteUser
             log.error("UserService::getUser: Authentication is needed");
             return this.getDefaultUser();
         }
+        log.info("UserID: {}", securityUser.getUserId());
         return findUserPort.getByUserId(securityUser.getUserId())
                 .map(userMapper::toDto)
                 .orElse(this.getDefaultUser());
