@@ -53,7 +53,9 @@ public class MatchingApplicationService implements MatchingApplicationUsecase {
             return ChatRoom.builder().build();
         }
         MatchingApplication matchingApplication = matchingMapper.toDomain(matchingApplicationDto);
-        matchingApplication.setUserId(securityUser.getUserId());
+        if (matchingApplication.getUserId() == null) {
+            matchingApplication.setUserId(securityUser.getUserId());
+        }
         matchingApplication = matchingApplicationPort.createMatchingApplication(matchingApplication);
         
         CreateChatRoomDto createChatRoomDto = CreateChatRoomDto.builder()
