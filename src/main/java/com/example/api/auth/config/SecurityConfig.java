@@ -7,9 +7,8 @@ import com.example.api.auth.handler.MyAuthenticationSuccessHandler;
 import com.example.api.auth.handler.MyLogoutSuccessHandler;
 import com.example.api.auth.repository.OAuth2AuthorizationRequestBasedOnCookieRepository;
 import com.example.api.auth.service.CustomOAuth2UserService;
-import com.example.api.auth.utils.CookieUtils;
-import jakarta.servlet.http.Cookie;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -20,8 +19,6 @@ import org.springframework.security.config.annotation.web.configurers.AbstractHt
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.oauth2.client.web.OAuth2LoginAuthenticationFilter;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
-import org.springframework.util.AntPathMatcher;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
@@ -43,6 +40,8 @@ public class SecurityConfig {
             "/v3/api-docs/**",
             "/swagger-ui/**"
     };
+    @Value("${login.url}")
+    private String loginPage;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
@@ -51,6 +50,7 @@ public class SecurityConfig {
                 .sessionManagement(httpSecuritySessionManagementConfigurer ->
                         httpSecuritySessionManagementConfigurer.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .cors(httpSecurityCorsConfigurer -> httpSecurityCorsConfigurer.configurationSource(corsConfigurationSource()))
+
 //                .logout(AbstractHttpConfigurer::disable)
                 .csrf(AbstractHttpConfigurer::disable);
         httpSecurity.authorizeHttpRequests(authorizeRequests -> // 인증 설정
@@ -69,7 +69,7 @@ public class SecurityConfig {
                             .baseUri("/oauth2/authorization")
                             .authorizationRequestRepository(oAuth2AuthorizationRequestBasedOnCookieRepository)
             );
-
+            oauth2.loginPage(loginPage);
             oauth2.redirectionEndpoint(redirectionEndpointConfig -> redirectionEndpointConfig.baseUri("/*/oauth2/code/*"));
             oauth2.userInfoEndpoint( // oauth2 로그인 시 사용자 정보를 가져오는 엔드포인트와 사용자 서비스 설정
                     userInfoEndpointConfig ->
