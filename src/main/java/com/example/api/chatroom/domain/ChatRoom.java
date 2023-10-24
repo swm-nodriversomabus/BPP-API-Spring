@@ -19,15 +19,19 @@ public class ChatRoom {
     private UUID masterId;
     private String chatroomName;
     private Boolean isActive;
-    private List<Member> members;
+    private List<UUID> memberIds;
     
     @Builder
-    public ChatRoom(UUID chatroomId, ChatRoomEnum type, String chatroomName, Boolean isActive, UUID masterId, List<Member> members){
+    public ChatRoom(UUID chatroomId, ChatRoomEnum type, String chatroomName, Boolean isActive, UUID masterId, List<UUID> memberIds){
         this.chatroomId = chatroomId;
         this.type = type;
         this.masterId = masterId;
         this.chatroomName = chatroomName;
         this.isActive = isActive;
-        this.members = members;
+        this.memberIds = memberIds;
+    }
+
+    public void setMembers(List<UUID> memberIds) {
+        this.memberIds = memberIds;
     }
 }

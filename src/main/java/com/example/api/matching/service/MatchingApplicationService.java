@@ -16,6 +16,7 @@ import com.example.api.matching.application.port.in.MatchingApplicationUsecase;
 import com.example.api.matching.application.port.out.FindMatchingPort;
 import com.example.api.matching.application.port.out.MatchingApplicationPort;
 import com.example.api.matching.domain.MatchingApplication;
+import com.example.api.matching.dto.FindMatchingApplicationDto;
 import com.example.api.matching.dto.FindMatchingDto;
 import com.example.api.matching.dto.SaveMatchingApplicationDto;
 import com.example.api.member.dto.AddMemberDto;
@@ -43,29 +44,52 @@ public class MatchingApplicationService implements MatchingApplicationUsecase {
     private final ChatRoomService chatRoomService;
     private final MemberService memberService;
     private final FcmService fcmService;
-    
+
+    /**
+     * createMatchingApplication Step 1
+     * @param matchingApplicationDto (데이터)
+     * @return MatchingApplication
+     */
     @Override
     @Transactional
-    public ChatRoom createMatchingApplication(SaveMatchingApplicationDto matchingApplicationDto) {
+    public MatchingApplication createMatchingApplicationData(SaveMatchingApplicationDto matchingApplicationDto) {
         SecurityUser securityUser = AuthenticationUtils.getCurrentUserAuthentication();
         if (securityUser == null) {
-            log.error("MatchingApplicationService::createMatchingApplication: Authentication is needed.");
-            return ChatRoom.builder().build();
+            log.error("MatchingApplicationService::createMatchingApplicationData: Authentication is needed.");
+            return MatchingApplication.builder().build();
         }
         MatchingApplication matchingApplication = matchingMapper.toDomain(matchingApplicationDto);
         if (matchingApplication.getUserId() == null) {
             matchingApplication.setUserId(securityUser.getUserId());
         }
-        matchingApplication = matchingApplicationPort.createMatchingApplication(matchingApplication);
-        
+        return matchingApplicationPort.createMatchingApplication(matchingApplication);
+    }
+
+    /**
+     * createMatchingApplication Step 2
+     * @param matchingApplication (데이터)
+     * @return ChatRoom
+     */
+    @Override
+    @Transactional
+    public ChatRoom createMatchingChatRoom(MatchingApplication matchingApplication) {
         CreateChatRoomDto createChatRoomDto = CreateChatRoomDto.builder()
                 .masterId(matchingApplication.getUserId())
                 .chatroomName("매칭 신청") // 이거 바꿔야 함
                 .type(ChatRoomEnum.Normal)
                 .isActive(true)
                 .build();
-        ChatRoom chatRoom = chatRoomService.createRoom(createChatRoomDto);
-        
+        return chatRoomService.createRoom(createChatRoomDto);
+    }
+
+    /**
+     * createMatchingApplication Step 3
+     * @param matchingApplication (데이터)
+     * @param chatRoom (데이터)
+     */
+    @Override
+    @Transactional
+    public ChatRoom setupMatchingChatRoom(MatchingApplication matchingApplication, ChatRoom chatRoom) {
         List<UUID> memberIds = new ArrayList<>();
         memberIds.add(matchingApplication.getUserId());
         UUID matchingWriterId = findMatchingPort.getByMatchingId(matchingApplication.getMatchingId())
@@ -79,6 +103,7 @@ public class MatchingApplicationService implements MatchingApplicationUsecase {
                 .build();
         memberService.addMember(addMemberDto);
         
+        chatRoom.setMembers(memberIds);
         return chatRoom;
     }
     
@@ -125,7 +150,7 @@ public class MatchingApplicationService implements MatchingApplicationUsecase {
     
     @Override
     @Transactional
-    public SaveMatchingApplicationDto updateMatchingApplication(SaveMatchingApplicationDto matchingApplicationDto) {
+    public FindMatchingApplicationDto updateMatchingApplication(SaveMatchingApplicationDto matchingApplicationDto) {
         MatchingApplication matchingApplication = matchingApplicationPort.updateMatchingApplication(matchingMapper.toDomain(matchingApplicationDto));
         return matchingMapper.toDto(matchingApplication);
     }

@@ -19,7 +19,6 @@ public class KafkaTopicConfig {
     @Value("${kafka.bootstrapAddress}")
     private String bootstrapServers;
 
-
     // KafkaAdmin 초기화
     @Bean
     public KafkaAdmin kafkaAdmin(){

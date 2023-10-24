@@ -27,7 +27,6 @@ import java.nio.charset.StandardCharsets;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-@RefreshScope
 public class MyAuthenticationSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
     private final JwtUtilService jwtUtilService;
     private final SocialService socialService;

@@ -2,10 +2,7 @@ package com.example.api.matching.adapter.out.persistence;
 
 import com.example.api.matching.domain.Matching;
 import com.example.api.matching.domain.MatchingApplication;
-import com.example.api.matching.dto.LikeDto;
-import com.example.api.matching.dto.SaveMatchingApplicationDto;
-import com.example.api.matching.dto.FindMatchingDto;
-import com.example.api.matching.dto.SaveMatchingDto;
+import com.example.api.matching.dto.*;
 import org.mapstruct.InjectionStrategy;
 import org.mapstruct.Mapper;
 import org.mapstruct.ReportingPolicy;
@@ -22,7 +19,7 @@ public interface MatchingMapperInterface {
     Matching toDomain(MatchingEntity matchingEntity);
     MatchingApplication toDomain(MatchingApplicationEntity matchingApplicationEntity);
     FindMatchingDto toDto(Matching matching);
-    SaveMatchingApplicationDto toDto(MatchingApplication matchingApplication);
+    FindMatchingApplicationDto toDto(MatchingApplication matchingApplication);
     FindMatchingDto toDto(MatchingEntity matchingEntity);
     LikeDto toDto(LikeEntity likeEntity);
 }

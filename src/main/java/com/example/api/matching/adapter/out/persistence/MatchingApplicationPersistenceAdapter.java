@@ -5,6 +5,7 @@ import com.example.api.matching.application.port.out.MatchingApplicationPort;
 import com.example.api.matching.domain.MatchingApplication;
 import com.example.api.matching.repository.MatchingApplicationRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.stereotype.Repository;
 
@@ -14,6 +15,7 @@ import java.util.UUID;
 
 @Repository
 @RequiredArgsConstructor
+@Slf4j
 @ComponentScan
 public class MatchingApplicationPersistenceAdapter implements MatchingApplicationPort {
     private final MatchingMapperInterface matchingMapper;
@@ -21,6 +23,7 @@ public class MatchingApplicationPersistenceAdapter implements MatchingApplicatio
     
     @Override
     public MatchingApplication createMatchingApplication(MatchingApplication matchingApplication) {
+        log.info(matchingMapper.toEntity(matchingApplication).toString());
         MatchingApplicationEntity matchingApplicationData = matchingApplicationRepository.save(matchingMapper.toEntity(matchingApplication));
         return matchingMapper.toDomain(matchingApplicationData);
     }

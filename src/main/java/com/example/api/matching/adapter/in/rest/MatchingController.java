@@ -3,14 +3,13 @@ package com.example.api.matching.adapter.in.rest;
 import com.example.api.chatroom.domain.ChatRoom;
 import com.example.api.common.type.ApplicationStateEnum;
 import com.example.api.matching.application.port.in.*;
-import com.example.api.matching.dto.FindMatchingDto;
-import com.example.api.matching.dto.LikeDto;
-import com.example.api.matching.dto.SaveMatchingApplicationDto;
-import com.example.api.matching.dto.SaveMatchingDto;
+import com.example.api.matching.domain.MatchingApplication;
+import com.example.api.matching.dto.*;
 import com.example.api.user.dto.FindUserDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
@@ -20,6 +19,7 @@ import java.util.Optional;
 @RestController
 @RequiredArgsConstructor
 @EnableWebMvc
+@Slf4j
 @Tag(name = "Matching", description = "Matching API")
 public class MatchingController {
     private final SaveMatchingUsecase saveMatchingUsecase;
@@ -47,7 +47,13 @@ public class MatchingController {
     @Operation(summary = "Create matching application", description = "새로운 매칭 신청을 생성한다.")
     @PostMapping("/matching/application")
     public ChatRoom createMatchingApplication(@RequestBody SaveMatchingApplicationDto matchingApplicationDto) {
-        return matchingApplicationUsecase.createMatchingApplication(matchingApplicationDto);
+        if (findMatchingUsecase.getMatchingById(matchingApplicationDto.getMatchingId()).isEmpty()) {
+            log.error("MatchingController::createMatchingApplication: no such matching");
+            return ChatRoom.builder().build();
+        }
+        MatchingApplication matchingApplication = matchingApplicationUsecase.createMatchingApplicationData(matchingApplicationDto);
+        ChatRoom chatRoom = matchingApplicationUsecase.createMatchingChatRoom(matchingApplication);
+        return matchingApplicationUsecase.setupMatchingChatRoom(matchingApplication, chatRoom);
     }
     
     /**

@@ -17,7 +17,6 @@ import org.springframework.kafka.support.serializer.JsonSerializer;
 import java.util.Map;
 
 @Configuration
-@RefreshScope
 public class KafkaProducerConfig {
 
     @Value("${kafka.bootstrapAddress}")
