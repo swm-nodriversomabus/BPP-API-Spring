@@ -19,26 +19,26 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class ChatRoomPersistenceAdapter implements CreateChatRoomPort, FindChatRoomListPort, RetrieveChatRoomPort {
     private final ChatRoomRepository chatRoomRepository;
-    private final ChatRoomMapper chatRoomMapper;
+    private final ChatRoomMapperInterface chatRoomMapper;
 
     @Override
     public ChatRoom createChatRoom(ChatRoom chatRoom) {
-        ChatRoomEntity chatRoomEntity = chatRoomRepository.save(chatRoomMapper.fromDomainToEntityWithoutId(chatRoom));
-        return chatRoomMapper.fromEntityToDomain(chatRoomEntity);
+        ChatRoomEntity chatRoomEntity = chatRoomRepository.save(chatRoomMapper.toEntity(chatRoom));
+        return chatRoomMapper.toDomain(chatRoomEntity);
     }
 
     @Override
     public ChatRoom retrieveChatRoom(UUID chatroomId) {
         ChatRoomEntity chatRoomEntity = chatRoomRepository.findById(chatroomId)
                 .orElseThrow(IllegalArgumentException::new);
-        return chatRoomMapper.fromEntityToDomain(chatRoomEntity);
+        return chatRoomMapper.toDomain(chatRoomEntity);
     }
 
     @Override
-    public List<ChatRoom> chatRoomList(Pageable pageable, UUID userId) {
+    public List<ChatRoomEntity> chatRoomList(Pageable pageable, UUID userId) {
         Page<ChatRoomEntity> ret = chatRoomRepository.findAllByUserId(pageable, userId);
         if (ret != null && ret.hasContent()) {
-            return chatRoomMapper.fromEntityListToDomain(ret.getContent());
+            return ret.getContent();
         }
         return new ArrayList<>();
     }

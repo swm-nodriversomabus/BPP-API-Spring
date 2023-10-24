@@ -2,6 +2,7 @@ package com.example.api.chatroom.service;
 
 import com.example.api.auth.domain.SecurityUser;
 import com.example.api.chat.config.KafkaConsumerConfig;
+import com.example.api.chatroom.adapter.out.persistence.ChatRoomMapperInterface;
 import com.example.api.chatroom.application.port.in.CreateChatRoomUsecase;
 import com.example.api.chatroom.application.port.in.FindChatRomListUsecase;
 import com.example.api.chatroom.application.port.out.CreateChatRoomPort;
@@ -19,6 +20,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -27,6 +29,7 @@ import java.util.*;
 public class ChatRoomService implements CreateChatRoomUsecase, FindChatRomListUsecase {
     private final CreateChatRoomPort createChatRoomPort;
     private final FindChatRoomListPort findChatRoomListPort;
+    private final ChatRoomMapperInterface chatRoomMapper;
     private final KafkaConsumerConfig kafkaConsumerConfig;
     private final KafkaAdmin kafkaAdmin;
 
@@ -43,7 +46,6 @@ public class ChatRoomService implements CreateChatRoomUsecase, FindChatRomListUs
         createTopic(chatRoom.getChatroomId().toString());
         kafkaConsumerConfig.createListenerContainerForRoom(chatRoom.getChatroomId().toString());
         return chatRoom;
-
     }
 
     @Override
@@ -53,7 +55,9 @@ public class ChatRoomService implements CreateChatRoomUsecase, FindChatRomListUs
             log.error("ChatRoomService::charRoomList: Authentication is needed.");
             return new ArrayList<>();
         }
-        return findChatRoomListPort.chatRoomList(pageable, securityUser.getUserId());
+        return findChatRoomListPort.chatRoomList(pageable, securityUser.getUserId()).stream()
+                .map(chatRoomMapper::toDomain)
+                .collect(Collectors.toList());
     }
 
     public void createTopic(String chatroomId){
