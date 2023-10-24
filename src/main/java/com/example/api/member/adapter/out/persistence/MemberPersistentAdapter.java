@@ -1,6 +1,6 @@
 package com.example.api.member.adapter.out.persistence;
 
-import com.example.api.chatroom.adapter.out.persistence.ChatRoomMapper;
+import com.example.api.chatroom.adapter.out.persistence.ChatRoomMapperInterface;
 import com.example.api.chatroom.domain.ChatRoom;
 import com.example.api.member.application.port.out.AddMemberChaatRoomPort;
 import com.example.api.member.domain.Member;
@@ -16,11 +16,11 @@ import java.util.List;
 @RequiredArgsConstructor
 public class MemberPersistentAdapter implements AddMemberChaatRoomPort {
     private final MemberMapper memberMapper;
-    private final ChatRoomMapper chatRoomMapper;
+    private final ChatRoomMapperInterface chatRoomMapper;
     private final MemberRepository memberRepository;
 
     @Override
     public void addMember(List<Member> members, ChatRoom chatRoom) {
-        memberRepository.saveAll(memberMapper.fromListDomainToEntity(members, chatRoomMapper.fromDomainToEntity(chatRoom)));
+        memberRepository.saveAll(memberMapper.fromListDomainToEntity(members, chatRoomMapper.toEntity(chatRoom)));
     }
 }
