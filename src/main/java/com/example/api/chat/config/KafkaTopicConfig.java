@@ -8,14 +8,12 @@ import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.kafka.core.KafkaAdmin;
-import org.springframework.stereotype.Component;
 
 import java.util.HashMap;
 import java.util.Map;
 
 @Configuration
 @Slf4j
-@RefreshScope
 public class KafkaTopicConfig {
 
     @Value("${kafka.bootstrapAddress}")
