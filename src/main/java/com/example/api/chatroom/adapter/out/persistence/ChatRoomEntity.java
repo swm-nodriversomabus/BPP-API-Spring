@@ -47,6 +47,4 @@ public class ChatRoomEntity extends BaseEntity {
         this.members.add(member);
         member.addChatRoom(this);
     }
-
-//    @OneToMany(mappedBy = "")
 }

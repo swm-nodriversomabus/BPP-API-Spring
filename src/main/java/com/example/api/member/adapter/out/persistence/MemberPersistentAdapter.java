@@ -2,7 +2,7 @@ package com.example.api.member.adapter.out.persistence;
 
 import com.example.api.chatroom.adapter.out.persistence.ChatRoomMapperInterface;
 import com.example.api.chatroom.domain.ChatRoom;
-import com.example.api.member.application.port.out.AddMemberChaatRoomPort;
+import com.example.api.member.application.port.out.AddMemberChatRoomPort;
 import com.example.api.member.domain.Member;
 import com.example.api.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
@@ -14,7 +14,7 @@ import java.util.List;
 @Slf4j
 @Component
 @RequiredArgsConstructor
-public class MemberPersistentAdapter implements AddMemberChaatRoomPort {
+public class MemberPersistentAdapter implements AddMemberChatRoomPort {
     private final MemberMapper memberMapper;
     private final ChatRoomMapperInterface chatRoomMapper;
     private final MemberRepository memberRepository;

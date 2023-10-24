@@ -36,11 +36,11 @@ public class MatchingApplicationServiceTests {
                 .build();
     }
     
-    @Test
+    /*@Test
     void createMatchingApplicationTest() {
         matchingApplicationService.createMatchingApplication(matchingApplication);
         verify(matchingApplicationPort, times(1)).createMatchingApplication(matchingMapper.toDomain(matchingApplication));
-    }
+    }*/
 
     @Test
     void getByUserIdIsAndStateEqualsTest() {

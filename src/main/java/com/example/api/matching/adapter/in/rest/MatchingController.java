@@ -4,10 +4,7 @@ import com.example.api.chatroom.domain.ChatRoom;
 import com.example.api.common.type.ApplicationStateEnum;
 import com.example.api.matching.application.port.in.*;
 import com.example.api.matching.domain.MatchingApplication;
-import com.example.api.matching.dto.FindMatchingDto;
-import com.example.api.matching.dto.LikeDto;
-import com.example.api.matching.dto.SaveMatchingApplicationDto;
-import com.example.api.matching.dto.SaveMatchingDto;
+import com.example.api.matching.dto.*;
 import com.example.api.user.dto.FindUserDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -50,14 +47,13 @@ public class MatchingController {
     @Operation(summary = "Create matching application", description = "새로운 매칭 신청을 생성한다.")
     @PostMapping("/matching/application")
     public ChatRoom createMatchingApplication(@RequestBody SaveMatchingApplicationDto matchingApplicationDto) {
-        MatchingApplication step1 = matchingApplicationUsecase.step1(matchingApplicationDto);
-        log.info("controller");
-        ChatRoom step2 = matchingApplicationUsecase.step2(step1);
-        matchingApplicationUsecase.step3(step1, step2);
-
-        return step2;
-
-//        return matchingApplicationUsecase.createMatchingApplication(matchingApplicationDto);
+        if (findMatchingUsecase.getMatchingById(matchingApplicationDto.getMatchingId()).isEmpty()) {
+            log.error("MatchingController::createMatchingApplication: no such matching");
+            return ChatRoom.builder().build();
+        }
+        MatchingApplication matchingApplication = matchingApplicationUsecase.createMatchingApplicationData(matchingApplicationDto);
+        ChatRoom chatRoom = matchingApplicationUsecase.createMatchingChatRoom(matchingApplication);
+        return matchingApplicationUsecase.setupMatchingChatRoom(matchingApplication, chatRoom);
     }
     
     /**

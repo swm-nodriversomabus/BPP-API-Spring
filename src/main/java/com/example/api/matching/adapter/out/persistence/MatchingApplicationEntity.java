@@ -25,9 +25,9 @@ public class MatchingApplicationEntity extends BaseEntity {
     @Id
     private Long matchingId;
     
-    @NotEmpty
+    @Column(nullable = false)
     private ApplicationStateEnum state;
     
-    @NotEmpty
+    @Column(nullable = false)
     private Boolean isActive;
 }

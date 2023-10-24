@@ -25,7 +25,6 @@ public class MatchingApplicationPersistenceAdapter implements MatchingApplicatio
     public MatchingApplication createMatchingApplication(MatchingApplication matchingApplication) {
         log.info(matchingMapper.toEntity(matchingApplication).toString());
         MatchingApplicationEntity matchingApplicationData = matchingApplicationRepository.save(matchingMapper.toEntity(matchingApplication));
-        log.info("오류여안녕");
         return matchingMapper.toDomain(matchingApplicationData);
     }
 
