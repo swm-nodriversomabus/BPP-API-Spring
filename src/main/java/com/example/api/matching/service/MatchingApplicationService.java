@@ -43,29 +43,49 @@ public class MatchingApplicationService implements MatchingApplicationUsecase {
     private final ChatRoomService chatRoomService;
     private final MemberService memberService;
     private final FcmService fcmService;
-    
+
+
     @Override
     @Transactional
-    public ChatRoom createMatchingApplication(SaveMatchingApplicationDto matchingApplicationDto) {
+    public MatchingApplication step1(SaveMatchingApplicationDto matchingApplicationDto){
+        log.info("step1 시작");
+
         SecurityUser securityUser = AuthenticationUtils.getCurrentUserAuthentication();
         if (securityUser == null) {
             log.error("MatchingApplicationService::createMatchingApplication: Authentication is needed.");
-            return ChatRoom.builder().build();
+            return MatchingApplication.builder().build();
         }
         MatchingApplication matchingApplication = matchingMapper.toDomain(matchingApplicationDto);
         if (matchingApplication.getUserId() == null) {
             matchingApplication.setUserId(securityUser.getUserId());
         }
-        matchingApplication = matchingApplicationPort.createMatchingApplication(matchingApplication);
-        
+        log.info("step1 종료");
+
+        return matchingApplicationPort.createMatchingApplication(matchingApplication);
+
+    }
+
+    @Override
+    @Transactional
+    public ChatRoom step2(MatchingApplication matchingApplication) {
+        log.info("step2 시작");
+
         CreateChatRoomDto createChatRoomDto = CreateChatRoomDto.builder()
                 .masterId(matchingApplication.getUserId())
                 .chatroomName("매칭 신청") // 이거 바꿔야 함
                 .type(ChatRoomEnum.Normal)
                 .isActive(true)
                 .build();
-        ChatRoom chatRoom = chatRoomService.createRoom(createChatRoomDto);
-        
+        log.info("step1 종료");
+
+        return chatRoomService.createRoom(createChatRoomDto);
+    }
+
+    @Override
+    @Transactional
+    public void step3(MatchingApplication matchingApplication, ChatRoom chatRoom) {
+        log.info("step3 시작");
+
         List<UUID> memberIds = new ArrayList<>();
         memberIds.add(matchingApplication.getUserId());
         UUID matchingWriterId = findMatchingPort.getByMatchingId(matchingApplication.getMatchingId())
@@ -78,9 +98,10 @@ public class MatchingApplicationService implements MatchingApplicationUsecase {
                 .memberIds(memberIds)
                 .build();
         memberService.addMember(addMemberDto);
-        
-        return chatRoom;
+        log.info("step3 종료");
+
     }
+
     
     @Override
     public List<FindMatchingDto> getByUserIdIsAndStateEquals(ApplicationStateEnum state) {

@@ -7,9 +7,6 @@ import org.springframework.stereotype.Component;
 
 @Data
 @Component
-@RefreshScope
-//@PropertySource(value = {"classpath:/application-${spring.profiles.active}.yml"})
-//@ConfigurationProperties(prefix = "jwt")
 public class JwtProperties {
     @Value("${jwt.secret}")
     private String secret;

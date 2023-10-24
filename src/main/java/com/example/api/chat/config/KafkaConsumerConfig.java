@@ -26,7 +26,6 @@ import java.util.Map;
 @Configuration
 @RequiredArgsConstructor
 @Slf4j
-@RefreshScope
 public class KafkaConsumerConfig {
     @Value("${kafka.bootstrapAddress}")
     private String bootstrapAddress;

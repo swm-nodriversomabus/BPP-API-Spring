@@ -17,7 +17,6 @@ import java.util.Optional;
 @RestController
 @Slf4j
 @RequiredArgsConstructor
-@RefreshScope
 public class AuthController {
     private final JwtUtilService jwtUtilService;
     private final FindRefreshUsecase findRefreshUsecase;

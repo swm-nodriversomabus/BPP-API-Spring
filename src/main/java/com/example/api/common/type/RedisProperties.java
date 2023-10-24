@@ -7,7 +7,6 @@ import org.springframework.stereotype.Component;
 
 @Data
 @Component
-@RefreshScope
 //@PropertySource(value = {"classpath:/application-${spring.profiles.active}.yml"})
 //@ConfigurationProperties(prefix = "redis")
 public class RedisProperties {
