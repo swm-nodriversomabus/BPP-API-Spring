@@ -2,6 +2,7 @@ package com.example.api.matching.application.port.in;
 
 import com.example.api.chatroom.domain.ChatRoom;
 import com.example.api.common.type.ApplicationStateEnum;
+import com.example.api.matching.adapter.out.persistence.MatchingApplicationPK;
 import com.example.api.matching.domain.MatchingApplication;
 import com.example.api.matching.dto.FindMatchingApplicationDto;
 import com.example.api.matching.dto.SaveMatchingApplicationDto;
@@ -17,5 +18,6 @@ public interface MatchingApplicationUsecase {
     List<FindMatchingDto> getByUserIdIsAndStateEquals(ApplicationStateEnum state);
     List<FindUserDto> getByMatchingIdIsAndStateEquals(Long matchingId, ApplicationStateEnum state);
     String getUserStatus(Long matchingId);
-    FindMatchingApplicationDto updateMatchingApplication(SaveMatchingApplicationDto matchingApplicationDto);
+    void approveMatchingApplication(SaveMatchingApplicationDto matchingApplicationPK);
+    void declineMatchingApplication(SaveMatchingApplicationDto matchingApplicationPK);
 }
