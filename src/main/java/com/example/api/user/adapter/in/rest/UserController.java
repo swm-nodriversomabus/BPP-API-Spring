@@ -1,6 +1,8 @@
 package com.example.api.user.adapter.in.rest;
 
+import com.example.api.common.exception.CustomException;
 import com.example.api.common.type.ApplicationStateEnum;
+import com.example.api.common.type.ErrorCodeEnum;
 import com.example.api.matching.application.port.in.FindMatchingUsecase;
 import com.example.api.matching.application.port.in.MatchingApplicationUsecase;
 import com.example.api.matching.dto.FindMatchingDto;
@@ -131,6 +133,7 @@ public class UserController {
     public void deleteAll() {
         if (!(findUserUsecase.getUser().getRole().equals(UserRoleEnum.Admin))) {
             log.error("UserController::deleteAll: Admin authority is needed.");
+            throw new CustomException(ErrorCodeEnum.INVALID_PERMISSION);
         }
         deleteUserUsecase.deleteAll();
     }
@@ -143,6 +146,7 @@ public class UserController {
     public void deleteUser() {
         if (!(findUserUsecase.getUser().getRole().equals(UserRoleEnum.Admin))) {
             log.error("UserController::deleteUser: Admin authority is needed.");
+            throw new CustomException(ErrorCodeEnum.INVALID_PERMISSION);
         }
         deleteUserUsecase.deleteUser();
     }

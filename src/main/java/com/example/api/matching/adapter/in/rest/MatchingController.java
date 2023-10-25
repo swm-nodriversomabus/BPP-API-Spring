@@ -2,7 +2,9 @@ package com.example.api.matching.adapter.in.rest;
 
 import com.example.api.auth.domain.SecurityUser;
 import com.example.api.chatroom.domain.ChatRoom;
+import com.example.api.common.exception.CustomException;
 import com.example.api.common.type.ApplicationStateEnum;
+import com.example.api.common.type.ErrorCodeEnum;
 import com.example.api.common.utils.AuthenticationUtils;
 import com.example.api.matching.adapter.out.persistence.MatchingApplicationPK;
 import com.example.api.matching.application.port.in.*;
@@ -57,17 +59,17 @@ public class MatchingController {
         Optional<FindMatchingDto> matchingDto = findMatchingUsecase.getMatchingById(matchingApplicationDto.getMatchingId());
         if (matchingDto.isEmpty()) {
             log.error("MatchingController::createMatchingApplication: No such matching.");
-            return ChatRoom.builder().build();
+            throw new CustomException(ErrorCodeEnum.MATCHING_NOT_FOUND);
         }
         
         SecurityUser securityUser = AuthenticationUtils.getCurrentUserAuthentication();
         if (securityUser == null) {
             log.error("MatchingController::createMatchingApplication: Authentication is needed.");
-            return ChatRoom.builder().build();
+            throw new CustomException(ErrorCodeEnum.LOGIN_IS_NOT_DONE);
         }
         if (securityUser.getUserId().equals(matchingApplicationDto.getUserId())) {
             log.error("MatchingController::createMatchingApplication: WriterId equals to applicantId.");
-            return ChatRoom.builder().build();
+            throw new CustomException(ErrorCodeEnum.INVALID_PERMISSION);
         }
         
         MatchingApplication matchingApplication = matchingApplicationUsecase.createMatchingApplicationData(matchingApplicationDto);
@@ -186,7 +188,7 @@ public class MatchingController {
     public void deleteAll() {
         if (!(findUserUsecase.getUser().getRole().equals(UserRoleEnum.Admin))) {
             log.error("MatchingController::deleteAll: Admin authority is needed.");
-            return;
+            throw new CustomException(ErrorCodeEnum.INVALID_PERMISSION);
         }
         deleteMatchingUsecase.deleteAll();
     }
@@ -202,10 +204,11 @@ public class MatchingController {
         Optional<FindMatchingDto> matchingDto = findMatchingUsecase.getMatchingById(matchingId);
         if (matchingDto.isEmpty()) {
             log.error("MatchingController::deleteMatching: No such matching.");
-            return;
+            throw new CustomException(ErrorCodeEnum.MATCHING_NOT_FOUND);
         }
         if (!(userDto.getRole().equals(UserRoleEnum.Admin)) && !(userDto.getUserId().equals(matchingDto.get().getWriterId()))) {
             log.error("MatchingController::deleteMatching: Admin or owner authority is needed.");
+            throw new CustomException(ErrorCodeEnum.INVALID_PERMISSION);
         }
         deleteMatchingUsecase.deleteMatching(matchingId);
     }
