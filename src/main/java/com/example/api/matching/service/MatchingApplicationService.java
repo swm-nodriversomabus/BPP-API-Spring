@@ -148,15 +148,19 @@ public class MatchingApplicationService implements MatchingApplicationUsecase {
         }
     }
     
-    @Override
     @Transactional
     public FindMatchingApplicationDto updateMatchingApplication(SaveMatchingApplicationDto matchingApplicationDto) {
         MatchingApplication matchingApplication = matchingApplicationPort.updateMatchingApplication(matchingMapper.toDomain(matchingApplicationDto));
         return matchingMapper.toDto(matchingApplication);
     }
 
+    @Override
     @Transactional
-    public void acceptMatchingApplication(MatchingApplicationPK matchingApplicationPK) {
+    public void approveMatchingApplication(SaveMatchingApplicationDto matchingApplicationDto) {
+        MatchingApplicationPK matchingApplicationPK = MatchingApplicationPK.builder()
+                .userId(matchingApplicationDto.getUserId())
+                .matchingId(matchingApplicationDto.getMatchingId())
+                .build();
         MatchingApplicationEntity matchingApplicationEntity = matchingApplicationPort.getByMatchingApplicationPK(matchingApplicationPK)
                 .orElseThrow(NoSuchElementException::new);
         MatchingApplication matchingApplication = matchingMapper.toDomain(matchingApplicationEntity);
@@ -169,8 +173,13 @@ public class MatchingApplicationService implements MatchingApplicationUsecase {
         fcmService.sendNotification(fcmDto);
     }
 
+    @Override
     @Transactional
-    public void declineMatchingApplication(MatchingApplicationPK matchingApplicationPK) {
+    public void declineMatchingApplication(SaveMatchingApplicationDto matchingApplicationDto) {
+        MatchingApplicationPK matchingApplicationPK = MatchingApplicationPK.builder()
+                .userId(matchingApplicationDto.getUserId())
+                .matchingId(matchingApplicationDto.getMatchingId())
+                .build();
         MatchingApplicationEntity matchingApplicationEntity = matchingApplicationPort.getByMatchingApplicationPK(matchingApplicationPK)
                 .orElseThrow(NoSuchElementException::new);
         MatchingApplication matchingApplication = matchingMapper.toDomain(matchingApplicationEntity);

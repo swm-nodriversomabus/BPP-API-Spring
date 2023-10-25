@@ -2,6 +2,7 @@ package com.example.api.matching.adapter.in.rest;
 
 import com.example.api.chatroom.domain.ChatRoom;
 import com.example.api.common.type.ApplicationStateEnum;
+import com.example.api.matching.adapter.out.persistence.MatchingApplicationPK;
 import com.example.api.matching.application.port.in.*;
 import com.example.api.matching.domain.MatchingApplication;
 import com.example.api.matching.dto.*;
@@ -123,19 +124,40 @@ public class MatchingController {
      * @return MatchingDto
      */
     @Operation(summary = "Update matching", description = "매칭 정보를 수정한다.")
-    @PatchMapping("/matching/{matchingId}")
+    @PutMapping("/matching/{matchingId}")
     public FindMatchingDto updateMatching(@PathVariable Long matchingId, @RequestBody SaveMatchingDto matchingDto) {
         return saveMatchingUsecase.updateMatching(matchingId, matchingDto);
     }
 
     /**
      * 매칭의 좋아요 토글
-     * @param likeDto (Data)
+     * @param likeDto (데이터)
      */
     @Operation(summary = "Toggle like state", description = "사용자가 매칭에 좋아요를 누른 상태를 변경한다.")
-    @PatchMapping("/matching/like")
+    @PutMapping("/matching/like")
     public void toggleLike(@RequestBody LikeDto likeDto) {
         likeUsecase.toggleLike(likeDto);
+    }
+
+    /**
+     * 매칭 신청 수락/거절
+     * @param matchingApplicationDto (데이터)
+     */
+    @Operation(summary = "Process matching application", description = "매칭 신청을 처리한다.")
+    @PutMapping("/matching/application")
+    public void processMatchingApplication(SaveMatchingApplicationDto matchingApplicationDto) {
+        MatchingApplicationPK matchingApplicationPK = MatchingApplicationPK.builder()
+                .userId(matchingApplicationDto.getUserId())
+                .matchingId(matchingApplicationDto.getMatchingId())
+                .build();
+        
+        
+        if (matchingApplicationDto.getState() == ApplicationStateEnum.Approved) {
+            matchingApplicationUsecase.approveMatchingApplication(matchingApplicationDto);
+        }
+        if (matchingApplicationDto.getState() == ApplicationStateEnum.Declined) {
+            matchingApplicationUsecase.declineMatchingApplication(matchingApplicationDto);
+        }
     }
 
     /**
