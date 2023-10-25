@@ -142,7 +142,8 @@ public class MatchingApplicationService implements MatchingApplicationUsecase {
         MatchingApplicationPK matchingApplicationPK = new MatchingApplicationPK(securityUser.getUserId(), matchingId);
         Optional<MatchingApplicationEntity> statusData = matchingApplicationPort.getByMatchingApplicationPK(matchingApplicationPK);
         if (statusData.isPresent()) {
-            return statusData.get().getState().toString();
+            String status = statusData.get().getState().toString();
+            return status.substring(status.indexOf('.') + 1, status.indexOf('('));
         } else {
             return "None";
         }

@@ -150,7 +150,7 @@ public class MatchingController {
                 .userId(matchingApplicationDto.getUserId())
                 .matchingId(matchingApplicationDto.getMatchingId())
                 .build();
-        
+        // Invalid input 거르기
         
         if (matchingApplicationDto.getState() == ApplicationStateEnum.Approved) {
             matchingApplicationUsecase.approveMatchingApplication(matchingApplicationDto);
