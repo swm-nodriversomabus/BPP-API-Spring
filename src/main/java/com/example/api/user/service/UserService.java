@@ -19,6 +19,7 @@ import com.example.api.user.domain.User;
 import com.example.api.user.application.port.in.SaveUserUsecase;
 import com.example.api.user.dto.CreateUserDto;
 import com.example.api.user.dto.UpdateUserDto;
+import com.example.api.user.dto.UserAuthorityCheckDto;
 import com.example.api.user.type.UserGenderEnum;
 import com.example.api.user.type.UserRoleEnum;
 import lombok.RequiredArgsConstructor;
@@ -60,6 +61,15 @@ public class UserService implements SaveUserUsecase, FindUserUsecase, DeleteUser
                 .isActive(false)
                 .build();
     }
+
+    public UserAuthorityCheckDto getDefaultAuthorityUser() {
+        return UserAuthorityCheckDto.builder()
+                .userId(UUID.fromString("00000000-0000-0000-0000-000000000000"))
+                .role(UserRoleEnum.User)
+                .blacklist(false)
+                .isActive(false)
+                .build();
+    }
     
     @Override
     @Transactional
@@ -84,10 +94,21 @@ public class UserService implements SaveUserUsecase, FindUserUsecase, DeleteUser
             log.error("UserService::getUser: Authentication is needed");
             return this.getDefaultUser();
         }
-        log.info("UserID: {}", securityUser.getUserId());
         return findUserPort.getByUserId(securityUser.getUserId())
                 .map(userMapper::toDto)
                 .orElse(this.getDefaultUser());
+    }
+
+    @Override
+    public UserAuthorityCheckDto getAuthorityUser() {
+        SecurityUser securityUser = AuthenticationUtils.getCurrentUserAuthentication();
+        if (securityUser == null) {
+            log.error("UserService::getAuthorityUser: Authentication is needed");
+            return this.getDefaultAuthorityUser();
+        }
+        return findUserPort.getByUserId(securityUser.getUserId())
+                .map(userMapper::toAuthorityDto)
+                .orElse(this.getDefaultAuthorityUser());
     }
 
     @Override
@@ -112,22 +133,17 @@ public class UserService implements SaveUserUsecase, FindUserUsecase, DeleteUser
     @Transactional
     public void deleteUser() {
         SecurityUser securityUser = AuthenticationUtils.getCurrentUserAuthentication();
-        try {
-            if (securityUser == null) {
-                log.error("UserService::deleteUser: Authentication is needed.");
-                throw new Exception();
-            }
-            deleteUserPort.deleteByUserId(securityUser.getUserId());
-        } catch (Exception e) {
-            e.printStackTrace();
+        if (securityUser == null) {
+            log.error("UserService::deleteUser: Authentication is needed.");
+            return;
         }
+        deleteUserPort.deleteByUserId(securityUser.getUserId());
     }
     
     // Social
     
     public SecurityUser findSocialUser(String id, String provider) {
         User user = userMapper.toDomain(findUserPort.findSocialUser(id, provider).orElseThrow(IllegalStateException::new));
-
         return SecurityUser.builder()
                 .userId(user.getUserId())
                 .naverId(user.getSocialId().getNaverId())

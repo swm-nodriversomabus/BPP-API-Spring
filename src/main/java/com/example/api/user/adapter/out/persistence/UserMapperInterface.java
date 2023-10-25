@@ -5,6 +5,7 @@ import com.example.api.user.domain.User;
 import com.example.api.user.dto.CreateUserDto;
 import com.example.api.user.dto.FindUserDto;
 import com.example.api.user.dto.UpdateUserDto;
+import com.example.api.user.dto.UserAuthorityCheckDto;
 import org.mapstruct.InjectionStrategy;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -23,5 +24,6 @@ public interface UserMapperInterface {
     User toDomain(UserEntity userEntity);
     FindUserDto toDto(UserEntity userEntity);
     FindUserDto toDto(User user);
+    UserAuthorityCheckDto toAuthorityDto(UserEntity userEntity);
     FindUserDto toDto(UpdateUserDto updateUserDto);
 }
