@@ -1,6 +1,8 @@
 package com.example.api.user.adapter.in.rest;
 
+import com.example.api.common.exception.CustomException;
 import com.example.api.common.type.ApplicationStateEnum;
+import com.example.api.common.type.ErrorCodeEnum;
 import com.example.api.matching.application.port.in.FindMatchingUsecase;
 import com.example.api.matching.application.port.in.MatchingApplicationUsecase;
 import com.example.api.matching.dto.FindMatchingDto;
@@ -8,11 +10,13 @@ import com.example.api.user.application.port.in.*;
 import com.example.api.user.dto.CreateUserDto;
 import com.example.api.user.dto.FindUserDto;
 import com.example.api.user.dto.UpdateUserDto;
+import com.example.api.user.type.UserRoleEnum;
 import com.example.api.user.validator.CreateGenderValidator;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.WebDataBinder;
@@ -25,6 +29,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @EnableWebMvc
 @Validated
+@Slf4j
 @Tag(name = "User", description = "User API")
 public class UserController {
     private final SaveUserUsecase saveUserUsecase;
@@ -126,6 +131,10 @@ public class UserController {
     @Operation(summary = "Delete all users", description = "모든 사용자를 삭제한다.")
     @DeleteMapping("/user/all")
     public void deleteAll() {
+        if (!(findUserUsecase.getUser().getRole().equals(UserRoleEnum.Admin))) {
+            log.error("UserController::deleteAll: Admin authority is needed.");
+            throw new CustomException(ErrorCodeEnum.INVALID_PERMISSION);
+        }
         deleteUserUsecase.deleteAll();
     }
 
@@ -135,6 +144,10 @@ public class UserController {
     @Operation(summary = "Delete user", description = "ID가 userId인 사용자를 삭제한다.")
     @DeleteMapping("/user")
     public void deleteUser() {
+        if (!(findUserUsecase.getUser().getRole().equals(UserRoleEnum.Admin))) {
+            log.error("UserController::deleteUser: Admin authority is needed.");
+            throw new CustomException(ErrorCodeEnum.INVALID_PERMISSION);
+        }
         deleteUserUsecase.deleteUser();
     }
 }

@@ -21,7 +21,7 @@ public class CustomExceptionHandler {
         return ResponseEntity.status(e.getErrorCodeEnum().getHttpStatus())
                 .body(new ExceptionDto(e.getErrorCodeEnum()));
     }
-
+    
     @ExceptionHandler(value = MethodArgumentNotValidException.class)
     public ResponseEntity<?> methodArgumentNotValidException(MethodArgumentNotValidException e) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
@@ -32,7 +32,7 @@ public class CustomExceptionHandler {
         log.error(e.getMessage());
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
     }
-
+    
     @ExceptionHandler(RuntimeException.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public String runtimeExceptionHandler(RuntimeException e) {

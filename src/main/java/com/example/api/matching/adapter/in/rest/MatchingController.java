@@ -1,12 +1,19 @@
 package com.example.api.matching.adapter.in.rest;
 
+import com.example.api.auth.domain.SecurityUser;
 import com.example.api.chatroom.domain.ChatRoom;
+import com.example.api.common.exception.CustomException;
 import com.example.api.common.type.ApplicationStateEnum;
+import com.example.api.common.type.ErrorCodeEnum;
+import com.example.api.common.utils.AuthenticationUtils;
 import com.example.api.matching.adapter.out.persistence.MatchingApplicationPK;
 import com.example.api.matching.application.port.in.*;
 import com.example.api.matching.domain.MatchingApplication;
 import com.example.api.matching.dto.*;
+import com.example.api.user.application.port.in.FindUserUsecase;
 import com.example.api.user.dto.FindUserDto;
+import com.example.api.user.dto.UserAuthorityCheckDto;
+import com.example.api.user.type.UserRoleEnum;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -23,6 +30,7 @@ import java.util.Optional;
 @Slf4j
 @Tag(name = "Matching", description = "Matching API")
 public class MatchingController {
+    private final FindUserUsecase findUserUsecase;
     private final SaveMatchingUsecase saveMatchingUsecase;
     private final FindMatchingUsecase findMatchingUsecase;
     private final DeleteMatchingUsecase deleteMatchingUsecase;
@@ -48,10 +56,22 @@ public class MatchingController {
     @Operation(summary = "Create matching application", description = "새로운 매칭 신청을 생성한다.")
     @PostMapping("/matching/application")
     public ChatRoom createMatchingApplication(@RequestBody SaveMatchingApplicationDto matchingApplicationDto) {
-        if (findMatchingUsecase.getMatchingById(matchingApplicationDto.getMatchingId()).isEmpty()) {
-            log.error("MatchingController::createMatchingApplication: no such matching");
-            return ChatRoom.builder().build();
+        Optional<FindMatchingDto> matchingDto = findMatchingUsecase.getMatchingById(matchingApplicationDto.getMatchingId());
+        if (matchingDto.isEmpty()) {
+            log.error("MatchingController::createMatchingApplication: No such matching.");
+            throw new CustomException(ErrorCodeEnum.MATCHING_NOT_FOUND);
         }
+        
+        SecurityUser securityUser = AuthenticationUtils.getCurrentUserAuthentication();
+        if (securityUser == null) {
+            log.error("MatchingController::createMatchingApplication: Authentication is needed.");
+            throw new CustomException(ErrorCodeEnum.LOGIN_IS_NOT_DONE);
+        }
+        if (securityUser.getUserId().equals(matchingApplicationDto.getUserId())) {
+            log.error("MatchingController::createMatchingApplication: WriterId equals to applicantId.");
+            throw new CustomException(ErrorCodeEnum.INVALID_PERMISSION);
+        }
+        
         MatchingApplication matchingApplication = matchingApplicationUsecase.createMatchingApplicationData(matchingApplicationDto);
         ChatRoom chatRoom = matchingApplicationUsecase.createMatchingChatRoom(matchingApplication);
         return matchingApplicationUsecase.setupMatchingChatRoom(matchingApplication, chatRoom);
@@ -166,6 +186,10 @@ public class MatchingController {
     @Operation(summary = "Delete all matching", description = "모든 매칭을 삭제한다.")
     @DeleteMapping("/matching")
     public void deleteAll() {
+        if (!(findUserUsecase.getUser().getRole().equals(UserRoleEnum.Admin))) {
+            log.error("MatchingController::deleteAll: Admin authority is needed.");
+            throw new CustomException(ErrorCodeEnum.INVALID_PERMISSION);
+        }
         deleteMatchingUsecase.deleteAll();
     }
 
@@ -176,6 +200,16 @@ public class MatchingController {
     @Operation(summary = "Delete matching", description = "ID가 matchingId인 매칭을 삭제한다.")
     @DeleteMapping("/matching/{matchingId}")
     public void deleteMatching(@PathVariable Long matchingId) {
+        UserAuthorityCheckDto userDto = findUserUsecase.getAuthorityUser();
+        Optional<FindMatchingDto> matchingDto = findMatchingUsecase.getMatchingById(matchingId);
+        if (matchingDto.isEmpty()) {
+            log.error("MatchingController::deleteMatching: No such matching.");
+            throw new CustomException(ErrorCodeEnum.MATCHING_NOT_FOUND);
+        }
+        if (!(userDto.getRole().equals(UserRoleEnum.Admin)) && !(userDto.getUserId().equals(matchingDto.get().getWriterId()))) {
+            log.error("MatchingController::deleteMatching: Admin or owner authority is needed.");
+            throw new CustomException(ErrorCodeEnum.INVALID_PERMISSION);
+        }
         deleteMatchingUsecase.deleteMatching(matchingId);
     }
 }
