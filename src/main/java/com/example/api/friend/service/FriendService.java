@@ -1,7 +1,5 @@
 package com.example.api.friend.service;
 
-import com.example.api.auth.domain.SecurityUser;
-import com.example.api.common.utils.AuthenticationUtils;
 import com.example.api.friend.adapter.out.persistence.FriendEntity;
 import com.example.api.friend.adapter.out.persistence.FriendMapperInterface;
 import com.example.api.friend.application.port.in.AddFriendUsecase;
@@ -22,6 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 @Service
 @Slf4j
@@ -43,14 +42,9 @@ public class FriendService implements AddFriendUsecase, FindFriendUsecase, Delet
     }
     
     @Override
-    public List<FindUserDto> getFriendList() {
-        SecurityUser securityUser = AuthenticationUtils.getCurrentUserAuthentication();
-        if (securityUser == null) {
-            log.error("FriendService::getFriendList: Authentication is needed.");
-            return new ArrayList<>();
-        }
+    public List<FindUserDto> getFriendList(UUID userId) {
         List<FindUserDto> friendList = new ArrayList<>();
-        List<FriendEntity> friendPairList = findFriendPort.getFriendList(securityUser.getUserId());
+        List<FriendEntity> friendPairList = findFriendPort.getFriendList(userId);
         for (FriendEntity friendPair: friendPairList) {
             friendList.add(userMapper.toDto(findUserPort.getByUserId(friendPair.getUserId()).orElseThrow()));
         }

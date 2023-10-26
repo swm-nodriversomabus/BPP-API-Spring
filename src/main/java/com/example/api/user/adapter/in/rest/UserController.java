@@ -1,8 +1,10 @@
 package com.example.api.user.adapter.in.rest;
 
+import com.example.api.auth.domain.SecurityUser;
 import com.example.api.common.exception.CustomException;
 import com.example.api.common.type.ApplicationStateEnum;
 import com.example.api.common.type.ErrorCodeEnum;
+import com.example.api.common.utils.AuthenticationUtils;
 import com.example.api.matching.application.port.in.FindMatchingUsecase;
 import com.example.api.matching.application.port.in.MatchingApplicationUsecase;
 import com.example.api.matching.dto.FindMatchingDto;
@@ -71,7 +73,12 @@ public class UserController {
     @Operation(summary = "Get user", description = "사용자를 조회한다.")
     @GetMapping("/user")
     public FindUserDto getUser() {
-        return findUserUsecase.getUser();
+        SecurityUser securityUser = AuthenticationUtils.getCurrentUserAuthentication();
+        if (securityUser == null) {
+            log.error("UserController::getUser: Login is needed");
+            throw new CustomException(ErrorCodeEnum.LOGIN_IS_NOT_DONE);
+        }
+        return findUserUsecase.getUser(securityUser.getUserId());
     }
 
     /**
@@ -81,7 +88,12 @@ public class UserController {
     @Operation(summary = "Get recommended matching list of a user", description = "사용자의 추천 매칭 목록을 조회한다.")
     @GetMapping("/user/recommendedmatching")
     public List<FindMatchingDto> getRecommendedMatchingList() {
-        return findMatchingUsecase.getRecommendedMatchingList();
+        SecurityUser securityUser = AuthenticationUtils.getCurrentUserAuthentication();
+        if (securityUser == null) {
+            log.error("UserController::getRecommendedMatchingList: Login is needed");
+            throw new CustomException(ErrorCodeEnum.LOGIN_IS_NOT_DONE);
+        }
+        return findMatchingUsecase.getRecommendedMatchingList(securityUser.getUserId());
     }
 
     /**
@@ -91,7 +103,12 @@ public class UserController {
     @Operation(summary = "Get own matching list of user", description = "사용자가 작성한 매칭 목록을 조회한다.")
     @GetMapping("/user/matching/own")
     public List<FindMatchingDto> getOwnMatchingList() {
-        return findMatchingUsecase.getMatchingByWriterId();
+        SecurityUser securityUser = AuthenticationUtils.getCurrentUserAuthentication();
+        if (securityUser == null) {
+            log.error("UserController::getOwnMatchingList: Login is needed");
+            throw new CustomException(ErrorCodeEnum.LOGIN_IS_NOT_DONE);
+        }
+        return findMatchingUsecase.getMatchingByWriterId(securityUser.getUserId());
     }
 
     /**
@@ -101,7 +118,12 @@ public class UserController {
     @Operation(summary = "Get pending matching list of user", description = "사용자가 대기 중인 매칭 목록을 조회한다.")
     @GetMapping("/user/pending")
     public List<FindMatchingDto> getPendingMatchingList() {
-        return matchingApplicationUsecase.getByUserIdIsAndStateEquals(ApplicationStateEnum.Pending);
+        SecurityUser securityUser = AuthenticationUtils.getCurrentUserAuthentication();
+        if (securityUser == null) {
+            log.error("UserController::getPendingMatchingList: Login is needed");
+            throw new CustomException(ErrorCodeEnum.LOGIN_IS_NOT_DONE);
+        }
+        return matchingApplicationUsecase.getByUserIdIsAndStateEquals(securityUser.getUserId(), ApplicationStateEnum.Pending);
     }
 
     /**
@@ -111,7 +133,12 @@ public class UserController {
     @Operation(summary = "Get approved matching list of user", description = "사용자가 참가한 매칭 목록을 조회한다.")
     @GetMapping("/user/approved")
     public List<FindMatchingDto> getApprovedMatchingList() {
-        return matchingApplicationUsecase.getByUserIdIsAndStateEquals(ApplicationStateEnum.Approved);
+        SecurityUser securityUser = AuthenticationUtils.getCurrentUserAuthentication();
+        if (securityUser == null) {
+            log.error("UserController::getApprovedMatchingList: Login is needed");
+            throw new CustomException(ErrorCodeEnum.LOGIN_IS_NOT_DONE);
+        }
+        return matchingApplicationUsecase.getByUserIdIsAndStateEquals(securityUser.getUserId(), ApplicationStateEnum.Approved);
     }
 
     /**
@@ -131,8 +158,13 @@ public class UserController {
     @Operation(summary = "Delete all users", description = "모든 사용자를 삭제한다.")
     @DeleteMapping("/user/all")
     public void deleteAll() {
-        if (!(findUserUsecase.getUser().getRole().equals(UserRoleEnum.Admin))) {
-            log.error("UserController::deleteAll: Admin authority is needed.");
+        SecurityUser securityUser = AuthenticationUtils.getCurrentUserAuthentication();
+        if (securityUser == null) {
+            log.error("UserController::deleteAll: Login is needed");
+            throw new CustomException(ErrorCodeEnum.LOGIN_IS_NOT_DONE);
+        }
+        if (!(findUserUsecase.getUser(securityUser.getUserId()).getRole().equals(UserRoleEnum.Admin))) {
+            log.error("UserController::deleteAll: Admin authority is needed");
             throw new CustomException(ErrorCodeEnum.INVALID_PERMISSION);
         }
         deleteUserUsecase.deleteAll();
@@ -141,13 +173,18 @@ public class UserController {
     /**
      * 사용자 삭제 (회원탈퇴 시 사용)
      */
-    @Operation(summary = "Delete user", description = "ID가 userId인 사용자를 삭제한다.")
+    @Operation(summary = "Delete user", description = "사용자를 삭제한다.")
     @DeleteMapping("/user")
     public void deleteUser() {
-        if (!(findUserUsecase.getUser().getRole().equals(UserRoleEnum.Admin))) {
-            log.error("UserController::deleteUser: Admin authority is needed.");
+        SecurityUser securityUser = AuthenticationUtils.getCurrentUserAuthentication();
+        if (securityUser == null) {
+            log.error("UserController::deleteUser: Login is needed");
+            throw new CustomException(ErrorCodeEnum.LOGIN_IS_NOT_DONE);
+        }
+        if (!(findUserUsecase.getUser(securityUser.getUserId()).getRole().equals(UserRoleEnum.Admin))) {
+            log.error("UserController::deleteUser: Admin authority is needed");
             throw new CustomException(ErrorCodeEnum.INVALID_PERMISSION);
         }
-        deleteUserUsecase.deleteUser();
+        deleteUserUsecase.deleteUser(securityUser.getUserId());
     }
 }

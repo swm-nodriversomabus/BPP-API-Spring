@@ -1,7 +1,5 @@
 package com.example.api.preference.service;
 
-import com.example.api.auth.domain.SecurityUser;
-import com.example.api.common.utils.AuthenticationUtils;
 import com.example.api.preference.adapter.out.persistence.PreferenceMapperInterface;
 import com.example.api.preference.adapter.out.persistence.UserPreferenceEntity;
 import com.example.api.preference.application.port.in.UserPreferenceUsecase;
@@ -15,6 +13,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.UUID;
 
 @Service
 @Slf4j
@@ -33,13 +33,8 @@ public class UserPreferenceService implements UserPreferenceUsecase {
     }
     
     @Override
-    public FindPreferenceDto updateUserPreference(SavePreferenceDto savePreferenceDto) {
-        SecurityUser securityUser = AuthenticationUtils.getCurrentUserAuthentication();
-        if (securityUser == null) {
-            log.error("UserPreferenceService::updateUserPreference: Authentication is needed");
-            return preferenceMapper.toDto(savePreferenceDto);
-        }
-        Long preferenceId = comparePreferencePort.getUserPreferenceId(securityUser.getUserId());
+    public FindPreferenceDto updateUserPreference(UUID userId, SavePreferenceDto savePreferenceDto) {
+        Long preferenceId = comparePreferencePort.getUserPreferenceId(userId);
         return preferenceMapper.toDto(savePreferencePort.updatePreference(preferenceId, preferenceMapper.toDomain(savePreferenceDto)));
     }
 }

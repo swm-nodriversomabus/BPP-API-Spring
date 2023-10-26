@@ -1,7 +1,5 @@
 package com.example.api.preference.service;
 
-import com.example.api.auth.domain.SecurityUser;
-import com.example.api.common.utils.AuthenticationUtils;
 import com.example.api.preference.adapter.out.persistence.PreferenceEntity;
 import com.example.api.preference.adapter.out.persistence.PreferenceMapperInterface;
 import com.example.api.preference.application.port.in.ComparePreferenceUsecase;
@@ -21,6 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 @Slf4j
@@ -74,22 +73,20 @@ public class PreferenceService implements SavePreferenceUsecase, FindPreferenceU
     // ComparePreference
     
     @Override
-    public ComparePreferenceDto getUserPreference() {
-        try {
-            SecurityUser securityUser = AuthenticationUtils.getCurrentUserAuthentication();
-            if (securityUser == null) {
-                log.error("PreferenceService::getUserPreference: Authentication is needed.");
-                throw new Exception();
-            }
-            Long preferenceId = comparePreferencePort.getUserPreferenceId(securityUser.getUserId());
-            if (preferenceId == 0L) {
-                throw new Exception();
-            }
-            return this.getByPreferenceId(preferenceId).orElseThrow(Exception::new);
-        } catch (Exception e) {
-            log.warn("PreferenceService::getUserPreference: Preference data was not found. Used default preference settings.");
+    public ComparePreferenceDto getUserPreference(UUID userId) {
+        Long preferenceId = comparePreferencePort.getUserPreferenceId(userId);
+        if (preferenceId == 0L) {
+            log.error("PreferenceService::getUserPreference: User preference data not found");
             return this.getDefaultPreference();
+            //throw new CustomException(ErrorCodeEnum.PREFERENCE_NOT_FOUND);
         }
+        Optional<ComparePreferenceDto> preferenceDto = this.getByPreferenceId(preferenceId);
+        if (preferenceDto.isEmpty()) {
+            log.error("PreferenceService::getUserPreference: User preference data not found");
+            return this.getDefaultPreference();
+            //throw new CustomException(ErrorCodeEnum.PREFERENCE_NOT_FOUND);
+        }
+        return preferenceDto.get();
     }
     
     @Override
@@ -98,8 +95,8 @@ public class PreferenceService implements SavePreferenceUsecase, FindPreferenceU
         return this.getByPreferenceId(preferenceId).orElse(this.getDefaultPreference());
     }
     
-    public Integer getMatchingScore(Long matchingId) {
-        ComparePreferenceDto userPreference = this.getUserPreference();
+    public Integer getMatchingScore(UUID userId, Long matchingId) {
+        ComparePreferenceDto userPreference = this.getUserPreference(userId);
         ComparePreferenceDto matchingPreference = this.getMatchingPreference(matchingId);
         Integer score = 0;
         score += Math.abs(userPreference.getAlcoholAmount() - matchingPreference.getAlcoholAmount());

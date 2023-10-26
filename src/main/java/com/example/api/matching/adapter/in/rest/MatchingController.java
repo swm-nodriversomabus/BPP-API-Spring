@@ -6,7 +6,6 @@ import com.example.api.common.exception.CustomException;
 import com.example.api.common.type.ApplicationStateEnum;
 import com.example.api.common.type.ErrorCodeEnum;
 import com.example.api.common.utils.AuthenticationUtils;
-import com.example.api.matching.adapter.out.persistence.MatchingApplicationPK;
 import com.example.api.matching.application.port.in.*;
 import com.example.api.matching.domain.MatchingApplication;
 import com.example.api.matching.dto.*;
@@ -45,7 +44,12 @@ public class MatchingController {
     @Operation(summary = "Create matching", description = "새로운 매칭을 생성한다.")
     @PostMapping("/matching")
     public FindMatchingDto createMatching(@RequestBody SaveMatchingDto matchingDto) {
-        return saveMatchingUsecase.createMatching(matchingDto);
+        SecurityUser securityUser = AuthenticationUtils.getCurrentUserAuthentication();
+        if (securityUser == null) {
+            log.error("MatchingController::createMatching: Login is needed");
+            throw new CustomException(ErrorCodeEnum.LOGIN_IS_NOT_DONE);
+        }
+        return saveMatchingUsecase.createMatching(securityUser.getUserId(), matchingDto);
     }
 
     /**
@@ -58,21 +62,21 @@ public class MatchingController {
     public ChatRoom createMatchingApplication(@RequestBody SaveMatchingApplicationDto matchingApplicationDto) {
         Optional<FindMatchingDto> matchingDto = findMatchingUsecase.getMatchingById(matchingApplicationDto.getMatchingId());
         if (matchingDto.isEmpty()) {
-            log.error("MatchingController::createMatchingApplication: No such matching.");
+            log.error("MatchingController::createMatchingApplication: No such matching");
             throw new CustomException(ErrorCodeEnum.MATCHING_NOT_FOUND);
         }
         
         SecurityUser securityUser = AuthenticationUtils.getCurrentUserAuthentication();
         if (securityUser == null) {
-            log.error("MatchingController::createMatchingApplication: Authentication is needed.");
+            log.error("MatchingController::createMatchingApplication: Login is needed");
             throw new CustomException(ErrorCodeEnum.LOGIN_IS_NOT_DONE);
         }
         if (securityUser.getUserId().equals(matchingApplicationDto.getUserId())) {
-            log.error("MatchingController::createMatchingApplication: WriterId equals to applicantId.");
+            log.error("MatchingController::createMatchingApplication: WriterId equals to applicantId");
             throw new CustomException(ErrorCodeEnum.INVALID_PERMISSION);
         }
         
-        MatchingApplication matchingApplication = matchingApplicationUsecase.createMatchingApplicationData(matchingApplicationDto);
+        MatchingApplication matchingApplication = matchingApplicationUsecase.createMatchingApplicationData(securityUser.getUserId(), matchingApplicationDto);
         ChatRoom chatRoom = matchingApplicationUsecase.createMatchingChatRoom(matchingApplication);
         return matchingApplicationUsecase.setupMatchingChatRoom(matchingApplication, chatRoom);
     }
@@ -123,11 +127,16 @@ public class MatchingController {
     @Operation(summary = "Get user status of matching", description = "매칭의 사용자 상태를 조회한다.")
     @GetMapping("/matching/{matchingId}/status")
     public String getUserStatus(@PathVariable Long matchingId) {
-        return matchingApplicationUsecase.getUserStatus(matchingId);
+        SecurityUser securityUser = AuthenticationUtils.getCurrentUserAuthentication();
+        if (securityUser == null) {
+            log.error("MatchingController::getUserStatus: Login is needed");
+            throw new CustomException(ErrorCodeEnum.LOGIN_IS_NOT_DONE);
+        }
+        return matchingApplicationUsecase.getUserStatus(securityUser.getUserId(), matchingId);
     }
 
     /**
-     * ID가 matchingId인 매칭의 좋아요 수 조회 (미구현)
+     * ID가 matchingId인 매칭의 좋아요 수 조회
      * @param matchingId (ID)
      * @return int
      */
@@ -166,12 +175,6 @@ public class MatchingController {
     @Operation(summary = "Process matching application", description = "매칭 신청을 처리한다.")
     @PutMapping("/matching/application")
     public void processMatchingApplication(SaveMatchingApplicationDto matchingApplicationDto) {
-        MatchingApplicationPK matchingApplicationPK = MatchingApplicationPK.builder()
-                .userId(matchingApplicationDto.getUserId())
-                .matchingId(matchingApplicationDto.getMatchingId())
-                .build();
-        // Invalid input 거르기
-        
         if (matchingApplicationDto.getState() == ApplicationStateEnum.Approved) {
             matchingApplicationUsecase.approveMatchingApplication(matchingApplicationDto);
         }
@@ -186,8 +189,13 @@ public class MatchingController {
     @Operation(summary = "Delete all matching", description = "모든 매칭을 삭제한다.")
     @DeleteMapping("/matching")
     public void deleteAll() {
-        if (!(findUserUsecase.getUser().getRole().equals(UserRoleEnum.Admin))) {
-            log.error("MatchingController::deleteAll: Admin authority is needed.");
+        SecurityUser securityUser = AuthenticationUtils.getCurrentUserAuthentication();
+        if (securityUser == null) {
+            log.error("MatchingController::deleteAll: Login is needed");
+            throw new CustomException(ErrorCodeEnum.LOGIN_IS_NOT_DONE);
+        }
+        if (!(findUserUsecase.getAuthorityUser(securityUser.getUserId()).getRole().equals(UserRoleEnum.Admin))) {
+            log.error("MatchingController::deleteAll: Admin authority is needed");
             throw new CustomException(ErrorCodeEnum.INVALID_PERMISSION);
         }
         deleteMatchingUsecase.deleteAll();
@@ -200,14 +208,21 @@ public class MatchingController {
     @Operation(summary = "Delete matching", description = "ID가 matchingId인 매칭을 삭제한다.")
     @DeleteMapping("/matching/{matchingId}")
     public void deleteMatching(@PathVariable Long matchingId) {
-        UserAuthorityCheckDto userDto = findUserUsecase.getAuthorityUser();
+        SecurityUser securityUser = AuthenticationUtils.getCurrentUserAuthentication();
+        if (securityUser == null) {
+            log.error("MatchingController::deleteMatching: Login is needed");
+            throw new CustomException(ErrorCodeEnum.LOGIN_IS_NOT_DONE);
+        }
+        
+        UserAuthorityCheckDto userDto = findUserUsecase.getAuthorityUser(securityUser.getUserId());
         Optional<FindMatchingDto> matchingDto = findMatchingUsecase.getMatchingById(matchingId);
         if (matchingDto.isEmpty()) {
-            log.error("MatchingController::deleteMatching: No such matching.");
+            log.error("MatchingController::deleteMatching: No such matching");
             throw new CustomException(ErrorCodeEnum.MATCHING_NOT_FOUND);
         }
+        
         if (!(userDto.getRole().equals(UserRoleEnum.Admin)) && !(userDto.getUserId().equals(matchingDto.get().getWriterId()))) {
-            log.error("MatchingController::deleteMatching: Admin or owner authority is needed.");
+            log.error("MatchingController::deleteMatching: Admin or owner authority is needed");
             throw new CustomException(ErrorCodeEnum.INVALID_PERMISSION);
         }
         deleteMatchingUsecase.deleteMatching(matchingId);

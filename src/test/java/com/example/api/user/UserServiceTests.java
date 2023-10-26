@@ -107,7 +107,7 @@ public class UserServiceTests {
     
     @Test
     void getUserByIdTest() {
-        userService.getUser();
+        userService.getUser(UUID.fromString(userUUID));
         verify(findUserPort, times(1)).getByUserId(UUID.fromString(userUUID));
     }
     
@@ -120,7 +120,7 @@ public class UserServiceTests {
     
     @Test
     void deleteUserTest() {
-        userService.deleteUser();
+        userService.deleteUser(UUID.fromString(userUUID));
         verify(deleteUserPort, times(1)).deleteByUserId(UUID.fromString(userUUID));
     }
 

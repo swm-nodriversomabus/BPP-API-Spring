@@ -25,7 +25,7 @@ public class MatchingApplicationServiceTests {
     @Mock
     private MatchingApplicationPort matchingApplicationPort;
     private SaveMatchingApplicationDto matchingApplication;
-    private final String userUUID = "09a46fb0-2ae0-4a35-8aad-0a9e4311a1a3";
+    private final UUID userId = UUID.fromString("09a46fb0-2ae0-4a35-8aad-0a9e4311a1a3");
     
     @BeforeEach
     void beforeEach() {
@@ -36,16 +36,16 @@ public class MatchingApplicationServiceTests {
                 .build();
     }
     
-    /*@Test
+    @Test
     void createMatchingApplicationTest() {
-        matchingApplicationService.createMatchingApplication(matchingApplication);
+        matchingApplicationService.createMatchingApplicationData(userId, matchingApplication);
         verify(matchingApplicationPort, times(1)).createMatchingApplication(matchingMapper.toDomain(matchingApplication));
-    }*/
+    }
 
     @Test
     void getByUserIdIsAndStateEqualsTest() {
-        matchingApplicationService.getByUserIdIsAndStateEquals(ApplicationStateEnum.Pending);
-        verify(matchingApplicationPort, times(1)).getByUserIdIsAndStateEquals(UUID.fromString(userUUID), ApplicationStateEnum.Pending);
+        matchingApplicationService.getByUserIdIsAndStateEquals(userId, ApplicationStateEnum.Pending);
+        verify(matchingApplicationPort, times(1)).getByUserIdIsAndStateEquals(userId, ApplicationStateEnum.Pending);
     }
 
     @Test

@@ -34,7 +34,7 @@ public class MatchingServiceTests {
     private LikePort likePort;
     private SaveMatchingDto matching1, matching2, matching3;
     private LikeDto like;
-    private final String userUUID = "09a46fb0-2ae0-4a35-8aad-0a9e4311a1a3";
+    private final UUID userId = UUID.fromString("09a46fb0-2ae0-4a35-8aad-0a9e4311a1a3");
     
     @BeforeEach
     void beforeEach() {
@@ -78,16 +78,16 @@ public class MatchingServiceTests {
                 .isActive(true)
                 .build();
         like = LikeDto.builder()
-                .userid(UUID.fromString(userUUID))
+                .userid(userId)
                 .matchingId(3L)
                 .build();
     }
     
     @Test
     void createMatchingTest() {
-        matchingService.createMatching(matching1);
-        matchingService.createMatching(matching2);
-        matchingService.createMatching(matching3);
+        matchingService.createMatching(userId, matching1);
+        matchingService.createMatching(userId, matching2);
+        matchingService.createMatching(userId, matching3);
         verify(saveMatchingPort, times(3)).createMatching(matchingMapper.toDomain(matching1));
     }
     
@@ -111,7 +111,7 @@ public class MatchingServiceTests {
     
     @Test
     void getRecommendedMatchingListTest() {
-        matchingService.getRecommendedMatchingList();
+        matchingService.getRecommendedMatchingList(userId);
     }
     
     @Test

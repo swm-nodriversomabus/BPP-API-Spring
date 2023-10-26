@@ -88,27 +88,23 @@ public class UserService implements SaveUserUsecase, FindUserUsecase, DeleteUser
     }
     
     @Override
-    public FindUserDto getUser() {
-        SecurityUser securityUser = AuthenticationUtils.getCurrentUserAuthentication();
-        if (securityUser == null) {
-            log.error("UserService::getUser: Authentication is needed");
-            return this.getDefaultUser();
+    public FindUserDto getUser(UUID userId) {
+        Optional<UserEntity> userEntity = findUserPort.getByUserId(userId);
+        if (userEntity.isEmpty()) {
+            log.error("UserService::getUser: No such user");
+            throw new CustomException(ErrorCodeEnum.USER_NOT_FOUND);
         }
-        return findUserPort.getByUserId(securityUser.getUserId())
-                .map(userMapper::toDto)
-                .orElse(this.getDefaultUser());
+        return userMapper.toDto(userEntity.get());
     }
 
     @Override
-    public UserAuthorityCheckDto getAuthorityUser() {
-        SecurityUser securityUser = AuthenticationUtils.getCurrentUserAuthentication();
-        if (securityUser == null) {
-            log.error("UserService::getAuthorityUser: Authentication is needed");
-            return this.getDefaultAuthorityUser();
+    public UserAuthorityCheckDto getAuthorityUser(UUID userId) {
+        Optional<UserEntity> userEntity = findUserPort.getByUserId(userId);
+        if (userEntity.isEmpty()) {
+            log.error("UserService::getAuthorityUser: No such user");
+            throw new CustomException(ErrorCodeEnum.USER_NOT_FOUND);
         }
-        return findUserPort.getByUserId(securityUser.getUserId())
-                .map(userMapper::toAuthorityDto)
-                .orElse(this.getDefaultAuthorityUser());
+        return userMapper.toAuthorityDto(userEntity.get());
     }
 
     @Override
@@ -116,8 +112,8 @@ public class UserService implements SaveUserUsecase, FindUserUsecase, DeleteUser
     public FindUserDto updateUser(UpdateUserDto userDto) {
         SecurityUser securityUser = AuthenticationUtils.getCurrentUserAuthentication();
         if (securityUser == null) {
-            log.error("UserService::updateUser: Authentication is needed.");
-            return userMapper.toDto(userDto);
+            log.error("UserService::updateUser: Login is needed");
+            throw new CustomException(ErrorCodeEnum.LOGIN_IS_NOT_DONE);
         }
         User user = saveUserPort.updateUser(securityUser.getUserId(), userMapper.toDomain(userDto));
         return userMapper.toDto(user);
@@ -131,13 +127,8 @@ public class UserService implements SaveUserUsecase, FindUserUsecase, DeleteUser
     
     @Override
     @Transactional
-    public void deleteUser() {
-        SecurityUser securityUser = AuthenticationUtils.getCurrentUserAuthentication();
-        if (securityUser == null) {
-            log.error("UserService::deleteUser: Authentication is needed.");
-            return;
-        }
-        deleteUserPort.deleteByUserId(securityUser.getUserId());
+    public void deleteUser(UUID userId) {
+        deleteUserPort.deleteByUserId(userId);
     }
     
     // Social

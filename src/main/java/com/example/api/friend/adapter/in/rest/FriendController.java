@@ -1,5 +1,9 @@
 package com.example.api.friend.adapter.in.rest;
 
+import com.example.api.auth.domain.SecurityUser;
+import com.example.api.common.exception.CustomException;
+import com.example.api.common.type.ErrorCodeEnum;
+import com.example.api.common.utils.AuthenticationUtils;
 import com.example.api.friend.application.port.in.AddFriendUsecase;
 import com.example.api.friend.application.port.in.DeleteFriendUsecase;
 import com.example.api.friend.application.port.in.FindFriendUsecase;
@@ -8,12 +12,14 @@ import com.example.api.user.dto.FindUserDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
+@Slf4j
 @Tag(name = "Friend", description = "Friend API")
 public class FriendController {
     private final AddFriendUsecase addFriendUsecase;
@@ -38,7 +44,12 @@ public class FriendController {
     @Operation(summary = "Get friend list", description = "사용자의 친구 목록을 조회한다.")
     @GetMapping("/user/friend")
     public List<FindUserDto> getFriendList() {
-        return findFriendUsecase.getFriendList();
+        SecurityUser securityUser = AuthenticationUtils.getCurrentUserAuthentication();
+        if (securityUser == null) {
+            log.error("FriendController::getFriendList: Login is needed");
+            throw new CustomException(ErrorCodeEnum.LOGIN_IS_NOT_DONE);
+        }
+        return findFriendUsecase.getFriendList(securityUser.getUserId());
     }
 
     /**
