@@ -1,8 +1,6 @@
 package com.example.api.matching.service;
 
-import com.example.api.auth.domain.SecurityUser;
 import com.example.api.common.type.Pair;
-import com.example.api.common.utils.AuthenticationUtils;
 import com.example.api.matching.adapter.out.persistence.MatchingMapperInterface;
 import com.example.api.matching.application.port.in.DeleteMatchingUsecase;
 import com.example.api.matching.application.port.in.FindMatchingUsecase;
@@ -39,16 +37,10 @@ public class MatchingService implements SaveMatchingUsecase, FindMatchingUsecase
 
     @Override
     @Transactional
-    public FindMatchingDto createMatching(SaveMatchingDto matchingDto) {
+    public FindMatchingDto createMatching(UUID writerId, SaveMatchingDto matchingDto) {
         Matching matching = matchingMapper.toDomain(matchingDto);
-        SecurityUser securityUser = AuthenticationUtils.getCurrentUserAuthentication();
-        if (securityUser == null) {
-            log.error("MatchingService::createMatching: Authentication is needed.");
-            return matchingMapper.toDto(matching);
-        }
-        matching.setWriterId(securityUser.getUserId());
-        matching = saveMatchingPort.createMatching(matching);
-        return matchingMapper.toDto(matching);
+        matching.setWriterId(writerId);
+        return matchingMapper.toDto(saveMatchingPort.createMatching(matching));
     }
 
     @Override
@@ -65,13 +57,7 @@ public class MatchingService implements SaveMatchingUsecase, FindMatchingUsecase
     }
     
     @Override
-    public List<FindMatchingDto> getMatchingByWriterId() {
-        SecurityUser securityUser = AuthenticationUtils.getCurrentUserAuthentication();
-        if (securityUser == null) {
-            log.error("MatchingService::getMatchingByWriterId: Authentication is needed.");
-            return new ArrayList<>();
-        }
-        UUID userId = securityUser.getUserId();
+    public List<FindMatchingDto> getMatchingByWriterId(UUID userId) {
         return findMatchingPort.getByWriterId(userId).stream()
                 .map(matchingMapper::toDto)
                 .collect(Collectors.toList());
@@ -85,17 +71,12 @@ public class MatchingService implements SaveMatchingUsecase, FindMatchingUsecase
     }
     
     @Override
-    public List<FindMatchingDto> getRecommendedMatchingList() {
-        SecurityUser securityUser = AuthenticationUtils.getCurrentUserAuthentication();
-        if (securityUser == null) {
-            log.error("MatchingService::getRecommendedMatchingList: Authentication is needed.");
-            return new ArrayList<>();
-        }
+    public List<FindMatchingDto> getRecommendedMatchingList(UUID userId) {
         List<FindMatchingDto> activeMatchingList = this.getMatchingByIsActive(true); // 유효한 매칭만 뽑아옴
         List<Pair<Long, Integer>> matchingScoreList = new ArrayList<>();
         for (FindMatchingDto matchingData: activeMatchingList) { // 매칭별로 유사도 점수를 계산함
             Long matchingId = matchingData.getMatchingId();
-            Integer matchingScore = preferenceService.getMatchingScore(matchingId);
+            Integer matchingScore = preferenceService.getMatchingScore(userId, matchingId);
             matchingScoreList.add(new Pair<>(matchingId, matchingScore));
         }
         matchingScoreList.sort(Comparator.comparing(Pair::getSecond));

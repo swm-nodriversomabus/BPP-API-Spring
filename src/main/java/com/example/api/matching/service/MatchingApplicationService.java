@@ -1,12 +1,10 @@
 package com.example.api.matching.service;
 
-import com.example.api.auth.domain.SecurityUser;
 import com.example.api.chatroom.domain.ChatRoom;
 import com.example.api.chatroom.dto.CreateChatRoomDto;
 import com.example.api.chatroom.service.ChatRoomService;
 import com.example.api.chatroom.type.ChatRoomEnum;
 import com.example.api.common.type.ApplicationStateEnum;
-import com.example.api.common.utils.AuthenticationUtils;
 import com.example.api.fcm.dto.FcmDto;
 import com.example.api.fcm.service.FcmService;
 import com.example.api.matching.adapter.out.persistence.MatchingApplicationEntity;
@@ -52,15 +50,10 @@ public class MatchingApplicationService implements MatchingApplicationUsecase {
      */
     @Override
     @Transactional
-    public MatchingApplication createMatchingApplicationData(SaveMatchingApplicationDto matchingApplicationDto) {
-        SecurityUser securityUser = AuthenticationUtils.getCurrentUserAuthentication();
-        if (securityUser == null) {
-            log.error("MatchingApplicationService::createMatchingApplicationData: Authentication is needed.");
-            return MatchingApplication.builder().build();
-        }
+    public MatchingApplication createMatchingApplicationData(UUID userId, SaveMatchingApplicationDto matchingApplicationDto) {
         MatchingApplication matchingApplication = matchingMapper.toDomain(matchingApplicationDto);
         if (matchingApplication.getUserId() == null) {
-            matchingApplication.setUserId(securityUser.getUserId());
+            matchingApplication.setUserId(userId);
         }
         return matchingApplicationPort.createMatchingApplication(matchingApplication);
     }
@@ -108,13 +101,8 @@ public class MatchingApplicationService implements MatchingApplicationUsecase {
     }
     
     @Override
-    public List<FindMatchingDto> getByUserIdIsAndStateEquals(ApplicationStateEnum state) {
-        SecurityUser securityUser = AuthenticationUtils.getCurrentUserAuthentication();
-        if (securityUser == null) {
-            log.error("MatchingApplicationService::getByUserIdAndStateEquals: Authentication is needed.");
-            return new ArrayList<>();
-        }
-        List<MatchingApplicationEntity> matchingPairList = matchingApplicationPort.getByUserIdIsAndStateEquals(securityUser.getUserId(), state);
+    public List<FindMatchingDto> getByUserIdIsAndStateEquals(UUID userId, ApplicationStateEnum state) {
+        List<MatchingApplicationEntity> matchingPairList = matchingApplicationPort.getByUserIdIsAndStateEquals(userId, state);
         List<FindMatchingDto> matchingData = new ArrayList<>();
         for (MatchingApplicationEntity matchingPair: matchingPairList) {
             matchingData.add(matchingMapper.toDto(findMatchingPort.getByMatchingId(matchingPair.getMatchingId()).orElseThrow()));
@@ -133,13 +121,8 @@ public class MatchingApplicationService implements MatchingApplicationUsecase {
     }
     
     @Override
-    public String getUserStatus(Long matchingId) {
-        SecurityUser securityUser = AuthenticationUtils.getCurrentUserAuthentication();
-        if (securityUser == null) {
-            log.error("MatchingApplicationService::getUserStatus: Authentication is needed.");
-            return "Error";
-        }
-        MatchingApplicationPK matchingApplicationPK = new MatchingApplicationPK(securityUser.getUserId(), matchingId);
+    public String getUserStatus(UUID userId, Long matchingId) {
+        MatchingApplicationPK matchingApplicationPK = new MatchingApplicationPK(userId, matchingId);
         Optional<MatchingApplicationEntity> statusData = matchingApplicationPort.getByMatchingApplicationPK(matchingApplicationPK);
         if (statusData.isPresent()) {
             String status = statusData.get().getState().toString();

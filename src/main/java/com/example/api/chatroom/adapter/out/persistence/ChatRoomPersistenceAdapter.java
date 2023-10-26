@@ -5,7 +5,6 @@ import com.example.api.chatroom.application.port.out.FindChatRoomListPort;
 import com.example.api.chatroom.application.port.out.RetrieveChatRoomPort;
 import com.example.api.chatroom.domain.ChatRoom;
 import com.example.api.chatroom.repository.ChatRoomRepository;
-import com.example.api.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -35,7 +34,7 @@ public class ChatRoomPersistenceAdapter implements CreateChatRoomPort, FindChatR
     }
 
     @Override
-    public List<ChatRoomEntity> chatRoomList(Pageable pageable, UUID userId) {
+    public List<ChatRoomEntity> getChatRoomList(UUID userId, Pageable pageable) {
         Page<ChatRoomEntity> ret = chatRoomRepository.findAllByUserId(pageable, userId);
         if (ret != null && ret.hasContent()) {
             return ret.getContent();

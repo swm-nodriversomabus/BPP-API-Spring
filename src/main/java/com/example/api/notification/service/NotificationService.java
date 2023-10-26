@@ -1,7 +1,5 @@
 package com.example.api.notification.service;
 
-import com.example.api.auth.domain.SecurityUser;
-import com.example.api.common.utils.AuthenticationUtils;
 import com.example.api.notification.adapter.out.persistence.NotificationEntity;
 import com.example.api.notification.adapter.out.persistence.NotificationMapperInterface;
 import com.example.api.notification.adapter.out.persistence.UserNotificationEntity;
@@ -20,6 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 @Slf4j
@@ -44,13 +43,9 @@ public class NotificationService implements SaveNotificationUsecase, FindNotific
     }
     
     @Override
-    public List<FindNotificationDto> getUserNotificationList() {
-        SecurityUser securityUser = AuthenticationUtils.getCurrentUserAuthentication();
-        if (securityUser == null) {
-            log.error("NotificationService::getUserNotificationList: Authentication is needed.");
-            return new ArrayList<>();
-        }
-        List<UserNotificationEntity> notificationPairList = findNotificationPort.getUserNotificationList(securityUser.getUserId());
+    public List<FindNotificationDto> getUserNotificationList(UUID userId) {
+        
+        List<UserNotificationEntity> notificationPairList = findNotificationPort.getUserNotificationList(userId);
         List<FindNotificationDto> userNotificationList = new ArrayList<>();
         for (UserNotificationEntity notificationPair: notificationPairList) {
             NotificationEntity notificationEntity = findNotificationPort.getNotificationById(notificationPair.getNotificationId()).orElseThrow();

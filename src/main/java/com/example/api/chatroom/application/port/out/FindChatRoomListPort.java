@@ -7,5 +7,5 @@ import java.util.List;
 import java.util.UUID;
 
 public interface FindChatRoomListPort {
-    List<ChatRoomEntity> chatRoomList(Pageable pageable, UUID userId);
+    List<ChatRoomEntity> getChatRoomList(UUID userId, Pageable pageable);
 }

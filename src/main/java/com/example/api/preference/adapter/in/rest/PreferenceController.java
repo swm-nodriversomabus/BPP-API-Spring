@@ -1,5 +1,9 @@
 package com.example.api.preference.adapter.in.rest;
 
+import com.example.api.auth.domain.SecurityUser;
+import com.example.api.common.exception.CustomException;
+import com.example.api.common.type.ErrorCodeEnum;
+import com.example.api.common.utils.AuthenticationUtils;
 import com.example.api.preference.application.port.in.ComparePreferenceUsecase;
 import com.example.api.preference.application.port.in.MatchingPreferenceUsecase;
 import com.example.api.preference.application.port.in.SavePreferenceUsecase;
@@ -8,10 +12,12 @@ import com.example.api.preference.dto.*;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
+@Slf4j
 @Tag(name = "Preference", description = "Preference API")
 public class PreferenceController {
     private final SavePreferenceUsecase savePreferenceUsecase;
@@ -58,8 +64,13 @@ public class PreferenceController {
      */
     @Operation(summary = "Get user preference", description = "사용자 선호도를 조회한다.")
     @GetMapping("/user/preference")
-    public ComparePreferenceDto findUserPreference() {
-        return comparePreferenceUsecase.getUserPreference();
+    public ComparePreferenceDto getUserPreference() {
+        SecurityUser securityUser = AuthenticationUtils.getCurrentUserAuthentication();
+        if (securityUser == null) {
+            log.error("PreferenceController::getUserPreference: Login is needed");
+            throw new CustomException(ErrorCodeEnum.LOGIN_IS_NOT_DONE);
+        }
+        return comparePreferenceUsecase.getUserPreference(securityUser.getUserId());
     }
 
     /**
@@ -81,7 +92,12 @@ public class PreferenceController {
     @Operation(summary = "Update user preference", description = "사용자 선호도를 변경한다.")
     @PatchMapping("/user/preference")
     public FindPreferenceDto updateUserPreference(@RequestBody SavePreferenceDto savePreferenceDto) {
-        return userPreferenceUsecase.updateUserPreference(savePreferenceDto);
+        SecurityUser securityUser = AuthenticationUtils.getCurrentUserAuthentication();
+        if (securityUser == null) {
+            log.error("PreferenceController::updateUserPreference: Login is needed");
+            throw new CustomException(ErrorCodeEnum.LOGIN_IS_NOT_DONE);
+        }
+        return userPreferenceUsecase.updateUserPreference(securityUser.getUserId(), savePreferenceDto);
     }
 
     /**

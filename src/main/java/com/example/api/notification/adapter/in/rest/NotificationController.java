@@ -1,5 +1,9 @@
 package com.example.api.notification.adapter.in.rest;
 
+import com.example.api.auth.domain.SecurityUser;
+import com.example.api.common.exception.CustomException;
+import com.example.api.common.type.ErrorCodeEnum;
+import com.example.api.common.utils.AuthenticationUtils;
 import com.example.api.notification.application.port.in.FindNotificationUsecase;
 import com.example.api.notification.application.port.in.SaveNotificationUsecase;
 import com.example.api.notification.application.port.in.UserNotificationUsecase;
@@ -9,6 +13,7 @@ import com.example.api.notification.dto.UserNotificationDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
@@ -18,6 +23,7 @@ import java.util.Optional;
 @RestController
 @RequiredArgsConstructor
 @EnableWebMvc
+@Slf4j
 @Tag(name = "Notification", description = "Notification API")
 public class NotificationController {
     private final SaveNotificationUsecase saveNotificationUsecase;
@@ -64,7 +70,12 @@ public class NotificationController {
     @Operation(summary = "Ger notification list of user", description = "사용자의 알림 리스트를 조회한다.")
     @GetMapping("/user/notification")
     public List<FindNotificationDto> getUserNotificationList() {
-        return findNotificationUsecase.getUserNotificationList();
+        SecurityUser securityUser = AuthenticationUtils.getCurrentUserAuthentication();
+        if (securityUser == null) {
+            log.error("NotificationController::getUserNotificationList: Login is needed");
+            throw new CustomException(ErrorCodeEnum.LOGIN_IS_NOT_DONE);
+        }
+        return findNotificationUsecase.getUserNotificationList(securityUser.getUserId());
     }
 
     /**
