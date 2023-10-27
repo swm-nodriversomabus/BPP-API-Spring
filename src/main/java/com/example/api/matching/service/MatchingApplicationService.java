@@ -1,9 +1,5 @@
 package com.example.api.matching.service;
 
-import com.example.api.chatroom.domain.ChatRoom;
-import com.example.api.chatroom.dto.CreateChatRoomDto;
-import com.example.api.chatroom.service.ChatRoomService;
-import com.example.api.chatroom.type.ChatRoomEnum;
 import com.example.api.common.type.ApplicationStateEnum;
 import com.example.api.fcm.dto.FcmDto;
 import com.example.api.fcm.service.FcmService;
@@ -14,11 +10,8 @@ import com.example.api.matching.application.port.in.MatchingApplicationUsecase;
 import com.example.api.matching.application.port.out.FindMatchingPort;
 import com.example.api.matching.application.port.out.MatchingApplicationPort;
 import com.example.api.matching.domain.MatchingApplication;
-import com.example.api.matching.dto.FindMatchingApplicationDto;
 import com.example.api.matching.dto.FindMatchingDto;
 import com.example.api.matching.dto.SaveMatchingApplicationDto;
-import com.example.api.member.dto.AddMemberDto;
-import com.example.api.member.service.MemberService;
 import com.example.api.user.adapter.out.persistence.UserMapperInterface;
 import com.example.api.user.application.port.out.FindUserPort;
 import com.example.api.user.dto.FindUserDto;
@@ -39,8 +32,6 @@ public class MatchingApplicationService implements MatchingApplicationUsecase {
     private final FindUserPort findUserPort;
     private final FindMatchingPort findMatchingPort;
     private final MatchingApplicationPort matchingApplicationPort;
-    private final ChatRoomService chatRoomService;
-    private final MemberService memberService;
     private final FcmService fcmService;
 
     /**
@@ -56,48 +47,6 @@ public class MatchingApplicationService implements MatchingApplicationUsecase {
             matchingApplication.setUserId(userId);
         }
         return matchingApplicationPort.createMatchingApplication(matchingApplication);
-    }
-
-    /**
-     * createMatchingApplication Step 2
-     * @param matchingApplication (데이터)
-     * @return ChatRoom
-     */
-    @Override
-    @Transactional
-    public ChatRoom createMatchingChatRoom(MatchingApplication matchingApplication) {
-        CreateChatRoomDto createChatRoomDto = CreateChatRoomDto.builder()
-                .masterId(matchingApplication.getUserId())
-                .chatroomName("매칭 신청") // 이거 바꿔야 함
-                .type(ChatRoomEnum.Normal)
-                .isActive(true)
-                .build();
-        return chatRoomService.createRoom(createChatRoomDto);
-    }
-
-    /**
-     * createMatchingApplication Step 3
-     * @param matchingApplication (데이터)
-     * @param chatRoom (데이터)
-     */
-    @Override
-    @Transactional
-    public ChatRoom setupMatchingChatRoom(MatchingApplication matchingApplication, ChatRoom chatRoom) {
-        List<UUID> memberIds = new ArrayList<>();
-        memberIds.add(matchingApplication.getUserId());
-        UUID matchingWriterId = findMatchingPort.getByMatchingId(matchingApplication.getMatchingId())
-                .orElseThrow(NoSuchElementException::new)
-                .getWriterId();
-        memberIds.add(matchingWriterId);
-
-        AddMemberDto addMemberDto = AddMemberDto.builder()
-                .chatroomId(chatRoom.getChatroomId())
-                .memberIds(memberIds)
-                .build();
-        memberService.addMember(addMemberDto);
-        
-        chatRoom.setMembers(memberIds);
-        return chatRoom;
     }
     
     @Override
@@ -130,12 +79,6 @@ public class MatchingApplicationService implements MatchingApplicationUsecase {
         } else {
             return "None";
         }
-    }
-    
-    @Transactional
-    public FindMatchingApplicationDto updateMatchingApplication(SaveMatchingApplicationDto matchingApplicationDto) {
-        MatchingApplication matchingApplication = matchingApplicationPort.updateMatchingApplication(matchingMapper.toDomain(matchingApplicationDto));
-        return matchingMapper.toDto(matchingApplication);
     }
 
     @Override

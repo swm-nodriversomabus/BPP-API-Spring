@@ -53,11 +53,4 @@ public class MatchingApplicationServiceTests {
         matchingApplicationService.getByMatchingIdIsAndStateEquals(1L, ApplicationStateEnum.Approved);
         verify(matchingApplicationPort, times(1)).getByMatchingIdIsAndStateEquals(1L, ApplicationStateEnum.Approved);
     }
-
-    @Test
-    void updateMatchingApplicationTest() {
-        matchingApplication.setState(ApplicationStateEnum.Approved);
-        matchingApplicationService.updateMatchingApplication(matchingApplication);
-        verify(matchingApplicationPort, times(1)).updateMatchingApplication(matchingMapper.toDomain(matchingApplication));
-    }
 }

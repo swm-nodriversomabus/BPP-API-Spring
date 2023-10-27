@@ -42,10 +42,4 @@ public class MatchingApplicationPersistenceAdapter implements MatchingApplicatio
     public List<MatchingApplicationEntity> getByMatchingIdIsAndStateEquals(Long matchingId, ApplicationStateEnum state) {
         return matchingApplicationRepository.getByMatchingIdAndStateEquals(matchingId, state);
     }
-    
-    @Override
-    public MatchingApplication updateMatchingApplication(MatchingApplication matchingApplication) {
-        MatchingApplicationEntity matchingApplicationData = matchingApplicationRepository.save(matchingMapper.toEntity(matchingApplication));
-        return matchingMapper.toDomain(matchingApplicationData);
-    }
 }

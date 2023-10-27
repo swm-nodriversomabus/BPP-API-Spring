@@ -8,6 +8,8 @@ import com.example.api.chatroom.application.port.out.CreateChatRoomPort;
 import com.example.api.chatroom.application.port.out.FindChatRoomListPort;
 import com.example.api.chatroom.domain.ChatRoom;
 import com.example.api.chatroom.dto.CreateChatRoomDto;
+import com.example.api.chatroom.type.ChatRoomEnum;
+import com.example.api.matching.domain.MatchingApplication;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.clients.admin.AdminClient;
@@ -44,6 +46,23 @@ public class ChatRoomService implements CreateChatRoomUsecase, FindChatRomListUs
         createTopic(chatRoom.getChatroomId().toString());
         kafkaConsumerConfig.createListenerContainerForRoom(chatRoom.getChatroomId().toString());
         return chatRoom;
+    }
+
+    /**
+     * createMatchingApplication Step 2
+     * @param matchingApplication (데이터)
+     * @return ChatRoom
+     */
+    @Override
+    @Transactional
+    public ChatRoom createMatchingChatRoom(MatchingApplication matchingApplication) {
+        CreateChatRoomDto createChatRoomDto = CreateChatRoomDto.builder()
+                .masterId(matchingApplication.getUserId())
+                .chatroomName("매칭 신청") // 이거 바꿔야 함
+                .type(ChatRoomEnum.Normal)
+                .isActive(true)
+                .build();
+        return this.createRoom(createChatRoomDto);
     }
 
     @Override
