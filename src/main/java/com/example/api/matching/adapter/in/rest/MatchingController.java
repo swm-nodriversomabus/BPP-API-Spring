@@ -1,6 +1,7 @@
 package com.example.api.matching.adapter.in.rest;
 
 import com.example.api.auth.domain.SecurityUser;
+import com.example.api.chatroom.application.port.in.CreateChatRoomUsecase;
 import com.example.api.chatroom.domain.ChatRoom;
 import com.example.api.common.exception.CustomException;
 import com.example.api.common.type.ApplicationStateEnum;
@@ -9,6 +10,7 @@ import com.example.api.common.utils.AuthenticationUtils;
 import com.example.api.matching.application.port.in.*;
 import com.example.api.matching.domain.MatchingApplication;
 import com.example.api.matching.dto.*;
+import com.example.api.member.application.port.in.AddMemberChatRoomUsecase;
 import com.example.api.user.application.port.in.FindUserUsecase;
 import com.example.api.user.dto.FindUserDto;
 import com.example.api.user.dto.UserAuthorityCheckDto;
@@ -35,21 +37,32 @@ public class MatchingController {
     private final DeleteMatchingUsecase deleteMatchingUsecase;
     private final MatchingApplicationUsecase matchingApplicationUsecase;
     private final LikeUsecase likeUsecase;
+    private final CreateChatRoomUsecase createChatRoomUsecase;
+    private final AddMemberChatRoomUsecase addMemberChatRoomUsecase;
 
     /**
      * 새 매칭 생성
-     * @param matchingDto (데이터)
-     * @return MatchingDto
+     * @param saveMatchingDto (데이터)
+     * @return FindMatchingDto
      */
     @Operation(summary = "Create matching", description = "새로운 매칭을 생성한다.")
     @PostMapping("/matching")
-    public FindMatchingDto createMatching(@RequestBody SaveMatchingDto matchingDto) {
+    public FindMatchingDto createMatching(@RequestBody SaveMatchingDto saveMatchingDto) {
         SecurityUser securityUser = AuthenticationUtils.getCurrentUserAuthentication();
         if (securityUser == null) {
             log.error("MatchingController::createMatching: Login is needed");
             throw new CustomException(ErrorCodeEnum.LOGIN_IS_NOT_DONE);
         }
-        return saveMatchingUsecase.createMatching(securityUser.getUserId(), matchingDto);
+        FindMatchingDto findMatchingDto =  saveMatchingUsecase.createMatching(securityUser.getUserId(), saveMatchingDto);
+        
+        SaveMatchingApplicationDto saveMatchingApplicationDto = SaveMatchingApplicationDto.builder()
+                .userId(securityUser.getUserId())
+                .matchingId(findMatchingDto.getMatchingId())
+                .state(ApplicationStateEnum.Owner)
+                .isActive(true)
+                .build();
+        matchingApplicationUsecase.createMatchingApplicationData(securityUser.getUserId(), saveMatchingApplicationDto);
+        return findMatchingDto;
     }
 
     /**
@@ -77,8 +90,8 @@ public class MatchingController {
         }
         
         MatchingApplication matchingApplication = matchingApplicationUsecase.createMatchingApplicationData(securityUser.getUserId(), matchingApplicationDto);
-        ChatRoom chatRoom = matchingApplicationUsecase.createMatchingChatRoom(matchingApplication);
-        return matchingApplicationUsecase.setupMatchingChatRoom(matchingApplication, chatRoom);
+        ChatRoom chatRoom = createChatRoomUsecase.createMatchingChatRoom(matchingApplication);
+        return addMemberChatRoomUsecase.setupMatchingChatRoom(matchingApplication, chatRoom);
     }
     
     /**

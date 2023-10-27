@@ -59,11 +59,4 @@ public class MatchingApplicationPersistenceAdapterTests {
         matchingApplicationPersistenceAdapter.getByMatchingIdIsAndStateEquals(1L, ApplicationStateEnum.Approved);
         verify(matchingApplicationRepository, times(1)).getByMatchingIdAndStateEquals(1L, ApplicationStateEnum.Approved);
     }
-
-    @Test
-    void updateMatchingApplicationTest() {
-        matchingApplication.setState(ApplicationStateEnum.Approved);
-        matchingApplicationPersistenceAdapter.updateMatchingApplication(matchingApplication);
-        verify(matchingApplicationRepository, times(1)).save(matchingMapper.toEntity(matchingApplication));
-    }
 }

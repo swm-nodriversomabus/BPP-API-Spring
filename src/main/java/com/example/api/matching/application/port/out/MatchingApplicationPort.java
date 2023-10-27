@@ -14,5 +14,4 @@ public interface MatchingApplicationPort {
     Optional<MatchingApplicationEntity> getByMatchingApplicationPK(MatchingApplicationPK matchingApplicationPK);
     List<MatchingApplicationEntity> getByUserIdIsAndStateEquals(UUID userId, ApplicationStateEnum state);
     List<MatchingApplicationEntity> getByMatchingIdIsAndStateEquals(Long matchingId, ApplicationStateEnum state);
-    MatchingApplication updateMatchingApplication(MatchingApplication matchingApplication);
 }

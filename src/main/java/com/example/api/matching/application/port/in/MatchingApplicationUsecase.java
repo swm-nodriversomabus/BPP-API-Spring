@@ -1,6 +1,5 @@
 package com.example.api.matching.application.port.in;
 
-import com.example.api.chatroom.domain.ChatRoom;
 import com.example.api.common.type.ApplicationStateEnum;
 import com.example.api.matching.domain.MatchingApplication;
 import com.example.api.matching.dto.SaveMatchingApplicationDto;
@@ -12,8 +11,6 @@ import java.util.UUID;
 
 public interface MatchingApplicationUsecase {
     MatchingApplication createMatchingApplicationData(UUID userId, SaveMatchingApplicationDto matchingApplicationDto);
-    ChatRoom createMatchingChatRoom(MatchingApplication matchingApplication);
-    ChatRoom setupMatchingChatRoom(MatchingApplication matchingApplication, ChatRoom chatRoom);
     List<FindMatchingDto> getByUserIdIsAndStateEquals(UUID userId, ApplicationStateEnum state);
     List<FindUserDto> getByMatchingIdIsAndStateEquals(Long matchingId, ApplicationStateEnum state);
     String getUserStatus(UUID userId, Long matchingId);
