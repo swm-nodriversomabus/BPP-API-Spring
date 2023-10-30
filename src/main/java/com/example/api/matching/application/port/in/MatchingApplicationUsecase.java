@@ -14,6 +14,5 @@ public interface MatchingApplicationUsecase {
     List<FindMatchingDto> getByUserIdIsAndStateEquals(UUID userId, ApplicationStateEnum state);
     List<FindUserInfoDto> getByMatchingIdIsAndStateEquals(Long matchingId, ApplicationStateEnum state);
     String getUserStatus(UUID userId, Long matchingId);
-    void approveMatchingApplication(SaveMatchingApplicationDto matchingApplicationPK);
-    void declineMatchingApplication(SaveMatchingApplicationDto matchingApplicationPK);
+    void processMatchingApplication(SaveMatchingApplicationDto matchingApplicationDto);
 }

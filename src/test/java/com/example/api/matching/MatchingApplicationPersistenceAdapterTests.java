@@ -44,7 +44,7 @@ public class MatchingApplicationPersistenceAdapterTests {
 
     @Test
     void createMatchingApplicationTest() {
-        matchingApplicationPersistenceAdapter.createMatchingApplication(matchingApplication);
+        matchingApplicationPersistenceAdapter.saveMatchingApplication(matchingApplication);
         verify(matchingApplicationRepository, times(1)).save(matchingMapper.toEntity(matchingApplication));
     }
 

@@ -22,8 +22,7 @@ public class MatchingApplicationPersistenceAdapter implements MatchingApplicatio
     private final MatchingApplicationRepository matchingApplicationRepository;
     
     @Override
-    public MatchingApplication createMatchingApplication(MatchingApplication matchingApplication) {
-        log.info(matchingMapper.toEntity(matchingApplication).toString());
+    public MatchingApplication saveMatchingApplication(MatchingApplication matchingApplication) {
         MatchingApplicationEntity matchingApplicationData = matchingApplicationRepository.save(matchingMapper.toEntity(matchingApplication));
         return matchingMapper.toDomain(matchingApplicationData);
     }

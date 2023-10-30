@@ -76,13 +76,13 @@ public class PreferenceService implements SavePreferenceUsecase, FindPreferenceU
     public ComparePreferenceDto getUserPreference(UUID userId) {
         Long preferenceId = comparePreferencePort.getUserPreferenceId(userId);
         if (preferenceId == 0L) {
-            log.error("PreferenceService::getUserPreference: User preference data not found");
+            log.warn("PreferenceService::getUserPreference: User preference data not found");
             return this.getDefaultPreference();
             //throw new CustomException(ErrorCodeEnum.PREFERENCE_NOT_FOUND);
         }
         Optional<ComparePreferenceDto> preferenceDto = this.getByPreferenceId(preferenceId);
         if (preferenceDto.isEmpty()) {
-            log.error("PreferenceService::getUserPreference: User preference data not found");
+            log.warn("PreferenceService::getUserPreference: User preference data not found");
             return this.getDefaultPreference();
             //throw new CustomException(ErrorCodeEnum.PREFERENCE_NOT_FOUND);
         }

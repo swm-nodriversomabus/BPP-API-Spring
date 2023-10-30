@@ -17,6 +17,7 @@ public enum ErrorCodeEnum {
     CODE_IS_NOT_VALID(HttpStatus.BAD_REQUEST, "잘못된 인증번호입니다"),
     MATCHING_NOT_FOUND(HttpStatus.BAD_REQUEST, "매칭 정보가 없습니다"),
     PREFERENCE_NOT_FOUND(HttpStatus.BAD_REQUEST, "선호도 정보가 없습니다"),
+    APPLICATION_NOT_FOUND(HttpStatus.BAD_REQUEST, "신청 정보가 없습니다"),
     // 401 Unauthorized
     LOGIN_IS_NOT_DONE(HttpStatus.UNAUTHORIZED, "로그인 정보가 없습니다"),
     // 403 Forbidden
