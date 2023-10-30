@@ -188,7 +188,7 @@ public class MatchingController {
      */
     @Operation(summary = "Process matching application", description = "매칭 신청을 처리한다.")
     @PutMapping("/matching/application")
-    public void processMatchingApplication(SaveMatchingApplicationDto matchingApplicationDto) {
+    public void processMatchingApplication(@RequestBody SaveMatchingApplicationDto matchingApplicationDto) {
         matchingApplicationUsecase.processMatchingApplication(matchingApplicationDto);
     }
 
