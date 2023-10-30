@@ -1,6 +1,8 @@
 package com.example.api.matching.service;
 
+import com.example.api.common.exception.CustomException;
 import com.example.api.common.type.ApplicationStateEnum;
+import com.example.api.common.type.ErrorCodeEnum;
 import com.example.api.fcm.dto.FcmDto;
 import com.example.api.fcm.service.FcmService;
 import com.example.api.matching.adapter.out.persistence.MatchingApplicationEntity;
@@ -49,7 +51,7 @@ public class MatchingApplicationService implements MatchingApplicationUsecase {
         if (matchingApplication.getUserId() == null) {
             matchingApplication.setUserId(userId);
         }
-        return matchingApplicationPort.createMatchingApplication(matchingApplication);
+        return matchingApplicationPort.saveMatchingApplication(matchingApplication);
     }
     
     @Override
@@ -93,41 +95,27 @@ public class MatchingApplicationService implements MatchingApplicationUsecase {
             return "None";
         }
     }
-
+    
     @Override
     @Transactional
-    public void approveMatchingApplication(SaveMatchingApplicationDto matchingApplicationDto) {
+    public void processMatchingApplication(SaveMatchingApplicationDto matchingApplicationDto) {
+        ApplicationStateEnum state = matchingApplicationDto.getState();
         MatchingApplicationPK matchingApplicationPK = MatchingApplicationPK.builder()
                 .userId(matchingApplicationDto.getUserId())
                 .matchingId(matchingApplicationDto.getMatchingId())
                 .build();
-        MatchingApplicationEntity matchingApplicationEntity = matchingApplicationPort.getByMatchingApplicationPK(matchingApplicationPK)
-                .orElseThrow(NoSuchElementException::new);
-        MatchingApplication matchingApplication = matchingMapper.toDomain(matchingApplicationEntity);
-        matchingApplication.setState(ApplicationStateEnum.Approved);
+        Optional<MatchingApplicationEntity> matchingApplicationEntity = matchingApplicationPort.getByMatchingApplicationPK(matchingApplicationPK);
+        if (matchingApplicationEntity.isEmpty()) {
+            log.error("MatchingApplicationService::processMatchingApplication: Data not found");
+            throw new CustomException(ErrorCodeEnum.APPLICATION_NOT_FOUND);
+        }
+        MatchingApplication matchingApplication = matchingMapper.toDomain(matchingApplicationEntity.get());
+        matchingApplication.setState(state);
+        matchingApplicationPort.saveMatchingApplication(matchingApplication);
         FcmDto fcmDto = FcmDto.builder()
                 .userId(matchingApplication.getUserId())
-                .title("신청 수락")
-                .body("매칭 신청이 수락되었어요!")
-                .build();
-        fcmService.sendNotification(fcmDto);
-    }
-
-    @Override
-    @Transactional
-    public void declineMatchingApplication(SaveMatchingApplicationDto matchingApplicationDto) {
-        MatchingApplicationPK matchingApplicationPK = MatchingApplicationPK.builder()
-                .userId(matchingApplicationDto.getUserId())
-                .matchingId(matchingApplicationDto.getMatchingId())
-                .build();
-        MatchingApplicationEntity matchingApplicationEntity = matchingApplicationPort.getByMatchingApplicationPK(matchingApplicationPK)
-                .orElseThrow(NoSuchElementException::new);
-        MatchingApplication matchingApplication = matchingMapper.toDomain(matchingApplicationEntity);
-        matchingApplication.setState(ApplicationStateEnum.Declined);
-        FcmDto fcmDto = FcmDto.builder()
-                .userId(matchingApplication.getUserId())
-                .title("신청 거절")
-                .body("매칭 신청이 거절되었어요.")
+                .title(state.equals(ApplicationStateEnum.Approved) ? "신청 수락" : "신청 거절")
+                .body(state.equals(ApplicationStateEnum.Approved) ? "매칭 신청이 수락되었어요!" : "매칭 신청이 거절되었어요.")
                 .build();
         fcmService.sendNotification(fcmDto);
     }

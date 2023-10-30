@@ -37,9 +37,9 @@ public class MatchingApplicationServiceTests {
     }
     
     @Test
-    void createMatchingApplicationTest() {
+    void saveMatchingApplicationTest() {
         matchingApplicationService.createMatchingApplicationData(userId, matchingApplication);
-        verify(matchingApplicationPort, times(1)).createMatchingApplication(matchingMapper.toDomain(matchingApplication));
+        verify(matchingApplicationPort, times(1)).saveMatchingApplication(matchingMapper.toDomain(matchingApplication));
     }
 
     @Test
