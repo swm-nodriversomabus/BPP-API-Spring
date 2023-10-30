@@ -30,11 +30,11 @@ public class MyLogoutSuccessHandler implements LogoutSuccessHandler {
         if(cookies != null) {
             for (Cookie cookie : request.getCookies()) {
                 String cookieName = cookie.getName();
-                if(cookieName.equals("access_token")){
+                if(cookieName.equals("access_token") && !cookie.getValue().isEmpty()){
                     String accessToken = cookie.getValue();
                     logoutUsecase.removeToken(accessToken);
+                    CookieUtils.addCookie(response, cookieName, null, 0);
                 }
-                CookieUtils.addCookie(response, cookieName, null, 0);
             }
         }
 
