@@ -5,6 +5,7 @@ import com.example.api.fcm.dto.FcmDto;
 import com.example.api.fcm.service.FcmService;
 import com.example.api.matching.adapter.out.persistence.MatchingApplicationEntity;
 import com.example.api.matching.adapter.out.persistence.MatchingApplicationPK;
+import com.example.api.matching.adapter.out.persistence.MatchingEntity;
 import com.example.api.matching.adapter.out.persistence.MatchingMapperInterface;
 import com.example.api.matching.application.port.in.MatchingApplicationUsecase;
 import com.example.api.matching.application.port.out.FindMatchingPort;
@@ -12,9 +13,11 @@ import com.example.api.matching.application.port.out.MatchingApplicationPort;
 import com.example.api.matching.domain.MatchingApplication;
 import com.example.api.matching.dto.FindMatchingDto;
 import com.example.api.matching.dto.SaveMatchingApplicationDto;
+import com.example.api.user.adapter.out.persistence.UserEntity;
 import com.example.api.user.adapter.out.persistence.UserMapperInterface;
 import com.example.api.user.application.port.out.FindUserPort;
 import com.example.api.user.dto.FindUserDto;
+import com.example.api.user.dto.FindUserInfoDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -54,17 +57,27 @@ public class MatchingApplicationService implements MatchingApplicationUsecase {
         List<MatchingApplicationEntity> matchingPairList = matchingApplicationPort.getByUserIdIsAndStateEquals(userId, state);
         List<FindMatchingDto> matchingData = new ArrayList<>();
         for (MatchingApplicationEntity matchingPair: matchingPairList) {
-            matchingData.add(matchingMapper.toDto(findMatchingPort.getByMatchingId(matchingPair.getMatchingId()).orElseThrow()));
+            Optional<MatchingEntity> matchingEntity = findMatchingPort.getByMatchingId(matchingPair.getMatchingId());
+            if (matchingEntity.isEmpty()) {
+                log.warn("MatchingApplicationService::getByUserIdIsAndStateEquals: Matching with ID {} doesn't exist", matchingPair.getMatchingId());
+            } else {
+                matchingData.add(matchingMapper.toDto(matchingEntity.get()));
+            }
         }
         return matchingData;
     }
 
     @Override
-    public List<FindUserDto> getByMatchingIdIsAndStateEquals(Long matchingId, ApplicationStateEnum state) {
+    public List<FindUserInfoDto> getByMatchingIdIsAndStateEquals(Long matchingId, ApplicationStateEnum state) {
         List<MatchingApplicationEntity> matchingPairList = matchingApplicationPort.getByMatchingIdIsAndStateEquals(matchingId, state);
-        List<FindUserDto> userData = new ArrayList<>();
+        List<FindUserInfoDto> userData = new ArrayList<>();
         for (MatchingApplicationEntity matchingPair: matchingPairList) {
-            userData.add(userMapper.toDto(findUserPort.getByUserId(matchingPair.getUserId()).orElseThrow()));
+            Optional<UserEntity> userEntity = findUserPort.getByUserId(matchingPair.getUserId());
+            if (userEntity.isEmpty()) {
+                log.warn("MatchingApplicationService::getByMatchingIdIsAndStateEquals: User with ID {} doesn't exist", matchingPair.getUserId());
+            } else {
+                userData.add(userMapper.toInfoDto(userEntity.get()));
+            }
         }
         return userData;
     }
