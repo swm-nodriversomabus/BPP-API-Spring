@@ -4,11 +4,9 @@ import com.example.api.common.exception.CustomException;
 import com.example.api.common.type.ErrorCodeEnum;
 import com.example.api.s3.application.port.in.FileDisplayUsecase;
 import com.example.api.s3.application.port.in.FileUploadUsecase;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -24,19 +22,16 @@ import java.util.UUID;
 
 @Service
 @Slf4j
-@RequiredArgsConstructor
 @Transactional(readOnly = true)
 public class S3Service implements FileUploadUsecase, FileDisplayUsecase {
     private final S3Client s3Client;
+    private final String bucket;
     
-    @Value("${cloud.aws.s3.bucket}")
-    private String bucket;
-    
-    /*@Autowired
+    @Autowired
     public S3Service(S3Client s3Client, @Value("${cloud.aws.s3.bucket}") String bucket) {
         this.s3Client = s3Client;
-        this.bucket = "yeohaengparty-image";
-    }*/
+        this.bucket = bucket;
+    }
     
     @Override
     public String upload(MultipartFile file) {
@@ -47,7 +42,7 @@ public class S3Service implements FileUploadUsecase, FileDisplayUsecase {
                     .key(objectKey)
                     .build(),
                     RequestBody.fromInputStream(file.getInputStream(), file.getSize()));
-            return "https://" + bucket + "s3.amazonaws.com/" + objectKey;
+            return objectKey;
         } catch (S3Exception e) {
             throw new CustomException(ErrorCodeEnum.S3_UPLOAD_FAIL);
         } catch (IOException e) {
