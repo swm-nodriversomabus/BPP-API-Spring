@@ -30,7 +30,6 @@ dependencies {
 	implementation 'com.google.guava:guava:32.1.2-jre' // google core library 사용
 	implementation 'org.springframework.boot:spring-boot-starter-security' // security
 	implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
-
 //	implementation(platform("software.amazon.awssdk:bom:2.20.54"))
 //	implementation 'software.amazon.awssdk:sns' // SNS 모듈 추가
 	implementation 'com.amazonaws:aws-java-sdk-core:1.11.927'
@@ -51,18 +50,19 @@ dependencies {
 	implementation 'org.springframework.kafka:spring-kafka' // 카프카
 	implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.0.2' // Swagger
 	implementation 'org.apache.commons:commons-lang3:3.11' // lang3
-	implementation 'org.springframework.boot:spring-boot-starter-data-redis' // redis
+	implementation 'org.springframework.boot:spring-boot-starter-data-redis' // Redis
 	// spring에서 redis를 session storage로 사용하기 위한 의존성
 //	implementation 'org.springframework.session:spring-session-data-redis'
-	implementation 'com.google.firebase:firebase-admin:9.2.0' // 푸시 알림
+	implementation 'com.google.firebase:firebase-admin:9.2.0' // Firebase; 푸시 알림
 	implementation 'org.springframework.cloud:spring-cloud-starter-config'
 //	implementation 'org.springframework.cloud:spring-cloud-starter-config' // spring cloud config
 	implementation 'org.springframework.boot:spring-boot-starter-actuator'
-	implementation "com.github.ulisesbocchio:jasypt-spring-boot-starter:3.0.3" // Jasypt
+	implementation 'com.github.ulisesbocchio:jasypt-spring-boot-starter:3.0.3' // Jasypt
+	implementation 'software.amazon.awssdk:s3:2.20.162' // S3; 이미지 처리
 	runtimeOnly 'com.mysql:mysql-connector-j' // MySQL 8
 	annotationProcessor 'org.projectlombok:lombok'
 	annotationProcessor 'org.mapstruct:mapstruct-processor:1.5.3.Final'
-	annotationProcessor "org.springframework.boot:spring-boot-configuration-processor"
+	annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testImplementation 'org.springframework.security:spring-security-test'
 	testImplementation 'com.h2database:h2' // 테스트 DB

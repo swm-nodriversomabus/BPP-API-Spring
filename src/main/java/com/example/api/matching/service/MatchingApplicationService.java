@@ -18,7 +18,6 @@ import com.example.api.matching.dto.SaveMatchingApplicationDto;
 import com.example.api.user.adapter.out.persistence.UserEntity;
 import com.example.api.user.adapter.out.persistence.UserMapperInterface;
 import com.example.api.user.application.port.out.FindUserPort;
-import com.example.api.user.dto.FindUserDto;
 import com.example.api.user.dto.FindUserInfoDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

@@ -32,7 +32,7 @@ public class JwtUtilService {
 
     public GeneratedToken generatedToken(String id, String role, String provider) {
         // token
-        String refreshToken = genereateRefreshToken(id, role, provider);
+        String refreshToken = generateRefreshToken(id, role, provider);
         String accessToken = generateAccessToken(id, role, provider);
 
         // 저장
@@ -40,7 +40,7 @@ public class JwtUtilService {
         return new GeneratedToken(accessToken, refreshToken);
     }
 
-    public String genereateRefreshToken(String id, String role, String provider) {
+    public String generateRefreshToken(String id, String role, String provider) {
         long tokenPeriod = 1000L * 60L * 60L * 24L * 14; // 2주 유효성
 
         // 새 클레임 객체를 생성하고, 이메일과 역할을 셋팅
