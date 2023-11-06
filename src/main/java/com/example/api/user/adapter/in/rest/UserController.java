@@ -210,6 +210,25 @@ public class UserController {
         }
         return saveUserUsecase.updateUser(securityUser.getUserId(), userDto);
     }
+    
+    @Operation(summary = "Update profile image state", description = "프로필 사진 승인 상태를 수정한다.")
+    @PutMapping("/user/image/state")
+    public void updateProfileImageState(UUID userId, ApplicationStateEnum state) {
+        SecurityUser securityUser = AuthenticationUtils.getCurrentUserAuthentication();
+        if (securityUser == null) {
+            log.error("UserController::updateProfileImageState: Login is needed");
+            throw new CustomException(ErrorCodeEnum.LOGIN_IS_NOT_DONE);
+        }
+        if (!(findUserUsecase.getUser(securityUser.getUserId()).getRole().equals(UserRoleEnum.Admin))) {
+            log.error("UserController::updateProfileImageState: Admin authority is needed");
+            throw new CustomException(ErrorCodeEnum.INVALID_PERMISSION);
+        }
+        if (findUserUsecase.getUser(userId) == null) {
+            log.error("UserController:updateProfileImageState: No such user");
+            throw new CustomException(ErrorCodeEnum.USER_NOT_FOUND);
+        }
+        profileImageUsecase.updateProfileImageState(userId, state);
+    }
 
     /**
      * 전체 사용자 삭제 (비상시 외 사용 금지)
