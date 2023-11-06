@@ -26,6 +26,7 @@ public enum ErrorCodeEnum {
     S3_UPLOAD_FAIL(HttpStatus.NOT_ACCEPTABLE, "S3 파일 업로드 실패"),
     S3_DISPLAY_FAIL(HttpStatus.NOT_ACCEPTABLE, "S3 파일 조회 실패"),
     FILE_READ_ERROR(HttpStatus.NOT_ACCEPTABLE, "파일을 읽을 수 없습니다"),
+    USER_PROFILE_IMAGE_NOT_FOUND(HttpStatus.NOT_ACCEPTABLE, "사용자 프로필 이미지 조회 오류"),
     // 500 Internal Server Error
     DATABASE_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "데이터베이스 오류");
     

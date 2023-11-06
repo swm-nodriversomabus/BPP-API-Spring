@@ -1,6 +1,7 @@
 package com.example.api.user.adapter.out.persistence;
 
 import com.example.api.user.domain.CreateUser;
+import com.example.api.user.domain.ProfileImage;
 import com.example.api.user.domain.User;
 import com.example.api.user.dto.*;
 import org.mapstruct.InjectionStrategy;
@@ -24,4 +25,5 @@ public interface UserMapperInterface {
     FindUserInfoDto toInfoDto(UserEntity userEntity);
     UserAuthorityCheckDto toAuthorityDto(UserEntity userEntity);
     FindUserDto toDto(UpdateUserDto updateUserDto);
+    ProfileImageEntity toEntity(ProfileImage profileImage);
 }

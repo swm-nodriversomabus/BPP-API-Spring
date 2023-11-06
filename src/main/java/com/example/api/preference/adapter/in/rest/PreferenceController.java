@@ -90,7 +90,7 @@ public class PreferenceController {
      * @return SavePreferenceDto
      */
     @Operation(summary = "Update user preference", description = "사용자 선호도를 변경한다.")
-    @PatchMapping("/user/preference")
+    @PutMapping("/user/preference")
     public FindPreferenceDto updateUserPreference(@RequestBody SavePreferenceDto savePreferenceDto) {
         SecurityUser securityUser = AuthenticationUtils.getCurrentUserAuthentication();
         if (securityUser == null) {
@@ -107,7 +107,7 @@ public class PreferenceController {
      * @return SavePreferenceDto
      */
     @Operation(summary = "Update matching preference", description = "매칭 선호도를 변경한다.")
-    @PatchMapping("/matching/{matchingId}/preference")
+    @PutMapping("/matching/{matchingId}/preference")
     public FindPreferenceDto updateMatchingPreference(@PathVariable Long matchingId, @RequestBody SavePreferenceDto savePreferenceDto) {
         return  matchingPreferenceUsecase.updateMatchingPreference(matchingId, savePreferenceDto);
     }

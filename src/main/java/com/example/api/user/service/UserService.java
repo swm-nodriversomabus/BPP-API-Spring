@@ -2,26 +2,28 @@ package com.example.api.user.service;
 
 import com.example.api.auth.domain.SecurityUser;
 import com.example.api.common.exception.CustomException;
+import com.example.api.common.type.ApplicationStateEnum;
 import com.example.api.common.type.ErrorCodeEnum;
-import com.example.api.common.utils.AuthenticationUtils;
 import com.example.api.common.utils.CustomBase64Utils;
 import com.example.api.sms.application.port.out.CheckVerifiedPhonePort;
 import com.example.api.social.adapter.out.persistence.SocialEntity;
+import com.example.api.user.adapter.out.persistence.ProfileImageEntity;
 import com.example.api.user.adapter.out.persistence.UserEntity;
 import com.example.api.user.adapter.out.persistence.UserMapperInterface;
 import com.example.api.user.application.port.in.DeleteUserUsecase;
 import com.example.api.user.application.port.in.FindUserUsecase;
+import com.example.api.user.application.port.in.ProfileImageUsecase;
 import com.example.api.user.application.port.out.DeleteUserPort;
 import com.example.api.social.application.port.out.FindSocialPort;
 import com.example.api.user.application.port.out.FindUserPort;
+import com.example.api.user.application.port.out.ProfileImagePort;
 import com.example.api.user.application.port.out.SaveUserPort;
+import com.example.api.user.domain.ProfileImage;
 import com.example.api.user.domain.User;
 import com.example.api.user.application.port.in.SaveUserUsecase;
 import com.example.api.user.dto.CreateUserDto;
 import com.example.api.user.dto.UpdateUserDto;
 import com.example.api.user.dto.UserAuthorityCheckDto;
-import com.example.api.user.type.UserGenderEnum;
-import com.example.api.user.type.UserRoleEnum;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import com.example.api.user.dto.FindUserDto;
@@ -38,38 +40,14 @@ import java.util.stream.Collectors;
 @Slf4j
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
-public class UserService implements SaveUserUsecase, FindUserUsecase, DeleteUserUsecase {
+public class UserService implements SaveUserUsecase, FindUserUsecase, DeleteUserUsecase, ProfileImageUsecase {
     private final UserMapperInterface userMapper;
     private final SaveUserPort saveUserPort;
     private final FindUserPort findUserPort;
     private final DeleteUserPort deleteUserPort;
     private final FindSocialPort findSocialPort;
+    private final ProfileImagePort profileImagePort;
     private final CheckVerifiedPhonePort checkVerifiedPhonePort;
-
-    public FindUserDto getDefaultUser() {
-        return FindUserDto.builder()
-                .username("Anonymous")
-                .gender(UserGenderEnum.None)
-                .age(30)
-                .phone("010-0000-0000")
-                .role(UserRoleEnum.User)
-                .blacklist(false)
-                .stateMessage("")
-                .mannerScore(60)
-                .createdAt(LocalDateTime.now())
-                .updatedAt(LocalDateTime.now())
-                .isActive(false)
-                .build();
-    }
-
-    public UserAuthorityCheckDto getDefaultAuthorityUser() {
-        return UserAuthorityCheckDto.builder()
-                .userId(UUID.fromString("00000000-0000-0000-0000-000000000000"))
-                .role(UserRoleEnum.User)
-                .blacklist(false)
-                .isActive(false)
-                .build();
-    }
     
     @Override
     @Transactional
@@ -109,13 +87,8 @@ public class UserService implements SaveUserUsecase, FindUserUsecase, DeleteUser
 
     @Override
     @Transactional
-    public FindUserDto updateUser(UpdateUserDto userDto) {
-        SecurityUser securityUser = AuthenticationUtils.getCurrentUserAuthentication();
-        if (securityUser == null) {
-            log.error("UserService::updateUser: Login is needed");
-            throw new CustomException(ErrorCodeEnum.LOGIN_IS_NOT_DONE);
-        }
-        User user = saveUserPort.updateUser(securityUser.getUserId(), userMapper.toDomain(userDto));
+    public FindUserDto updateUser(UUID userId, UpdateUserDto userDto) {
+        User user = saveUserPort.updateUser(userId, userMapper.toDomain(userDto));
         return userMapper.toDto(user);
     }
     
@@ -148,5 +121,46 @@ public class UserService implements SaveUserUsecase, FindUserUsecase, DeleteUser
     
     public Optional<UserEntity> findUserSigned(Long id) {
         return findUserPort.findUserSigned(id);
+    }
+    
+    // Profile Image
+
+    @Override
+    @Transactional
+    public void saveProfileImage(UUID userId, String filename) {
+        Optional<UserEntity> userEntity = findUserPort.getByUserId(userId);
+        if (userEntity.isEmpty()) {
+            log.error("UserService::saveProfileImage: No such user");
+            throw new CustomException(ErrorCodeEnum.USER_NOT_FOUND);
+        }
+        ProfileImage profileImage = ProfileImage.builder()
+                .userId(userId)
+                .profileImage(filename)
+                .state(ApplicationStateEnum.Pending)
+                .updatedAt(LocalDateTime.now())
+                .build();
+        profileImagePort.saveProfileImage(profileImage);
+    }
+    
+    @Override
+    public String getProfileImageName(UUID userId) {
+        Optional<ProfileImageEntity> profileImageEntity = profileImagePort.getProfileImage(userId);
+        if (profileImageEntity.isEmpty()) {
+            log.error("UserService::getProfileImageName: Failed loading profile image data");
+            throw new CustomException(ErrorCodeEnum.USER_PROFILE_IMAGE_NOT_FOUND);
+        }
+        return profileImageEntity.get().getProfileImage();
+    }
+    
+    @Override
+    @Transactional
+    public void deleteProfileImage(UUID userId) {
+        ProfileImage profileImage = ProfileImage.builder()
+                .userId(userId)
+                .profileImage(null)
+                .state(ApplicationStateEnum.Approved)
+                .updatedAt(LocalDateTime.now())
+                .build();
+        profileImagePort.saveProfileImage(profileImage);
     }
 }
