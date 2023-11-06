@@ -12,6 +12,7 @@ import com.example.api.matching.domain.MatchingApplication;
 import com.example.api.matching.dto.*;
 import com.example.api.member.application.port.in.AddMemberChatRoomUsecase;
 import com.example.api.user.application.port.in.FindUserUsecase;
+import com.example.api.user.dto.FindUserInfoDto;
 import com.example.api.user.dto.UserAuthorityCheckDto;
 import com.example.api.user.type.UserRoleEnum;
 import io.swagger.v3.oas.annotations.Operation;
@@ -120,7 +121,7 @@ public class MatchingController {
      */
     @Operation(summary = "Get pending user list of matching", description = "매칭의 대기자 목록을 조회한다.")
     @GetMapping("/matching/{matchingId}/pending")
-    public List<Object> getPendingUserList(@PathVariable Long matchingId) {
+    public List<FindUserInfoDto> getPendingUserList(@PathVariable Long matchingId) {
         return matchingApplicationUsecase.getByMatchingIdIsAndStateEquals(matchingId, ApplicationStateEnum.Pending);
     }
 
@@ -131,7 +132,7 @@ public class MatchingController {
      */
     @Operation(summary = "Get approved user list of matching", description = "매칭의 참가자 목록을 조회한다.")
     @GetMapping("/matching/{matchingId}/approved")
-    public List<Object> getApprovedUserList(@PathVariable Long matchingId) {
+    public List<FindUserInfoDto> getApprovedUserList(@PathVariable Long matchingId) {
         return matchingApplicationUsecase.getByMatchingIdIsAndStateEquals(matchingId, ApplicationStateEnum.Approved);
     }
 

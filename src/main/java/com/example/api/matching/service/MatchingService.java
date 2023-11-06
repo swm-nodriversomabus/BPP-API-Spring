@@ -20,7 +20,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -45,9 +44,14 @@ public class MatchingService implements SaveMatchingUsecase, FindMatchingUsecase
 
     @Override
     public List<FindMatchingDto> getAll() {
-        return findMatchingPort.getAllBy().stream()
-                .map(matchingMapper::toDto)
-                .collect(Collectors.toList());
+        List<MatchingEntity> matchingEntities = findMatchingPort.getAllBy();
+        List<FindMatchingDto> matchingList = new ArrayList<>();
+        for (MatchingEntity matchingData: matchingEntities) {
+            Matching matching = matchingMapper.toDomain(matchingData);
+            matching.setCurrentMember(matchingApplicationPort.getByMatchingIdIsAndStateEquals(matchingData.getMatchingId(), ApplicationStateEnum.Approved).size() + 1);
+            matchingList.add(matchingMapper.toDto(matching));
+        }
+        return matchingList;
     }
 
     @Override
@@ -60,21 +64,31 @@ public class MatchingService implements SaveMatchingUsecase, FindMatchingUsecase
         matching.setCurrentMember(matchingApplicationPort.getByMatchingIdIsAndStateEquals(matchingId, ApplicationStateEnum.Approved).size() + 1);
         return matchingMapper.toDto(matching);
     }
-    
+
     @Override
     public List<FindMatchingDto> getMatchingByWriterId(UUID userId) {
-        return findMatchingPort.getByWriterId(userId).stream()
-                .map(matchingMapper::toDto)
-                .collect(Collectors.toList());
+        List<MatchingEntity> matchingEntities = findMatchingPort.getByWriterId(userId);
+        List<FindMatchingDto> matchingList = new ArrayList<>();
+        for (MatchingEntity matchingData: matchingEntities) {
+            Matching matching = matchingMapper.toDomain(matchingData);
+            matching.setCurrentMember(matchingApplicationPort.getByMatchingIdIsAndStateEquals(matchingData.getMatchingId(), ApplicationStateEnum.Approved).size() + 1);
+            matchingList.add(matchingMapper.toDto(matching));
+        }
+        return matchingList;
     }
-    
+
     @Override
     public List<FindMatchingDto> getMatchingByIsActive(Boolean isActive) {
-        return findMatchingPort.getByIsActive(isActive).stream()
-                .map(matchingMapper::toDto)
-                .collect(Collectors.toList());
+        List<MatchingEntity> matchingEntities = findMatchingPort.getByIsActive(isActive);
+        List<FindMatchingDto> matchingList = new ArrayList<>();
+        for (MatchingEntity matchingData: matchingEntities) {
+            Matching matching = matchingMapper.toDomain(matchingData);
+            matching.setCurrentMember(matchingApplicationPort.getByMatchingIdIsAndStateEquals(matchingData.getMatchingId(), ApplicationStateEnum.Approved).size() + 1);
+            matchingList.add(matchingMapper.toDto(matching));
+        }
+        return matchingList;
     }
-    
+
     @Override
     public List<FindMatchingDto> getRecommendedMatchingList(UUID userId) {
         List<FindMatchingDto> activeMatchingList = this.getMatchingByIsActive(true); // 유효한 매칭만 뽑아옴
@@ -101,7 +115,7 @@ public class MatchingService implements SaveMatchingUsecase, FindMatchingUsecase
     }
     // 특성별로 가중치 추가하기
     // 이전의 여행 히스토리 참고하기
-    
+
     @Override
     public int getLikeCount(Long matchingId) {
         return likePort.getLikeCount(matchingId);
@@ -113,7 +127,7 @@ public class MatchingService implements SaveMatchingUsecase, FindMatchingUsecase
         Matching matching = saveMatchingPort.updateMatching(matchingId, matchingMapper.toDomain(matchingDto));
         return matchingMapper.toDto(matching);
     }
-    
+
     @Override
     @Transactional
     public void toggleLike(LikeDto likeDto) {
