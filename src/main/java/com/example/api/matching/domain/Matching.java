@@ -20,6 +20,7 @@ public class Matching {
     private String content;
     private LocalDateTime startDate;
     private LocalDateTime endDate;
+    private Integer currentMember;
     private Integer maxMember;
     private Integer minusAge;
     private Integer plusAge;
