@@ -51,11 +51,11 @@ public class UserService implements SaveUserUsecase, FindUserUsecase, DeleteUser
     
     @Override
     @Transactional
-    public void createUser(CreateUserDto userDto) {
+    public UUID createUser(CreateUserDto userDto) {
         checkVerifiedPhonePort.findCheckedPhone(userDto.getPhone()); // 인증여부 검증 추가
         SocialEntity social = findSocialPort.findSocialUser(CustomBase64Utils.getBase64DecodeString(userDto.getSocialEmail()), CustomBase64Utils.getBase64DecodeString(userDto.getProvider())).orElseThrow(()->new CustomException(ErrorCodeEnum.LOGIN_IS_NOT_DONE));
         userDto.setSocialId(social.getSocialId());
-        saveUserPort.createUser(userMapper.toDomain(userDto));
+        return saveUserPort.createUser(userMapper.toDomain(userDto));
     }
 
     @Override
@@ -154,7 +154,7 @@ public class UserService implements SaveUserUsecase, FindUserUsecase, DeleteUser
     
     @Override
     @Transactional
-    public void deleteProfileImage(UUID userId) {
+    public void initializeProfileImage(UUID userId) {
         ProfileImage profileImage = ProfileImage.builder()
                 .userId(userId)
                 .profileImage(null)

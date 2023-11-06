@@ -33,6 +33,7 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 import java.io.InputStream;
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequiredArgsConstructor
@@ -63,7 +64,8 @@ public class UserController {
     @Operation(summary = "Create user", description = "새로운 사용자를 추가한다.")
     @PostMapping("/user")
     public void createUser(@Valid @RequestBody CreateUserDto userDto, BindingResult bindingResult) {
-        saveUserUsecase.createUser(userDto);
+        UUID userId = saveUserUsecase.createUser(userDto);
+        profileImageUsecase.initializeProfileImage(userId);
     }
 
     /**
@@ -249,6 +251,6 @@ public class UserController {
             log.error("UserController::deleteProfileImage: Login is needed");
             throw new CustomException(ErrorCodeEnum.LOGIN_IS_NOT_DONE);
         }
-        profileImageUsecase.deleteProfileImage(securityUser.getUserId());
+        profileImageUsecase.initializeProfileImage(securityUser.getUserId());
     }
 }

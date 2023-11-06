@@ -28,8 +28,8 @@ public class UserPersistenceAdapter implements SaveUserPort, FindUserPort, Delet
     private final ProfileImageRepository profileImageRepository;
     
     @Override
-    public void createUser(CreateUser user) {
-        userRepository.save(userMapper.toEntity(user));
+    public UUID createUser(CreateUser user) {
+        return userRepository.save(userMapper.toEntity(user)).getUserId();
     }
     
     @Override

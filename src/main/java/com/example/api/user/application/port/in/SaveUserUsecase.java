@@ -7,6 +7,6 @@ import com.example.api.user.dto.UpdateUserDto;
 import java.util.UUID;
 
 public interface SaveUserUsecase {
-    void createUser(CreateUserDto userDto);
+    UUID createUser(CreateUserDto userDto);
     FindUserDto updateUser(UUID userId, UpdateUserDto userDto);
 }
