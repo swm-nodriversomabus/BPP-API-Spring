@@ -1,16 +1,15 @@
 package com.example.api.matching.service;
 
+import com.example.api.common.type.ApplicationStateEnum;
 import com.example.api.common.type.Pair;
+import com.example.api.matching.adapter.out.persistence.MatchingEntity;
 import com.example.api.matching.adapter.out.persistence.MatchingMapperInterface;
 import com.example.api.matching.application.port.in.DeleteMatchingUsecase;
 import com.example.api.matching.application.port.in.FindMatchingUsecase;
 import com.example.api.matching.application.port.in.LikeUsecase;
+import com.example.api.matching.application.port.out.*;
 import com.example.api.matching.domain.Matching;
 import com.example.api.matching.application.port.in.SaveMatchingUsecase;
-import com.example.api.matching.application.port.out.DeleteMatchingPort;
-import com.example.api.matching.application.port.out.FindMatchingPort;
-import com.example.api.matching.application.port.out.LikePort;
-import com.example.api.matching.application.port.out.SaveMatchingPort;
 import com.example.api.matching.dto.FindMatchingDto;
 import com.example.api.matching.dto.LikeDto;
 import com.example.api.matching.dto.SaveMatchingDto;
@@ -33,6 +32,7 @@ public class MatchingService implements SaveMatchingUsecase, FindMatchingUsecase
     private final SaveMatchingPort saveMatchingPort;
     private final FindMatchingPort findMatchingPort;
     private final DeleteMatchingPort deleteMatchingPort;
+    private final MatchingApplicationPort matchingApplicationPort;
     private final LikePort likePort;
 
     @Override
@@ -51,9 +51,14 @@ public class MatchingService implements SaveMatchingUsecase, FindMatchingUsecase
     }
 
     @Override
-    public Optional<FindMatchingDto> getMatchingById(Long matchingId) {
-        return findMatchingPort.getByMatchingId(matchingId)
-                .map(matchingMapper::toDto);
+    public FindMatchingDto getMatchingById(Long matchingId) {
+        Optional<MatchingEntity> matchingEntity = findMatchingPort.getByMatchingId(matchingId);
+        if (matchingEntity.isEmpty()) {
+            return null;
+        }
+        Matching matching = matchingMapper.toDomain(matchingEntity.get());
+        matching.setCurrentMember(matchingApplicationPort.getByMatchingIdIsAndStateEquals(matchingId, ApplicationStateEnum.Approved).size() + 1);
+        return matchingMapper.toDto(matching);
     }
     
     @Override
@@ -83,8 +88,10 @@ public class MatchingService implements SaveMatchingUsecase, FindMatchingUsecase
         List<FindMatchingDto> sortedMatchingList = new ArrayList<>();
         try {
             for (Pair<Long, Integer> matchingData: matchingScoreList) { // 유사도가 높은 순서로 정렬한 후 반환
-                Optional<FindMatchingDto> findMatchingDto = this.getMatchingById(matchingData.getFirst());
-                findMatchingDto.ifPresent(sortedMatchingList::add);
+                FindMatchingDto findMatchingDto = this.getMatchingById(matchingData.getFirst());
+                if (findMatchingDto != null) {
+                    sortedMatchingList.add(findMatchingDto);
+                }
             }
         } catch (Exception e) {
             log.error("MatchingService::getRecommendedMatchingList: Cannot find matchingData");

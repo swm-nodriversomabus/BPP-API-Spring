@@ -42,6 +42,10 @@ public class FindMatchingDto {
     
     @NotNull
     @Min(1)
+    private Integer currentMember;
+    
+    @NotNull
+    @Min(1)
     private Integer maxMember;
     
     @NotNull
