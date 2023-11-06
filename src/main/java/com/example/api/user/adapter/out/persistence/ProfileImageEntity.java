@@ -15,7 +15,6 @@ import java.util.UUID;
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor
-@IdClass(ProfileImagePK.class)
 @Table(name="profileImage")
 public class ProfileImageEntity extends BaseEntity {
     @Id

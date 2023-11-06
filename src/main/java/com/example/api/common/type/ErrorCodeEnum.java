@@ -18,6 +18,7 @@ public enum ErrorCodeEnum {
     MATCHING_NOT_FOUND(HttpStatus.BAD_REQUEST, "매칭 정보가 없습니다"),
     PREFERENCE_NOT_FOUND(HttpStatus.BAD_REQUEST, "선호도 정보가 없습니다"),
     APPLICATION_NOT_FOUND(HttpStatus.BAD_REQUEST, "신청 정보가 없습니다"),
+    FILE_NOT_FOUND(HttpStatus.BAD_REQUEST, "파일이 없습니다"),
     // 401 Unauthorized
     LOGIN_IS_NOT_DONE(HttpStatus.UNAUTHORIZED, "로그인 정보가 없습니다"),
     // 403 Forbidden

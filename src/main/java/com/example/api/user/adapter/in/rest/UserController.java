@@ -80,6 +80,10 @@ public class UserController {
             log.error("UserController::saveProfileImage: Login is needed");
             throw new CustomException(ErrorCodeEnum.LOGIN_IS_NOT_DONE);
         }
+        if (file == null) {
+            log.error("UserController::saveProfileImage: File not found");
+            throw new CustomException(ErrorCodeEnum.FILE_NOT_FOUND);
+        }
         String filename = fileUploadUsecase.upload(file);
         profileImageUsecase.saveProfileImage(securityUser.getUserId(), filename);
     }
