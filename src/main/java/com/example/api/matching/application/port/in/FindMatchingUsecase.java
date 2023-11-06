@@ -3,7 +3,6 @@ package com.example.api.matching.application.port.in;
 import com.example.api.matching.dto.FindMatchingDto;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 public interface FindMatchingUsecase {

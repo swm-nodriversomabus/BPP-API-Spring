@@ -52,7 +52,7 @@ public class MatchingApplicationService implements MatchingApplicationUsecase {
         }
         return matchingApplicationPort.saveMatchingApplication(matchingApplication);
     }
-    
+
     @Override
     public List<FindMatchingDto> getByUserIdIsAndStateEquals(UUID userId, ApplicationStateEnum state) {
         List<MatchingApplicationEntity> matchingPairList = matchingApplicationPort.getByUserIdIsAndStateEquals(userId, state);
@@ -69,7 +69,7 @@ public class MatchingApplicationService implements MatchingApplicationUsecase {
     }
 
     @Override
-    public List<Object> getByMatchingIdIsAndStateEquals(Long matchingId, ApplicationStateEnum state) {
+    public List<FindUserInfoDto> getByMatchingIdIsAndStateEquals(Long matchingId, ApplicationStateEnum state) {
         List<MatchingApplicationEntity> matchingPairList = matchingApplicationPort.getByMatchingIdIsAndStateEquals(matchingId, state);
         List<FindUserInfoDto> userData = new ArrayList<>();
         for (MatchingApplicationEntity matchingPair: matchingPairList) {
@@ -80,12 +80,9 @@ public class MatchingApplicationService implements MatchingApplicationUsecase {
                 userData.add(userMapper.toInfoDto(userEntity.get()));
             }
         }
-        List<Object> data = new ArrayList<>();
-        data.add(userData);
-        data.add(userData.size());
-        return data;
+        return userData;
     }
-    
+
     @Override
     public String getUserStatus(UUID userId, Long matchingId) {
         MatchingApplicationPK matchingApplicationPK = new MatchingApplicationPK(userId, matchingId);
@@ -97,7 +94,7 @@ public class MatchingApplicationService implements MatchingApplicationUsecase {
             return "None";
         }
     }
-    
+
     @Override
     @Transactional
     public void processMatchingApplication(SaveMatchingApplicationDto matchingApplicationDto) {
