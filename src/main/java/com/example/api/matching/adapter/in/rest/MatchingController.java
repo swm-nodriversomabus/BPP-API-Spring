@@ -17,6 +17,7 @@ import com.example.api.user.dto.UserAuthorityCheckDto;
 import com.example.api.user.type.UserRoleEnum;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
@@ -46,7 +47,7 @@ public class MatchingController {
      */
     @Operation(summary = "Create matching", description = "새로운 매칭을 생성한다.")
     @PostMapping("/matching")
-    public FindMatchingDto createMatching(@RequestBody SaveMatchingDto saveMatchingDto) {
+    public FindMatchingDto createMatching(@Valid @RequestBody SaveMatchingDto saveMatchingDto) {
         SecurityUser securityUser = AuthenticationUtils.getCurrentUserAuthentication();
         if (securityUser == null) {
             log.error("MatchingController::createMatching: Login is needed");
@@ -71,7 +72,7 @@ public class MatchingController {
      */
     @Operation(summary = "Create matching application", description = "새로운 매칭 신청을 생성한다.")
     @PostMapping("/matching/application")
-    public ChatRoom createMatchingApplication(@RequestBody SaveMatchingApplicationDto matchingApplicationDto) {
+    public ChatRoom createMatchingApplication(@Valid @RequestBody SaveMatchingApplicationDto matchingApplicationDto) {
         FindMatchingDto matchingDto = findMatchingUsecase.getMatchingById(matchingApplicationDto.getMatchingId());
         if (matchingDto == null) {
             log.error("MatchingController::createMatchingApplication: No such matching");
