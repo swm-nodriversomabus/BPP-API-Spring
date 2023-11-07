@@ -24,7 +24,7 @@ public class SaveMatchingDto {
     @NotBlank(message = "Place is empty")
     private String place;
     
-    @NotBlank(message = "Content is empty")
+    @NotNull
     private String content;
     
     @NotNull
