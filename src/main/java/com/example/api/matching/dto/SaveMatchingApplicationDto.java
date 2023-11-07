@@ -14,6 +14,7 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 public class SaveMatchingApplicationDto {
+    @org.hibernate.validator.constraints.UUID
     private UUID userId;
     
     @NotNull

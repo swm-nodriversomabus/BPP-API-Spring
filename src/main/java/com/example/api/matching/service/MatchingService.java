@@ -1,6 +1,8 @@
 package com.example.api.matching.service;
 
+import com.example.api.common.exception.CustomException;
 import com.example.api.common.type.ApplicationStateEnum;
+import com.example.api.common.type.ErrorCodeEnum;
 import com.example.api.common.type.Pair;
 import com.example.api.matching.adapter.out.persistence.MatchingEntity;
 import com.example.api.matching.adapter.out.persistence.MatchingMapperInterface;
@@ -39,6 +41,10 @@ public class MatchingService implements SaveMatchingUsecase, FindMatchingUsecase
     public FindMatchingDto createMatching(UUID writerId, SaveMatchingDto matchingDto) {
         Matching matching = matchingMapper.toDomain(matchingDto);
         matching.setWriterId(writerId);
+        if (matching.getStartDate().isAfter(matching.getEndDate())) {
+            log.error("MatchingService::createMatching: Invalid duration");
+            throw new CustomException(ErrorCodeEnum.INVALID_DURATION);
+        }
         return matchingMapper.toDto(saveMatchingPort.createMatching(matching));
     }
     

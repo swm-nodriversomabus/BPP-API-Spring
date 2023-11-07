@@ -18,13 +18,13 @@ public class SaveMatchingDto {
     @NotNull
     private MatchingTypeEnum type;
     
-    @NotBlank
+    @NotBlank(message = "Title is empty")
     private String title;
     
-    @NotBlank
+    @NotBlank(message = "Place is empty")
     private String place;
     
-    @NotBlank
+    @NotBlank(message = "Content is empty")
     private String content;
     
     @NotNull
@@ -34,7 +34,7 @@ public class SaveMatchingDto {
     private LocalDateTime endDate;
     
     @NotNull
-    @Min(1)
+    @Min(value = 1, message = "MaxMember must be at least 1")
     private Integer maxMember;
     
     @NotNull
