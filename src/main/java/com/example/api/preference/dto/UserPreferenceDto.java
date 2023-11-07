@@ -14,6 +14,7 @@ import java.util.UUID;
 @AllArgsConstructor
 public class UserPreferenceDto {
     @NotNull
+    @org.hibernate.validator.constraints.UUID
     private UUID userId;
     
     @NotNull

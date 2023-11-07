@@ -18,7 +18,7 @@ public class SaveMatchingApplicationDto {
     private UUID userId;
     
     @NotNull
-    @Min(1)
+    @Min(1L)
     private Long matchingId;
 
     @NotNull
