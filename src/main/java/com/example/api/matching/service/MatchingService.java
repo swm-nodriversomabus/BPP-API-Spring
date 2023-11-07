@@ -41,10 +41,8 @@ public class MatchingService implements SaveMatchingUsecase, FindMatchingUsecase
         matching.setWriterId(writerId);
         return matchingMapper.toDto(saveMatchingPort.createMatching(matching));
     }
-
-    @Override
-    public List<FindMatchingDto> getAll() {
-        List<MatchingEntity> matchingEntities = findMatchingPort.getAllBy();
+    
+    public List<FindMatchingDto> setCurrentMember(List<MatchingEntity> matchingEntities) {
         List<FindMatchingDto> matchingList = new ArrayList<>();
         for (MatchingEntity matchingData: matchingEntities) {
             Matching matching = matchingMapper.toDomain(matchingData);
@@ -52,6 +50,11 @@ public class MatchingService implements SaveMatchingUsecase, FindMatchingUsecase
             matchingList.add(matchingMapper.toDto(matching));
         }
         return matchingList;
+    }
+
+    @Override
+    public List<FindMatchingDto> getAll() {
+        return this.setCurrentMember(findMatchingPort.getAllBy());
     }
 
     @Override
@@ -67,26 +70,12 @@ public class MatchingService implements SaveMatchingUsecase, FindMatchingUsecase
 
     @Override
     public List<FindMatchingDto> getMatchingByWriterId(UUID userId) {
-        List<MatchingEntity> matchingEntities = findMatchingPort.getByWriterId(userId);
-        List<FindMatchingDto> matchingList = new ArrayList<>();
-        for (MatchingEntity matchingData: matchingEntities) {
-            Matching matching = matchingMapper.toDomain(matchingData);
-            matching.setCurrentMember(matchingApplicationPort.getByMatchingIdIsAndStateEquals(matchingData.getMatchingId(), ApplicationStateEnum.Approved).size() + 1);
-            matchingList.add(matchingMapper.toDto(matching));
-        }
-        return matchingList;
+        return this.setCurrentMember(findMatchingPort.getByWriterId(userId));
     }
 
     @Override
     public List<FindMatchingDto> getMatchingByIsActive(Boolean isActive) {
-        List<MatchingEntity> matchingEntities = findMatchingPort.getByIsActive(isActive);
-        List<FindMatchingDto> matchingList = new ArrayList<>();
-        for (MatchingEntity matchingData: matchingEntities) {
-            Matching matching = matchingMapper.toDomain(matchingData);
-            matching.setCurrentMember(matchingApplicationPort.getByMatchingIdIsAndStateEquals(matchingData.getMatchingId(), ApplicationStateEnum.Approved).size() + 1);
-            matchingList.add(matchingMapper.toDto(matching));
-        }
-        return matchingList;
+        return this.setCurrentMember(findMatchingPort.getByIsActive(isActive));
     }
 
     @Override
