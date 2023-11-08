@@ -31,7 +31,7 @@ public class UpdateUserDto {
     @NotNull
     private Boolean blacklist;
     
-    @NotEmpty
+    @NotNull
     private String stateMessage;
     
     @NotNull
