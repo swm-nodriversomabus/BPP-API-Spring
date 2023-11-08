@@ -69,14 +69,6 @@ public class JwtAuthFilter extends OncePerRequestFilter {
             log.info("JWT 이슈 발생");
             throw new JwtException("Access Token 만료");
         } else {
-            //TODO 도메인으로 변경 예정
-            // 유저가 회원가입 되어 있는지에 대한 체크
-            log.info("jwt 인증");
-
-//            log.info(jwtUtilService.getId(atc));
-//            log.info(jwtUtilService.getProvider(atc));
-//            UserEntity user = userService.findSocialUser(jwtUtilService.getId(atc), jwtUtilService.getProvider(atc))
-//                    .orElseThrow(IllegalStateException::new);
             // Security Context에 등록할 user 객체 생성
             SecurityUser userinfo = userService.findSocialUser(jwtUtilService.getId(atc), jwtUtilService.getProvider(atc));
 
