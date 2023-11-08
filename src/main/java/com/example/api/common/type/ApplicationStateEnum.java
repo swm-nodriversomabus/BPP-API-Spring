@@ -9,9 +9,10 @@ import lombok.ToString;
 @Getter
 public enum ApplicationStateEnum {
     Pending("대기", 0),
-    Declined("거절", 1),
-    Approved("수락", 2),
-    Owner("작성자", 3);
+    Canceled("취소", 1),
+    Declined("거절", 2),
+    Approved("수락", 3),
+    Owner("작성자", 4);
     
     private final String applicationState;
     private final Integer stateCode;

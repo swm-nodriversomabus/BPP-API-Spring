@@ -5,6 +5,7 @@ import com.example.api.social.application.port.out.FindSocialPort;
 import com.example.api.user.adapter.out.persistence.UserMapperInterface;
 import com.example.api.user.application.port.out.DeleteUserPort;
 import com.example.api.user.application.port.out.FindUserPort;
+import com.example.api.user.application.port.out.ProfileImagePort;
 import com.example.api.user.application.port.out.SaveUserPort;
 import com.example.api.user.dto.CreateUserDto;
 import com.example.api.user.dto.UpdateUserDto;
@@ -37,14 +38,16 @@ public class UserServiceTests {
     @Mock
     private FindSocialPort findSocialPort;
     @Mock
+    private ProfileImagePort profileImagePort;
+    @Mock
     private CheckVerifiedPhonePort checkVerifiedPhonePort;
     private CreateUserDto user1, user2, user3;
     private UpdateUserDto newUser;
-    private final String userUUID = "09a46fb0-2ae0-4a35-8aad-0a9e4311a1a3";
+    private final UUID userId = UUID.fromString("09a46fb0-2ae0-4a35-8aad-0a9e4311a1a3");
     
     @BeforeEach
     void beforeEach() {
-        userService = new UserService(userMapper, saveUserPort, findUserPort, deleteUserPort, findSocialPort, checkVerifiedPhonePort);
+        userService = new UserService(userMapper, saveUserPort, findUserPort, deleteUserPort, findSocialPort, profileImagePort, checkVerifiedPhonePort);
         user1 = CreateUserDto.builder()
                 .username("Andrew")
                 .gender(UserGenderEnum.Male)
@@ -107,21 +110,21 @@ public class UserServiceTests {
     
     @Test
     void getUserByIdTest() {
-        userService.getUser(UUID.fromString(userUUID));
-        verify(findUserPort, times(1)).getByUserId(UUID.fromString(userUUID));
+        userService.getUser(userId);
+        verify(findUserPort, times(1)).getByUserId(userId);
     }
     
     @Test
     void updateUserTest() {
         user1.setMannerScore(77);
-        userService.updateUser(newUser);
-        verify(saveUserPort, times(1)).updateUser(UUID.fromString(userUUID), userMapper.toDomain(newUser));
+        userService.updateUser(userId, newUser);
+        verify(saveUserPort, times(1)).updateUser(userId, userMapper.toDomain(newUser));
     }
     
     @Test
     void deleteUserTest() {
-        userService.deleteUser(UUID.fromString(userUUID));
-        verify(deleteUserPort, times(1)).deleteByUserId(UUID.fromString(userUUID));
+        userService.deleteUser(userId);
+        verify(deleteUserPort, times(1)).deleteByUserId(userId);
     }
 
     @Test

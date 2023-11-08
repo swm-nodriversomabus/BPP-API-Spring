@@ -6,6 +6,6 @@ import com.example.api.user.domain.User;
 import java.util.UUID;
 
 public interface SaveUserPort {
-    void createUser(CreateUser user);
+    UUID createUser(CreateUser user);
     User updateUser(UUID userId, User user);
 }

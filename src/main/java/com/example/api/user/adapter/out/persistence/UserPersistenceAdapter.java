@@ -2,9 +2,12 @@ package com.example.api.user.adapter.out.persistence;
 
 import com.example.api.user.application.port.out.DeleteUserPort;
 import com.example.api.user.application.port.out.FindUserPort;
+import com.example.api.user.application.port.out.ProfileImagePort;
 import com.example.api.user.application.port.out.SaveUserPort;
 import com.example.api.user.domain.CreateUser;
+import com.example.api.user.domain.ProfileImage;
 import com.example.api.user.domain.User;
+import com.example.api.user.repository.ProfileImageRepository;
 import com.example.api.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.ComponentScan;
@@ -19,13 +22,14 @@ import java.util.UUID;
 @Repository
 @Slf4j
 @ComponentScan
-public class UserPersistenceAdapter implements SaveUserPort, FindUserPort, DeleteUserPort {
+public class UserPersistenceAdapter implements SaveUserPort, FindUserPort, DeleteUserPort, ProfileImagePort {
     private final UserMapperInterface userMapper;
     private final UserRepository userRepository;
+    private final ProfileImageRepository profileImageRepository;
     
     @Override
-    public void createUser(CreateUser user) {
-        userRepository.save(userMapper.toEntity(user));
+    public UUID createUser(CreateUser user) {
+        return userRepository.save(userMapper.toEntity(user)).getUserId();
     }
     
     @Override
@@ -72,5 +76,17 @@ public class UserPersistenceAdapter implements SaveUserPort, FindUserPort, Delet
     @Override
     public Optional<UserEntity> findUserSigned(Long socialId) {
         return userRepository.getBySocialId_SocialId(socialId);
+    }
+    
+    // Profile Image
+    
+    @Override
+    public void saveProfileImage(ProfileImage profileImage) {
+        profileImageRepository.save(userMapper.toEntity(profileImage));
+    }
+    
+    @Override
+    public Optional<ProfileImageEntity> getProfileImage(UUID userId) {
+        return profileImageRepository.getByUserId(userId);
     }
 }

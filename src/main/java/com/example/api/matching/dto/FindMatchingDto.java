@@ -1,6 +1,5 @@
 package com.example.api.matching.dto;
 
-import com.example.api.matching.adapter.out.persistence.MatchingEntity;
 import com.example.api.matching.type.MatchingTypeEnum;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
@@ -66,21 +65,4 @@ public class FindMatchingDto {
     
     @NotNull
     private Boolean isActive;
-    
-    public MatchingEntity toEntity() {
-        return MatchingEntity.builder()
-                .writerId(writerId)
-                .type(type)
-                .title(title)
-                .place(place)
-                .content(content)
-                .startDate(startDate)
-                .endDate(endDate)
-                .maxMember(maxMember)
-                .minusAge(minusAge)
-                .plusAge(plusAge)
-                .readCount(readCount)
-                .isActive(isActive)
-                .build();
-    }
 }

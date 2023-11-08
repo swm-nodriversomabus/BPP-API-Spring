@@ -83,7 +83,7 @@ public class NotificationController {
      * @param userNotificationDto (Data)
      */
     @Operation(summary = "Toggle read state", description = "알림의 읽음 여부를 변경한다.")
-    @PatchMapping("/usernotification")
+    @PutMapping("/usernotification")
     public void toggleReadState(@RequestBody UserNotificationDto userNotificationDto) {
         userNotificationUsecase.toggleReadState(userNotificationDto);
     }
