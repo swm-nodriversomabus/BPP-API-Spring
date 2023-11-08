@@ -1,5 +1,6 @@
 package com.example.api.user.dto;
 
+import com.example.api.social.adapter.out.persistence.SocialEntity;
 import com.example.api.user.type.UserGenderEnum;
 import com.example.api.user.type.UserRoleEnum;
 import jakarta.validation.constraints.*;
@@ -19,7 +20,7 @@ public class UpdateUserDto {
     private UserGenderEnum gender;
     
     @NotNull
-    @Min(0)
+    @PositiveOrZero
     private Integer age;
     
     @NotBlank
@@ -31,11 +32,11 @@ public class UpdateUserDto {
     @NotNull
     private Boolean blacklist;
     
-    @NotEmpty
+    @NotNull
     private String stateMessage;
     
     @NotNull
-    @Min(0)
+    @PositiveOrZero
     private Integer mannerScore;
     
     @NotNull

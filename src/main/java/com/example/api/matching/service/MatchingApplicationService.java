@@ -12,6 +12,7 @@ import com.example.api.matching.adapter.out.persistence.MatchingMapperInterface;
 import com.example.api.matching.application.port.in.MatchingApplicationUsecase;
 import com.example.api.matching.application.port.out.FindMatchingPort;
 import com.example.api.matching.application.port.out.MatchingApplicationPort;
+import com.example.api.matching.domain.Matching;
 import com.example.api.matching.domain.MatchingApplication;
 import com.example.api.matching.dto.FindMatchingDto;
 import com.example.api.matching.dto.SaveMatchingApplicationDto;
@@ -52,37 +53,39 @@ public class MatchingApplicationService implements MatchingApplicationUsecase {
         }
         return matchingApplicationPort.saveMatchingApplication(matchingApplication);
     }
-    
+
     @Override
     public List<FindMatchingDto> getByUserIdIsAndStateEquals(UUID userId, ApplicationStateEnum state) {
         List<MatchingApplicationEntity> matchingPairList = matchingApplicationPort.getByUserIdIsAndStateEquals(userId, state);
-        List<FindMatchingDto> matchingData = new ArrayList<>();
+        List<FindMatchingDto> matchingList = new ArrayList<>();
         for (MatchingApplicationEntity matchingPair: matchingPairList) {
             Optional<MatchingEntity> matchingEntity = findMatchingPort.getByMatchingId(matchingPair.getMatchingId());
             if (matchingEntity.isEmpty()) {
                 log.warn("MatchingApplicationService::getByUserIdIsAndStateEquals: Matching with ID {} doesn't exist", matchingPair.getMatchingId());
             } else {
-                matchingData.add(matchingMapper.toDto(matchingEntity.get()));
+                Matching matching = matchingMapper.toDomain(matchingEntity.get());
+                matching.setCurrentMember(matchingApplicationPort.getByMatchingIdIsAndStateEquals(matching.getMatchingId(), ApplicationStateEnum.Approved).size() + 1);
+                matchingList.add(matchingMapper.toDto(matching));
             }
         }
-        return matchingData;
+        return matchingList;
     }
 
     @Override
     public List<FindUserInfoDto> getByMatchingIdIsAndStateEquals(Long matchingId, ApplicationStateEnum state) {
         List<MatchingApplicationEntity> matchingPairList = matchingApplicationPort.getByMatchingIdIsAndStateEquals(matchingId, state);
-        List<FindUserInfoDto> userData = new ArrayList<>();
+        List<FindUserInfoDto> userList = new ArrayList<>();
         for (MatchingApplicationEntity matchingPair: matchingPairList) {
             Optional<UserEntity> userEntity = findUserPort.getByUserId(matchingPair.getUserId());
             if (userEntity.isEmpty()) {
                 log.warn("MatchingApplicationService::getByMatchingIdIsAndStateEquals: User with ID {} doesn't exist", matchingPair.getUserId());
             } else {
-                userData.add(userMapper.toInfoDto(userEntity.get()));
+                userList.add(userMapper.toInfoDto(userEntity.get()));
             }
         }
-        return userData;
+        return userList;
     }
-    
+
     @Override
     public String getUserStatus(UUID userId, Long matchingId) {
         MatchingApplicationPK matchingApplicationPK = new MatchingApplicationPK(userId, matchingId);
@@ -94,7 +97,7 @@ public class MatchingApplicationService implements MatchingApplicationUsecase {
             return "None";
         }
     }
-    
+
     @Override
     @Transactional
     public void processMatchingApplication(SaveMatchingApplicationDto matchingApplicationDto) {

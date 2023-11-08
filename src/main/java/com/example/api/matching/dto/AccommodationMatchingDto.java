@@ -10,7 +10,7 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 public class AccommodationMatchingDto {
-    private Long accommodationMatchingId;
+    private Long matchingId;
     
     @Min(0)
     private Integer price;

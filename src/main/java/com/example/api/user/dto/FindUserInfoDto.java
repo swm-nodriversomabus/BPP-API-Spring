@@ -26,7 +26,6 @@ public class FindUserInfoDto {
     private UserGenderEnum gender;
 
     @NotNull
-    @Min(0)
     private Integer age;
 
     @NotBlank
@@ -42,7 +41,6 @@ public class FindUserInfoDto {
     private String stateMessage;
 
     @NotNull
-    @Min(0)
     private Integer mannerScore;
 
     @NotNull

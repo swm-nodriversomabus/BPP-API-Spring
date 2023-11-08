@@ -18,7 +18,7 @@ public class LikeDto {
     private UUID userid;
     
     @NotNull
-    @Min(1)
+    @Min(1L)
     private Long matchingId;
     
     private LocalDateTime createdAt;

@@ -30,7 +30,6 @@ import com.example.api.user.dto.FindUserDto;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -88,8 +87,16 @@ public class UserService implements SaveUserUsecase, FindUserUsecase, DeleteUser
     @Override
     @Transactional
     public FindUserDto updateUser(UUID userId, UpdateUserDto userDto) {
-        User user = saveUserPort.updateUser(userId, userMapper.toDomain(userDto));
-        return userMapper.toDto(user);
+        Optional<UserEntity> userEntity = findUserPort.getByUserId(userId);
+        if (userEntity.isEmpty()) {
+            log.error("UserService::updateUser: No such user");
+            throw new CustomException(ErrorCodeEnum.USER_NOT_FOUND);
+        }
+        User userdata = userMapper.toDomain(userEntity.get());
+        User user = userMapper.toDomain(userDto);
+        user.setUserId(securityUser.getUserId());
+        user.setSocialId(userdata.getSocialId());
+        return userMapper.toDto(saveUserPort.updateUser(userId, user));
     }
     
     @Override

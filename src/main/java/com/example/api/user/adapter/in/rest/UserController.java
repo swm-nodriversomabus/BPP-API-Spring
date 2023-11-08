@@ -202,7 +202,7 @@ public class UserController {
      */
     @Operation(summary = "Update user information", description = "사용자 정보를 변경한다.")
     @PutMapping("/user")
-    public FindUserDto updateUser(@RequestBody UpdateUserDto userDto) {
+    public FindUserDto updateUser(@Valid @RequestBody UpdateUserDto userDto) {
         SecurityUser securityUser = AuthenticationUtils.getCurrentUserAuthentication();
         if (securityUser == null) {
             log.error("UserController::updateUser: Login is needed");

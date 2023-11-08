@@ -14,6 +14,7 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 public class User {
+    private SocialEntity socialId;
     private UUID userId;
     private String username;
     private UserGenderEnum gender;
@@ -26,5 +27,4 @@ public class User {
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
     private Boolean isActive;
-    private SocialEntity socialId;
 }

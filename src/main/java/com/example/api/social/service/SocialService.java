@@ -19,12 +19,12 @@ public class SocialService {
     private final SaveSocialPort saveSocialPort;
     private final FindSocialPort findSocialPort;
 
-    public Optional<SocialEntity> findSocialInfo(String id, String provider) {
-        return findSocialPort.findSocialUser(id, provider);
-    }
-
     @Transactional
     public void saveSocialInfo(AddSocialDto addSocialDto) {
         saveSocialPort.saveSocial(addSocialDto);
+    }
+
+    public Optional<SocialEntity> findSocialInfo(String id, String provider) {
+        return findSocialPort.findSocialUser(id, provider);
     }
 }
