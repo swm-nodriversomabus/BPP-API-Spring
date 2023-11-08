@@ -10,8 +10,8 @@ import lombok.Setter;
 @Setter
 @Builder
 public class CreateUser {
-    private String username;
     private Long socialId;
+    private String username;
     private UserGenderEnum gender;
     private Integer age;
     private String phone;
