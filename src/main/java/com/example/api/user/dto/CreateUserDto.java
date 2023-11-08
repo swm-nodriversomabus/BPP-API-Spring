@@ -6,7 +6,6 @@ import jakarta.validation.constraints.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
-// User 셍성 DTO
 @Builder
 @Data
 @NoArgsConstructor
@@ -30,6 +29,7 @@ public class CreateUserDto {
     UserGenderEnum gender;
 
     @NotNull(message = "나이를 입력해주세요")
+    @PositiveOrZero
     Integer age;
 
     @NotBlank(message = "휴대폰 번호를 입력해주세요")
@@ -49,7 +49,7 @@ public class CreateUserDto {
     String stateMessage = "";
     
     @Builder.Default
-    Integer mannerScore = 30;
+    Integer mannerScore = (int) Math.ceil(6 * Math.random());
     
     @Builder.Default
     Boolean isActive = true;

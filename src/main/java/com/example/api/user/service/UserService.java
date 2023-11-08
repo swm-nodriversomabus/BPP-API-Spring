@@ -20,15 +20,12 @@ import com.example.api.user.application.port.in.SaveUserUsecase;
 import com.example.api.user.dto.CreateUserDto;
 import com.example.api.user.dto.UpdateUserDto;
 import com.example.api.user.dto.UserAuthorityCheckDto;
-import com.example.api.user.type.UserGenderEnum;
-import com.example.api.user.type.UserRoleEnum;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import com.example.api.user.dto.FindUserDto;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -45,31 +42,6 @@ public class UserService implements SaveUserUsecase, FindUserUsecase, DeleteUser
     private final DeleteUserPort deleteUserPort;
     private final FindSocialPort findSocialPort;
     private final CheckVerifiedPhonePort checkVerifiedPhonePort;
-
-    public FindUserDto getDefaultUser() {
-        return FindUserDto.builder()
-                .username("Anonymous")
-                .gender(UserGenderEnum.None)
-                .age(30)
-                .phone("010-0000-0000")
-                .role(UserRoleEnum.User)
-                .blacklist(false)
-                .stateMessage("")
-                .mannerScore(60)
-                .createdAt(LocalDateTime.now())
-                .updatedAt(LocalDateTime.now())
-                .isActive(false)
-                .build();
-    }
-
-    public UserAuthorityCheckDto getDefaultAuthorityUser() {
-        return UserAuthorityCheckDto.builder()
-                .userId(UUID.fromString("00000000-0000-0000-0000-000000000000"))
-                .role(UserRoleEnum.User)
-                .blacklist(false)
-                .isActive(false)
-                .build();
-    }
     
     @Override
     @Transactional
@@ -115,8 +87,16 @@ public class UserService implements SaveUserUsecase, FindUserUsecase, DeleteUser
             log.error("UserService::updateUser: Login is needed");
             throw new CustomException(ErrorCodeEnum.LOGIN_IS_NOT_DONE);
         }
-        User user = saveUserPort.updateUser(securityUser.getUserId(), userMapper.toDomain(userDto));
-        return userMapper.toDto(user);
+        Optional<UserEntity> userEntity = findUserPort.getByUserId(securityUser.getUserId());
+        if (userEntity.isEmpty()) {
+            log.error("UserService::updateUser: No such user");
+            throw new CustomException(ErrorCodeEnum.USER_NOT_FOUND);
+        }
+        User userdata = userMapper.toDomain(userEntity.get());
+        User user = userMapper.toDomain(userDto);
+        user.setUserId(securityUser.getUserId());
+        user.setSocialId(userdata.getSocialId());
+        return userMapper.toDto(saveUserPort.updateUser(securityUser.getUserId(), user));
     }
     
     @Override
