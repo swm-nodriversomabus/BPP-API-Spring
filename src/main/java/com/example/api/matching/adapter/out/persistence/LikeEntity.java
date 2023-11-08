@@ -1,10 +1,10 @@
 package com.example.api.matching.adapter.out.persistence;
 
+import com.example.api.common.entity.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Entity
@@ -16,13 +16,10 @@ import java.util.UUID;
 @AllArgsConstructor
 @IdClass(LikePK.class)
 @Table(name="likes")
-public class LikeEntity {
+public class LikeEntity extends BaseEntity {
     @Id
     private UUID userId;
     
     @Id
     private Long matchingId;
-    
-    @Temporal(TemporalType.TIMESTAMP)
-    private LocalDateTime createdAt;
 }
