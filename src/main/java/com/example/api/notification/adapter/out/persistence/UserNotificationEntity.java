@@ -14,7 +14,7 @@ import java.util.UUID;
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name="notification")
+@Table(name="userNotification")
 public class UserNotificationEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
