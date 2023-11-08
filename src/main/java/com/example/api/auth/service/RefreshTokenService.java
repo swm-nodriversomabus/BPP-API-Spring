@@ -1,6 +1,5 @@
 package com.example.api.auth.service;
 
-
 import com.example.api.auth.application.port.in.FindRefreshUsecase;
 import com.example.api.auth.application.port.in.LogoutUsecase;
 import com.example.api.auth.repository.RefreshTokenRepository;
@@ -18,10 +17,10 @@ public class RefreshTokenService implements LogoutUsecase, FindRefreshUsecase {
     private final RefreshTokenRepository repository;
 
     /**
-     * 토큰 저장
-     * @param id
-     * @param accessToken
-     * @param refreshToken
+     * 토큰 저장 1
+     * @param id (ID)
+     * @param accessToken (토큰)
+     * @param refreshToken (토큰)
      */
     @Transactional
     public void saveToken(String id, String accessToken, String refreshToken) {
@@ -29,8 +28,8 @@ public class RefreshTokenService implements LogoutUsecase, FindRefreshUsecase {
     }
 
     /**
-     * 토큰 저장 2 - 위랑 다른점은 refresh token차이점
-     * @param token
+     * 토큰 저장 2 - 위랑 다른점은 refresh token 차이점
+     * @param token (토큰)
      */
     @Override
     @Transactional

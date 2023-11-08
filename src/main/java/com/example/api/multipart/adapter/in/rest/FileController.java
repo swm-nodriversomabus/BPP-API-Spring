@@ -29,10 +29,10 @@ public class FileController {
     /**
      * 파일 조회
      * @param fileName (파일명)
-     * @return ResponseEntity<byte[]>
+     * @return file
      */
     @Operation(summary = "Show File", description = "파일을 조회한다.")
-    @GetMapping("/file/{fileName}")
+    @GetMapping("/file/local/{fileName}")
     public ResponseEntity<byte[]> getFile(@PathVariable String fileName) {
         return showFileUsecase.getFile(fileName);
     }

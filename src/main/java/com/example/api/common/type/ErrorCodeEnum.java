@@ -24,6 +24,10 @@ public enum ErrorCodeEnum {
     LOGIN_IS_NOT_DONE(HttpStatus.UNAUTHORIZED, "로그인 정보가 없습니다"),
     // 403 Forbidden
     INVALID_PERMISSION(HttpStatus.FORBIDDEN, "권한이 없습니다"),
+    // 406 Not Acceptable
+    S3_UPLOAD_FAIL(HttpStatus.NOT_ACCEPTABLE, "S3 파일 업로드 실패"),
+    S3_DISPLAY_FAIL(HttpStatus.NOT_ACCEPTABLE, "S3 파일 조회 실패"),
+    FILE_READ_ERROR(HttpStatus.NOT_ACCEPTABLE, "파일을 읽을 수 없습니다"),
     // 500 Internal Server Error
     DATABASE_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "데이터베이스 오류");
     
