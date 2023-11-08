@@ -15,7 +15,6 @@ import java.util.UUID;
 @AllArgsConstructor
 public class LikeDto {
     @NotNull
-    @org.hibernate.validator.constraints.UUID
     private UUID userid;
     
     @NotNull
