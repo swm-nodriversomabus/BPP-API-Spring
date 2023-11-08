@@ -28,18 +28,23 @@ public class FriendController {
 
     /**
      * 친구 추가
-     * @param friendDto (Data)
-     * @return FriendDto
+     * @param friendDto (데이터)
+     * @return friend data
      */
     @Operation(summary = "Add friend", description = "새로운 친구를 추가한다.")
     @PostMapping("/friend")
     public FriendDto addFriend(@RequestBody FriendDto friendDto) {
+        SecurityUser securityUser = AuthenticationUtils.getCurrentUserAuthentication();
+        if (securityUser == null) {
+            log.error("FriendController::addFriend: Login is needed");
+            throw new CustomException(ErrorCodeEnum.LOGIN_IS_NOT_DONE);
+        }
         return addFriendUsecase.addFriend(friendDto);
     }
 
     /**
      * 친구 목록 조회
-     * @return List<UserDto>
+     * @return friend list
      */
     @Operation(summary = "Get friend list", description = "사용자의 친구 목록을 조회한다.")
     @GetMapping("/user/friend")
@@ -54,11 +59,16 @@ public class FriendController {
 
     /**
      * 친구 삭제
-     * @param friendDto (Data)
+     * @param friendDto (데이터)
      */
     @Operation(summary = "Delete friend", description = "친구를 삭제한다.")
     @DeleteMapping("/friend")
     public void deleteFriend(FriendDto friendDto) {
+        SecurityUser securityUser = AuthenticationUtils.getCurrentUserAuthentication();
+        if (securityUser == null) {
+            log.error("FriendController::deleteFriend: Login is needed");
+            throw new CustomException(ErrorCodeEnum.LOGIN_IS_NOT_DONE);
+        }
         deleteFriendUsecase.deleteFriend(friendDto);
     }
 }

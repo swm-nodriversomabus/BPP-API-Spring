@@ -50,6 +50,11 @@ public class S3Controller {
     @Operation(summary = "Display file", description = "S3에 업로드한 파일을 조회한다.")
     @GetMapping("/file/{filename}")
     public ResponseEntity<InputStreamResource> display(@PathVariable String filename) {
+        SecurityUser securityUser = AuthenticationUtils.getCurrentUserAuthentication();
+        if (securityUser == null) {
+            log.error("S3Controller::display: Login is needed");
+            throw new CustomException(ErrorCodeEnum.LOGIN_IS_NOT_DONE);
+        }
         InputStream fileStream = fileDisplayUsecase.display(filename);
         return ResponseEntity.ok()
                 .contentType(MediaType.IMAGE_PNG)
