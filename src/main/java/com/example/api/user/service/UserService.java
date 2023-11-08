@@ -160,6 +160,19 @@ public class UserService implements SaveUserUsecase, FindUserUsecase, DeleteUser
     }
     
     @Override
+    public void updateProfileImageState(UUID userId, ApplicationStateEnum state) {
+        Optional<ProfileImageEntity> profileImageEntity = profileImagePort.getProfileImage(userId);
+        if (profileImageEntity.isEmpty()) {
+            log.error("UserService::updateProfileImageState: Failed loading profile image data");
+            throw new CustomException(ErrorCodeEnum.USER_PROFILE_IMAGE_NOT_FOUND);
+        }
+        ProfileImage profileImage = userMapper.toDomain(profileImageEntity.get());
+        profileImage.setState(state);
+        profileImage.setUpdatedAt(LocalDateTime.now());
+        profileImagePort.saveProfileImage(profileImage);
+    }
+    
+    @Override
     @Transactional
     public void initializeProfileImage(UUID userId) {
         ProfileImage profileImage = ProfileImage.builder()

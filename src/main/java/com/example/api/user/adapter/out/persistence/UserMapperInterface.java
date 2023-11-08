@@ -26,4 +26,5 @@ public interface UserMapperInterface {
     UserAuthorityCheckDto toAuthorityDto(UserEntity userEntity);
     FindUserDto toDto(UpdateUserDto updateUserDto);
     ProfileImageEntity toEntity(ProfileImage profileImage);
+    ProfileImage toDomain(ProfileImageEntity profileImageEntity);
 }
