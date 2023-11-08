@@ -30,6 +30,7 @@ import com.example.api.user.dto.FindUserDto;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -94,7 +95,7 @@ public class UserService implements SaveUserUsecase, FindUserUsecase, DeleteUser
         }
         User userdata = userMapper.toDomain(userEntity.get());
         User user = userMapper.toDomain(userDto);
-        user.setUserId(securityUser.getUserId());
+        user.setUserId(userId);
         user.setSocialId(userdata.getSocialId());
         return userMapper.toDto(saveUserPort.updateUser(userId, user));
     }
