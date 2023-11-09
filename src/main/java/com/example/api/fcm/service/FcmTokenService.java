@@ -1,8 +1,8 @@
 package com.example.api.fcm.service;
 
 import com.example.api.fcm.adapter.out.persistence.FcmTokenMapperInterface;
-import com.example.api.fcm.applocation.port.out.FindFcmTokenPort;
-import com.example.api.fcm.applocation.port.out.SaveFcmTokenPort;
+import com.example.api.fcm.application.port.out.FindFcmTokenPort;
+import com.example.api.fcm.application.port.out.SaveFcmTokenPort;
 import com.example.api.fcm.domain.FcmToken;
 import com.example.api.fcm.dto.FcmTokenDto;
 import lombok.RequiredArgsConstructor;

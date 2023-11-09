@@ -7,6 +7,8 @@ import com.example.api.common.exception.CustomException;
 import com.example.api.common.type.ApplicationStateEnum;
 import com.example.api.common.type.ErrorCodeEnum;
 import com.example.api.common.utils.AuthenticationUtils;
+import com.example.api.fcm.application.port.in.SendNotificationUsecase;
+import com.example.api.fcm.dto.FcmDto;
 import com.example.api.matching.application.port.in.*;
 import com.example.api.matching.domain.MatchingApplication;
 import com.example.api.matching.dto.*;
@@ -37,6 +39,7 @@ public class MatchingController {
     private final DeleteMatchingUsecase deleteMatchingUsecase;
     private final MatchingApplicationUsecase matchingApplicationUsecase;
     private final LikeUsecase likeUsecase;
+    private final SendNotificationUsecase sendNotificationUsecase;
     private final CreateChatRoomUsecase createChatRoomUsecase;
     private final AddMemberChatRoomUsecase addMemberChatRoomUsecase;
 
@@ -89,6 +92,13 @@ public class MatchingController {
         }
         
         MatchingApplication matchingApplication = matchingApplicationUsecase.createMatchingApplicationData(securityUser.getUserId(), matchingApplicationDto);
+        FcmDto fcmDto = FcmDto.builder()
+                .userId(matchingApplication.getUserId())
+                .matchingId(matchingApplication.getMatchingId())
+                .title("새 신청")
+                .body("새로운 매칭 신청이 들어왔어요!")
+                .build();
+        sendNotificationUsecase.sendNotification(fcmDto);
         ChatRoom chatRoom = createChatRoomUsecase.createMatchingChatRoom(matchingApplication);
         return addMemberChatRoomUsecase.setupMatchingChatRoom(matchingApplication, chatRoom);
     }

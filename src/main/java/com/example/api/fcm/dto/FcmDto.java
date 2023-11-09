@@ -15,6 +15,8 @@ public class FcmDto {
     @NotNull
     private UUID userId;
     
+    private Long matchingId;
+    
     private String title;
     
     private String body;

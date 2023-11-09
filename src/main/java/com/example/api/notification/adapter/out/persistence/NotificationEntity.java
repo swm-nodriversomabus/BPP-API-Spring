@@ -23,6 +23,9 @@ public class NotificationEntity extends BaseEntity {
     private NotificationTypeEnum type;
     
     @Column(nullable = false)
+    private Long matchingId;
+    
+    @Column(nullable = false)
     private String content;
     
     @Column(nullable = false)

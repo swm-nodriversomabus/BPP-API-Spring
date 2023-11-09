@@ -13,6 +13,7 @@ import java.time.LocalDateTime;
 public class Notification {
     private Long notificationId;
     private NotificationTypeEnum type;
+    private Long matchingId;
     private String content;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;

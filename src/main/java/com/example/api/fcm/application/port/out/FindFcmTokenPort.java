@@ -1,4 +1,4 @@
-package com.example.api.fcm.applocation.port.out;
+package com.example.api.fcm.application.port.out;
 
 import org.springframework.stereotype.Component;
 

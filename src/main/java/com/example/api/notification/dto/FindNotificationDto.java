@@ -19,6 +19,9 @@ public class FindNotificationDto {
     @NotNull
     private NotificationTypeEnum type;
     
+    @NotNull
+    private Long matchingId;
+    
     @NotBlank
     private String content;
     

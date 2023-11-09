@@ -15,6 +15,9 @@ public class SaveNotificationDto {
     @NotNull
     private NotificationTypeEnum type;
     
+    @Builder.Default
+    private Long matchingId = 0L;
+    
     @NotBlank
     private String content;
 

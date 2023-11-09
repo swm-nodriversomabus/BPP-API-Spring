@@ -116,6 +116,7 @@ public class MatchingApplicationService implements MatchingApplicationUsecase {
         matchingApplicationPort.saveMatchingApplication(matchingApplication);
         FcmDto fcmDto = FcmDto.builder()
                 .userId(matchingApplication.getUserId())
+                .matchingId(matchingApplicationDto.getMatchingId())
                 .title(state.equals(ApplicationStateEnum.Approved) ? "신청 수락" : "신청 거절")
                 .body(state.equals(ApplicationStateEnum.Approved) ? "매칭 신청이 수락되었어요!" : "매칭 신청이 거절되었어요.")
                 .build();
