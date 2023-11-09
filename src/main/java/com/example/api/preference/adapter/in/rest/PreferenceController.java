@@ -34,6 +34,11 @@ public class PreferenceController {
     @Operation(summary = "Create preference", description = "선호도 데이터를 생성한다.")
     @PostMapping("/preference")
     public FindPreferenceDto createPreference(@Valid @RequestBody SavePreferenceDto preferenceDto) {
+        SecurityUser securityUser = AuthenticationUtils.getCurrentUserAuthentication();
+        if (securityUser == null) {
+            log.error("PreferenceController::createPreference: Login is needed");
+            throw new CustomException(ErrorCodeEnum.LOGIN_IS_NOT_DONE);
+        }
         return savePreferenceUsecase.createPreference(preferenceDto);
     }
 
@@ -45,6 +50,11 @@ public class PreferenceController {
     @Operation(summary = "Connect user preference", description = "사용자 선호도를 설정한다.")
     @PostMapping("/user-preference")
     public UserPreferenceDto createUserPreference(@Valid @RequestBody UserPreferenceDto userPreferenceDto) {
+        SecurityUser securityUser = AuthenticationUtils.getCurrentUserAuthentication();
+        if (securityUser == null) {
+            log.error("PreferenceController::createUserPreference: Login is needed");
+            throw new CustomException(ErrorCodeEnum.LOGIN_IS_NOT_DONE);
+        }
         return userPreferenceUsecase.createUserPreference(userPreferenceDto);
     }
 
@@ -56,6 +66,11 @@ public class PreferenceController {
     @Operation(summary = "Connect matching preference", description = "매칭 선호도를 설정한다.")
     @PostMapping("/matching-preference")
     public MatchingPreferenceDto createMatchingPreference(@Valid @RequestBody MatchingPreferenceDto matchingPreferenceDto) {
+        SecurityUser securityUser = AuthenticationUtils.getCurrentUserAuthentication();
+        if (securityUser == null) {
+            log.error("PreferenceController::createMatchingPreference: Login is needed");
+            throw new CustomException(ErrorCodeEnum.LOGIN_IS_NOT_DONE);
+        }
         return matchingPreferenceUsecase.createMatchingPreference(matchingPreferenceDto);
     }
 
@@ -82,6 +97,11 @@ public class PreferenceController {
     @Operation(summary = "Get matching preference", description = "매칭 선호도를 조회한다.")
     @GetMapping("/matching/{matchingId}/preference")
     public ComparePreferenceDto findMatchingPreference(@PathVariable Long matchingId) {
+        SecurityUser securityUser = AuthenticationUtils.getCurrentUserAuthentication();
+        if (securityUser == null) {
+            log.error("PreferenceController::findMatchingPreference: Login is needed");
+            throw new CustomException(ErrorCodeEnum.LOGIN_IS_NOT_DONE);
+        }
         return comparePreferenceUsecase.getMatchingPreference(matchingId);
     }
 
@@ -92,7 +112,7 @@ public class PreferenceController {
      */
     @Operation(summary = "Update user preference", description = "사용자 선호도를 변경한다.")
     @PutMapping("/user/preference")
-    public FindPreferenceDto updateUserPreference(@RequestBody SavePreferenceDto savePreferenceDto) {
+    public FindPreferenceDto updateUserPreference(@Valid @RequestBody SavePreferenceDto savePreferenceDto) {
         SecurityUser securityUser = AuthenticationUtils.getCurrentUserAuthentication();
         if (securityUser == null) {
             log.error("PreferenceController::updateUserPreference: Login is needed");
@@ -110,6 +130,11 @@ public class PreferenceController {
     @Operation(summary = "Update matching preference", description = "매칭 선호도를 변경한다.")
     @PutMapping("/matching/{matchingId}/preference")
     public FindPreferenceDto updateMatchingPreference(@PathVariable Long matchingId, @RequestBody SavePreferenceDto savePreferenceDto) {
+        SecurityUser securityUser = AuthenticationUtils.getCurrentUserAuthentication();
+        if (securityUser == null) {
+            log.error("PreferenceController::updateMatchingPreference: Login is needed");
+            throw new CustomException(ErrorCodeEnum.LOGIN_IS_NOT_DONE);
+        }
         return  matchingPreferenceUsecase.updateMatchingPreference(matchingId, savePreferenceDto);
     }
 }

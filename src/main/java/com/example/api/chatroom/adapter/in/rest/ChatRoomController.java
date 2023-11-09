@@ -36,7 +36,12 @@ public class ChatRoomController {
      */
     @Operation(summary = "Create chatroom", description = "새로운 채팅방을 생성한다.")
     @PostMapping("/chatroom")
-    public UUID createChatroom(@RequestBody @Valid CreateChatRoomDto createChatRoomDto){
+    public UUID createChatroom(@RequestBody @Valid CreateChatRoomDto createChatRoomDto) {
+        SecurityUser securityUser = AuthenticationUtils.getCurrentUserAuthentication();
+        if (securityUser == null) {
+            log.error("ChatRoomController::createChatroom: Login is needed");
+            throw new CustomException(ErrorCodeEnum.LOGIN_IS_NOT_DONE);
+        }
         ChatRoom chatRoom = createChatRoomUsecase.createRoom(createChatRoomDto);
         return chatRoom.getChatroomId();
     }
@@ -59,7 +64,12 @@ public class ChatRoomController {
 
     @Operation(summary = "Delete chatroom", description = "채팅방을 삭제한다.")
     @DeleteMapping("/chatroom/{chatRoomId}")
-    public void outChatRoom(@PathVariable UUID chatRoomId){
+    public void outChatRoom(@PathVariable UUID chatRoomId) {
+        SecurityUser securityUser = AuthenticationUtils.getCurrentUserAuthentication();
+        if (securityUser == null) {
+            log.error("ChatRoomController::outChatroom: Login is needed");
+            throw new CustomException(ErrorCodeEnum.LOGIN_IS_NOT_DONE);
+        }
         log.info("chatroom = {}", chatRoomId);
     }
 }
