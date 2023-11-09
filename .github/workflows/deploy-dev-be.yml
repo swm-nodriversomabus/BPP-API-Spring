@@ -19,7 +19,7 @@ env:
   ECS_TASK_DEFINITION: ${{ github.ref == 'refs/heads/main' && './cicd/task-definition-prod.json' || './cicd/task-definition-dev.json' }}
   JASYPT_SECRET: ${{ secrets.JASYPT_SECRET }}
   CONFIG_IMPORT: ${{ secrets.CONFIG_IMPORT }}
-
+  APPSPEC_YML: ${{ github.ref == 'refs/heads/main' && 'appspec-prod.yaml' || 'appspec-dev.yaml' }}
 permissions:
   contents: read
 jobs:
@@ -96,7 +96,7 @@ jobs:
           task-definition: ${{ steps.task-def.outputs.task-definition }}
           service: ${{ env.ECS_SERVICE }}
           cluster: ${{ env.ECS_CLUSTER }}
-          codedeploy-appspec: appspec.yaml
+          codedeploy-appspec: ${{ env.APPSPEC_YML }}
           wait-for-service-stability: true
 
 
