@@ -4,6 +4,7 @@ import com.example.api.common.exception.CustomException;
 import com.example.api.common.type.ApplicationStateEnum;
 import com.example.api.common.type.ErrorCodeEnum;
 import com.example.api.common.type.Pair;
+import com.example.api.matching.adapter.out.persistence.MatchingApplicationPK;
 import com.example.api.matching.adapter.out.persistence.MatchingEntity;
 import com.example.api.matching.adapter.out.persistence.MatchingMapperInterface;
 import com.example.api.matching.application.port.in.DeleteMatchingUsecase;
@@ -99,7 +100,13 @@ public class MatchingService implements SaveMatchingUsecase, FindMatchingUsecase
             for (Pair<Long, Integer> matchingData: matchingScoreList) { // 유사도가 높은 순서로 정렬한 후 반환
                 FindMatchingDto findMatchingDto = this.getMatchingById(matchingData.getFirst());
                 if (findMatchingDto != null) {
-                    sortedMatchingList.add(findMatchingDto);
+                    MatchingApplicationPK matchingApplicationPK = MatchingApplicationPK.builder()
+                                    .userId(userId)
+                                    .matchingId(findMatchingDto.getMatchingId())
+                                    .build();
+                    if (matchingApplicationPort.getByMatchingApplicationPK(matchingApplicationPK).isEmpty()) {
+                        sortedMatchingList.add(findMatchingDto);
+                    }
                 }
             }
         } catch (Exception e) {
