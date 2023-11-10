@@ -9,11 +9,14 @@ import lombok.*;
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor
-public class AccommodationMatchingDto {
+public class AccommodationDto {
     private Long matchingId;
     
     @Min(0)
     private Integer price;
+    
+    @Min(0)
+    private Integer pricePerOne;
     
     private String room;
 }

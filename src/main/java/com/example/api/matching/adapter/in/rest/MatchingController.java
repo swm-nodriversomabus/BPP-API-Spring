@@ -10,6 +10,7 @@ import com.example.api.common.utils.AuthenticationUtils;
 import com.example.api.matching.application.port.in.*;
 import com.example.api.matching.domain.MatchingApplication;
 import com.example.api.matching.dto.*;
+import com.example.api.matching.type.MatchingTypeEnum;
 import com.example.api.member.application.port.in.AddMemberChatRoomUsecase;
 import com.example.api.user.application.port.in.FindUserUsecase;
 import com.example.api.user.dto.FindUserInfoDto;
@@ -26,9 +27,9 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import java.util.List;
 
 @RestController
+@Slf4j
 @RequiredArgsConstructor
 @EnableWebMvc
-@Slf4j
 @Tag(name = "Matching", description = "Matching API")
 public class MatchingController {
     private final FindUserUsecase findUserUsecase;
@@ -36,6 +37,7 @@ public class MatchingController {
     private final FindMatchingUsecase findMatchingUsecase;
     private final DeleteMatchingUsecase deleteMatchingUsecase;
     private final MatchingApplicationUsecase matchingApplicationUsecase;
+    private final AccommodationUsecase accommodationUsecase;
     private final LikeUsecase likeUsecase;
     private final CreateChatRoomUsecase createChatRoomUsecase;
     private final AddMemberChatRoomUsecase addMemberChatRoomUsecase;
@@ -47,13 +49,13 @@ public class MatchingController {
      */
     @Operation(summary = "Create matching", description = "새로운 매칭을 생성한다.")
     @PostMapping("/matching")
-    public FindMatchingDto createMatching(@Valid @RequestBody SaveMatchingDto saveMatchingDto) {
+    public FindMatchingDto createMatching(@Valid @RequestBody SaveMatchingDto saveMatchingDto, @Valid @RequestBody AccommodationDto accommodationDto) {
         SecurityUser securityUser = AuthenticationUtils.getCurrentUserAuthentication();
         if (securityUser == null) {
             log.error("MatchingController::createMatching: Login is needed");
             throw new CustomException(ErrorCodeEnum.LOGIN_IS_NOT_DONE);
         }
-        FindMatchingDto findMatchingDto =  saveMatchingUsecase.createMatching(securityUser.getUserId(), saveMatchingDto);
+        FindMatchingDto findMatchingDto = saveMatchingUsecase.createMatching(securityUser.getUserId(), saveMatchingDto);
         
         SaveMatchingApplicationDto saveMatchingApplicationDto = SaveMatchingApplicationDto.builder()
                 .userId(securityUser.getUserId())
@@ -62,6 +64,15 @@ public class MatchingController {
                 .isActive(true)
                 .build();
         matchingApplicationUsecase.createMatchingApplicationData(securityUser.getUserId(), saveMatchingApplicationDto);
+        
+        if (saveMatchingDto.getType().equals(MatchingTypeEnum.Accommodation)) {
+            if (accommodationDto == null) {
+                log.error("MatchingController::createMatching: Accommodation data not found");
+                throw new CustomException(ErrorCodeEnum.ACCOMMODATION_NOT_FOUND);
+            }
+            accommodationUsecase.createAccommodation(findMatchingDto.getMatchingId(), accommodationDto);
+        }
+        
         return findMatchingDto;
     }
 

@@ -9,13 +9,16 @@ import lombok.*;
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name="accommodationMatching")
-public class AccommodationMatchingEntity {
+@Table(name="accommodation")
+public class AccommodationEntity {
     @Id
     private Long matchingId;
     
     @Column
     private Integer price;
+    
+    @Column
+    private Integer pricePerOne;
     
     @Column(length = 3000)
     private String room;

@@ -14,8 +14,8 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Repository
-@RequiredArgsConstructor
 @Slf4j
+@RequiredArgsConstructor
 @ComponentScan
 public class MatchingApplicationPersistenceAdapter implements MatchingApplicationPort {
     private final MatchingMapperInterface matchingMapper;
