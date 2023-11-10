@@ -100,7 +100,7 @@ public class PreferenceController {
             log.error("PreferenceController::findMatchingPreference: Login is needed");
             throw new CustomException(ErrorCodeEnum.LOGIN_IS_NOT_DONE);
         }
-        return comparePreferenceUsecase.getMatchingPreference(matchingId);
+        return findPreferenceUsecase.getMatchingPreference(matchingId);
     }
 
     /**
