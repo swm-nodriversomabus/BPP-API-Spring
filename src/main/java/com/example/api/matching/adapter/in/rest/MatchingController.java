@@ -53,7 +53,7 @@ public class MatchingController {
             log.error("MatchingController::createMatching: Login is needed");
             throw new CustomException(ErrorCodeEnum.LOGIN_IS_NOT_DONE);
         }
-        FindMatchingDto findMatchingDto =  saveMatchingUsecase.createMatching(securityUser.getUserId(), saveMatchingDto);
+        FindMatchingDto findMatchingDto = saveMatchingUsecase.createMatching(securityUser.getUserId(), saveMatchingDto);
         
         SaveMatchingApplicationDto saveMatchingApplicationDto = SaveMatchingApplicationDto.builder()
                 .userId(securityUser.getUserId())

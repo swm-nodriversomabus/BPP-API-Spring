@@ -26,6 +26,7 @@ public class MatchingApplicationEntity extends BaseEntity {
     private Long matchingId;
     
     @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
     private ApplicationStateEnum state;
     
     @Column(nullable = false)
