@@ -23,6 +23,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 @RestController
@@ -137,11 +139,11 @@ public class MatchingController {
             log.error("MatchingController::getPendingUserList: Login is needed");
             throw new CustomException(ErrorCodeEnum.LOGIN_IS_NOT_DONE);
         }
-        return matchingApplicationUsecase.getByMatchingIdIsAndStateEquals(matchingId, ApplicationStateEnum.Pending);
+        return matchingApplicationUsecase.getByMatchingIdAndStateEquals(matchingId, ApplicationStateEnum.Pending);
     }
 
     /**
-     * ID가 matchingId인 매칭의 참가자 목록 조회
+     * ID가 matchingId인 매칭의 작성자 포함 참가자 목록 조회
      * @param matchingId (ID)
      * @return participant list
      */
@@ -153,7 +155,8 @@ public class MatchingController {
             log.error("MatchingController::getApprovedUserList: Login is needed");
             throw new CustomException(ErrorCodeEnum.LOGIN_IS_NOT_DONE);
         }
-        return matchingApplicationUsecase.getByMatchingIdIsAndStateEquals(matchingId, ApplicationStateEnum.Approved);
+        List<ApplicationStateEnum> stateList = new ArrayList<>(Arrays.asList(ApplicationStateEnum.Approved, ApplicationStateEnum.Owner));
+        return matchingApplicationUsecase.getByMatchingIdAndStateIn(matchingId, stateList);
     }
 
     /**

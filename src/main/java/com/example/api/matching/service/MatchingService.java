@@ -53,7 +53,7 @@ public class MatchingService implements SaveMatchingUsecase, FindMatchingUsecase
         List<FindMatchingDto> matchingList = new ArrayList<>();
         for (MatchingEntity matchingData: matchingEntities) {
             Matching matching = matchingMapper.toDomain(matchingData);
-            matching.setCurrentMember(matchingApplicationPort.getByMatchingIdIsAndStateEquals(matchingData.getMatchingId(), ApplicationStateEnum.Approved).size() + 1);
+            matching.setCurrentMember(matchingApplicationPort.getByMatchingIdAndStateEquals(matchingData.getMatchingId(), ApplicationStateEnum.Approved).size() + 1);
             matchingList.add(matchingMapper.toDto(matching));
         }
         return matchingList;
@@ -71,7 +71,7 @@ public class MatchingService implements SaveMatchingUsecase, FindMatchingUsecase
             return null;
         }
         Matching matching = matchingMapper.toDomain(matchingEntity.get());
-        matching.setCurrentMember(matchingApplicationPort.getByMatchingIdIsAndStateEquals(matchingId, ApplicationStateEnum.Approved).size() + 1);
+        matching.setCurrentMember(matchingApplicationPort.getByMatchingIdAndStateEquals(matchingId, ApplicationStateEnum.Approved).size() + 1);
         return matchingMapper.toDto(matching);
     }
 

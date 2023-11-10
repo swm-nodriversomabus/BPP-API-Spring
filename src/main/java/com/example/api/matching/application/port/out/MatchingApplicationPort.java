@@ -12,6 +12,7 @@ import java.util.UUID;
 public interface MatchingApplicationPort {
     MatchingApplication saveMatchingApplication(MatchingApplication matchingApplication);
     Optional<MatchingApplicationEntity> getByMatchingApplicationPK(MatchingApplicationPK matchingApplicationPK);
-    List<MatchingApplicationEntity> getByUserIdIsAndStateEquals(UUID userId, ApplicationStateEnum state);
-    List<MatchingApplicationEntity> getByMatchingIdIsAndStateEquals(Long matchingId, ApplicationStateEnum state);
+    List<MatchingApplicationEntity> getByUserIdAndStateEquals(UUID userId, ApplicationStateEnum state);
+    List<MatchingApplicationEntity> getByMatchingIdAndStateEquals(Long matchingId, ApplicationStateEnum state);
+    List<MatchingApplicationEntity> getByMatchingIdAndStateIn(Long matchingId, List<ApplicationStateEnum> stateList);
 }
