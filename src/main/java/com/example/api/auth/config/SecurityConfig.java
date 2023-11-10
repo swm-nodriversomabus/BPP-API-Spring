@@ -103,10 +103,6 @@ public class SecurityConfig {
                 .build();
     }
 
-//    @Bean
-//    public OAuth2AuthorizationRequestBasedOnCookieRepository oAuth2AuthorizationRequestBasedOnCookieRepository() {
-//        return new OAuth2AuthorizationRequestBasedOnCookieRepository();
-//    }
 
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {

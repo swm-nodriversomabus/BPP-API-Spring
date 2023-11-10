@@ -64,6 +64,11 @@ public class UserController {
     @Operation(summary = "Create user", description = "새로운 사용자를 추가한다.")
     @PostMapping("/user")
     public void createUser(@Valid @RequestBody CreateUserDto userDto, BindingResult bindingResult) {
+        SecurityUser securityUser = AuthenticationUtils.getCurrentUserAuthentication();
+        if (securityUser == null) {
+            log.error("UserController::createUser: Login is needed");
+            throw new CustomException(ErrorCodeEnum.LOGIN_IS_NOT_DONE);
+        }
         UUID userId = saveUserUsecase.createUser(userDto);
         profileImageUsecase.initializeProfileImage(userId);
     }
@@ -95,6 +100,11 @@ public class UserController {
     @Operation(summary = "Get all users", description = "모든 사용자 목록을 조회한다.")
     @GetMapping("/user/all")
     public List<FindUserDto> getAll() {
+        SecurityUser securityUser = AuthenticationUtils.getCurrentUserAuthentication();
+        if (securityUser == null) {
+            log.error("UserController::getAll: Login is needed");
+            throw new CustomException(ErrorCodeEnum.LOGIN_IS_NOT_DONE);
+        }
         return findUserUsecase.getAll();
     }
 
