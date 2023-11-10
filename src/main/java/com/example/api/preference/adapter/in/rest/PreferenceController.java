@@ -4,10 +4,7 @@ import com.example.api.auth.domain.SecurityUser;
 import com.example.api.common.exception.CustomException;
 import com.example.api.common.type.ErrorCodeEnum;
 import com.example.api.common.utils.AuthenticationUtils;
-import com.example.api.preference.application.port.in.ComparePreferenceUsecase;
-import com.example.api.preference.application.port.in.MatchingPreferenceUsecase;
-import com.example.api.preference.application.port.in.SavePreferenceUsecase;
-import com.example.api.preference.application.port.in.UserPreferenceUsecase;
+import com.example.api.preference.application.port.in.*;
 import com.example.api.preference.dto.*;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -22,6 +19,7 @@ import org.springframework.web.bind.annotation.*;
 @Tag(name = "Preference", description = "Preference API")
 public class PreferenceController {
     private final SavePreferenceUsecase savePreferenceUsecase;
+    private final FindPreferenceUsecase findPreferenceUsecase;
     private final UserPreferenceUsecase userPreferenceUsecase;
     private final MatchingPreferenceUsecase matchingPreferenceUsecase;
     private final ComparePreferenceUsecase comparePreferenceUsecase;
@@ -61,28 +59,28 @@ public class PreferenceController {
 
     /**
      * 사용자 선호도 조회
-     * @return user compare-preference data
+     * @return user preference data
      */
     @Operation(summary = "Get user preference", description = "사용자 선호도를 조회한다.")
     @GetMapping("/user/preference")
-    public ComparePreferenceDto getUserPreference() {
+    public FindPreferenceDto getUserPreference() {
         SecurityUser securityUser = AuthenticationUtils.getCurrentUserAuthentication();
         if (securityUser == null) {
             log.error("PreferenceController::getUserPreference: Login is needed");
             throw new CustomException(ErrorCodeEnum.LOGIN_IS_NOT_DONE);
         }
-        return comparePreferenceUsecase.getUserPreference(securityUser.getUserId());
+        return findPreferenceUsecase.getUserPreference(securityUser.getUserId());
     }
 
     /**
      * 매칭 선호도 조회
      * @param matchingId (ID)
-     * @return matching compare-preference data
+     * @return matching preference data
      */
     @Operation(summary = "Get matching preference", description = "매칭 선호도를 조회한다.")
     @GetMapping("/matching/{matchingId}/preference")
-    public ComparePreferenceDto findMatchingPreference(@PathVariable Long matchingId) {
-        return comparePreferenceUsecase.getMatchingPreference(matchingId);
+    public FindPreferenceDto findMatchingPreference(@PathVariable Long matchingId) {
+        return findPreferenceUsecase.getMatchingPreference(matchingId);
     }
 
     /**
