@@ -165,7 +165,7 @@ public class UserController {
             log.error("UserController::getPendingMatchingList: Login is needed");
             throw new CustomException(ErrorCodeEnum.LOGIN_IS_NOT_DONE);
         }
-        return matchingApplicationUsecase.getByUserIdIsAndStateEquals(securityUser.getUserId(), ApplicationStateEnum.Pending);
+        return matchingApplicationUsecase.getByUserIdAndStateEquals(securityUser.getUserId(), ApplicationStateEnum.Pending);
     }
 
     /**
@@ -180,7 +180,7 @@ public class UserController {
             log.error("UserController::getApprovedMatchingList: Login is needed");
             throw new CustomException(ErrorCodeEnum.LOGIN_IS_NOT_DONE);
         }
-        return matchingApplicationUsecase.getByUserIdIsAndStateEquals(securityUser.getUserId(), ApplicationStateEnum.Approved);
+        return matchingApplicationUsecase.getByUserIdAndStateEquals(securityUser.getUserId(), ApplicationStateEnum.Approved);
     }
 
     /**

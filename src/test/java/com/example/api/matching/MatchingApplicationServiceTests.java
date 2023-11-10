@@ -44,13 +44,13 @@ public class MatchingApplicationServiceTests {
 
     @Test
     void getByUserIdIsAndStateEqualsTest() {
-        matchingApplicationService.getByUserIdIsAndStateEquals(userId, ApplicationStateEnum.Pending);
-        verify(matchingApplicationPort, times(1)).getByUserIdIsAndStateEquals(userId, ApplicationStateEnum.Pending);
+        matchingApplicationService.getByUserIdAndStateEquals(userId, ApplicationStateEnum.Pending);
+        verify(matchingApplicationPort, times(1)).getByUserIdAndStateEquals(userId, ApplicationStateEnum.Pending);
     }
 
     @Test
     void getByMatchingIdIsAndStateEqualsTest() {
-        matchingApplicationService.getByMatchingIdIsAndStateEquals(1L, ApplicationStateEnum.Approved);
-        verify(matchingApplicationPort, times(1)).getByMatchingIdIsAndStateEquals(1L, ApplicationStateEnum.Approved);
+        matchingApplicationService.getByMatchingIdAndStateEquals(1L, ApplicationStateEnum.Approved);
+        verify(matchingApplicationPort, times(1)).getByMatchingIdAndStateEquals(1L, ApplicationStateEnum.Approved);
     }
 }
