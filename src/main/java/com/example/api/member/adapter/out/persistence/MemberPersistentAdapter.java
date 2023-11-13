@@ -20,7 +20,7 @@ public class MemberPersistentAdapter implements AddMemberChatRoomPort {
     private final MemberRepository memberRepository;
 
     @Override
-    public void addMember(List<Member> members, ChatRoom chatRoom) {
+    public void addMembers(List<Member> members, ChatRoom chatRoom) {
         memberRepository.saveAll(memberMapper.fromListDomainToEntity(members, chatRoomMapper.toEntity(chatRoom)));
     }
 }
