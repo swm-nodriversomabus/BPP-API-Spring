@@ -64,11 +64,6 @@ public class UserController {
     @Operation(summary = "Create user", description = "새로운 사용자를 추가한다.")
     @PostMapping("/user")
     public void createUser(@Valid @RequestBody CreateUserDto userDto, BindingResult bindingResult) {
-        SecurityUser securityUser = AuthenticationUtils.getCurrentUserAuthentication();
-        if (securityUser == null) {
-            log.error("UserController::createUser: Login is needed");
-            throw new CustomException(ErrorCodeEnum.LOGIN_IS_NOT_DONE);
-        }
         UUID userId = saveUserUsecase.createUser(userDto);
         profileImageUsecase.initializeProfileImage(userId);
     }
