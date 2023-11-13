@@ -50,8 +50,14 @@ public class ChatController {
             log.error("ChatController::sendMessage: Login is needed");
             throw new CustomException(ErrorCodeEnum.LOGIN_IS_NOT_DONE);
         }
+        message.setSenderId(securityUser.getUserId());
         log.info("roomId : {}", roomId);
+        
         if (contentType.equals("image")) {
+            if (file.isEmpty()) {
+                log.error("ChatController:sendMessage: cannot find a image");
+                throw new CustomException(ErrorCodeEnum.IMAGE_NOT_FOUND);
+            }
             message.setContent(uploadFileUsecase.uploadFile(file));
         }
         sendChatUsecase.send(roomId, message);
