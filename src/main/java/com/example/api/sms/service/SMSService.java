@@ -25,10 +25,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
 
-
+@Service
 @Slf4j
 @RequiredArgsConstructor
-@Service
 public class SMSService implements SendCertificationCodeUsecase, VerifyCodeUsecase {
     private final AWSConfig awsConfig;
     private final CertificationCodePort certificationCodePort;
@@ -44,19 +43,17 @@ public class SMSService implements SendCertificationCodeUsecase, VerifyCodeUseca
             // 이제 그 redis에 저장 => 인증 redis
             checkVerifiedPhonePort.saveCheckedPhone(phone);
         }else{
-            throw new CustomException(ErrorCodeEnum.CODE_IS_NOT_VALID); // 코드가 일치 하지 않음
+            throw new CustomException(ErrorCodeEnum.CODE_IS_NOT_VALID); // 코드가 일치하지 않음
         }
-
     }
 
     /**
      * 코드 발급 받고, 전송
-     * @param phone
-     * @return
+     * @param phone (휴대폰 번호)
+     * @return PublishResult
      */
     @Override
     public PublishResult send(String phone) {
-
         PublishResult result = null;
         StringBuilder koreaPhone = new StringBuilder("+82");
         koreaPhone.append(phone);
@@ -65,13 +62,13 @@ public class SMSService implements SendCertificationCodeUsecase, VerifyCodeUseca
             String code = generateRandomSixDigitNumber();
             StringBuilder newMessage = new StringBuilder(message);
             newMessage.append(code);
-            BasicAWSCredentials awsCreds = new BasicAWSCredentials(awsConfig.getAwsAccessKey(), awsConfig.getAwsSecretKey());
+            BasicAWSCredentials awsCredentials = new BasicAWSCredentials(awsConfig.getAwsAccessKey(), awsConfig.getAwsSecretKey());
 
             AmazonSNSClientBuilder builder =
                     AmazonSNSClientBuilder.standard();
 
             AmazonSNS sns = builder.withRegion(Regions.AP_NORTHEAST_1)
-                    .withCredentials(new AWSStaticCredentialsProvider(awsCreds)).build();
+                    .withCredentials(new AWSStaticCredentialsProvider(awsCredentials)).build();
 
             Map<String, MessageAttributeValue> smsAttributes =
                     new HashMap<>();
@@ -91,7 +88,6 @@ public class SMSService implements SendCertificationCodeUsecase, VerifyCodeUseca
                     smsAttributes);
             certificationCodePort.saveCode(phone,code);
         } catch (Exception ex) {
-
             log.error("The sms was not sent.");
             log.error("Error message: " + ex.getMessage());
             throw new AmazonClientException(ex.getMessage(), ex);
@@ -100,14 +96,13 @@ public class SMSService implements SendCertificationCodeUsecase, VerifyCodeUseca
     }
 
     /**
-     * 6 랜덤 숫자 리턴
-     *
-     * @return
+     * 6자리 난수 생성
+     * @return random code
      */
     private String generateRandomSixDigitNumber() {
         Random random = new Random();
 
-        int randomNumber = random.nextInt(1000000); // 0~ 999999 사이 랜덤 숫자
+        int randomNumber = random.nextInt(1000000); // 000000 ~ 999999 사이 난수
         return String.format("%06d", randomNumber);
 //        newMessage.append();
 //        return newMessage.toString();
