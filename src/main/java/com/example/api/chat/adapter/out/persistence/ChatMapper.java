@@ -25,6 +25,6 @@ public interface ChatMapper {
 //    @Mapping(source = "senderId.userId.userId", target = "senderId.userId")
     Chat toDomain(ChatEntity chatEntity);
 
-    @Mapping(source = "senderId",target = "senderId.userId")
+    @Mapping(source = "senderId", target = "senderId.userId")
     Chat toDomain(AddChatDto addChatDto);
 }
