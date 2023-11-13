@@ -16,6 +16,7 @@ import com.example.api.matching.domain.Matching;
 import com.example.api.matching.domain.MatchingApplication;
 import com.example.api.matching.dto.FindMatchingDto;
 import com.example.api.matching.dto.SaveMatchingApplicationDto;
+import com.example.api.member.service.MemberService;
 import com.example.api.user.adapter.out.persistence.UserEntity;
 import com.example.api.user.adapter.out.persistence.UserMapperInterface;
 import com.example.api.user.application.port.out.FindUserPort;
@@ -37,6 +38,7 @@ public class MatchingApplicationService implements MatchingApplicationUsecase {
     private final FindUserPort findUserPort;
     private final FindMatchingPort findMatchingPort;
     private final MatchingApplicationPort matchingApplicationPort;
+    private final MemberService memberService;
     private final FcmService fcmService;
 
     /**
@@ -126,9 +128,18 @@ public class MatchingApplicationService implements MatchingApplicationUsecase {
             log.error("MatchingApplicationService::processMatchingApplication: Data not found");
             throw new CustomException(ErrorCodeEnum.APPLICATION_NOT_FOUND);
         }
+        
         MatchingApplication matchingApplication = matchingMapper.toDomain(matchingApplicationEntity.get());
         matchingApplication.setState(state);
         matchingApplicationPort.saveMatchingApplication(matchingApplication);
+        
+        // 신청 수락 시 매칭 채팅방에 멤버 초대
+        if (state.equals(ApplicationStateEnum.Approved)) {
+            MatchingEntity matchingEntity = findMatchingPort.getByMatchingId(matchingApplication.getMatchingId()).get();
+            memberService.addMember(matchingEntity.getChatRoomId(), matchingApplication.getUserId());
+        }
+        
+        // 푸시 알림 전송
         FcmDto fcmDto = FcmDto.builder()
                 .userId(matchingApplication.getUserId())
                 .title(state.equals(ApplicationStateEnum.Approved) ? "신청 수락" : "신청 거절")

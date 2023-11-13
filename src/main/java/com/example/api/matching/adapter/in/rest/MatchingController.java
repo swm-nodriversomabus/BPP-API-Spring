@@ -3,6 +3,8 @@ package com.example.api.matching.adapter.in.rest;
 import com.example.api.auth.domain.SecurityUser;
 import com.example.api.chatroom.application.port.in.CreateChatRoomUsecase;
 import com.example.api.chatroom.domain.ChatRoom;
+import com.example.api.chatroom.dto.CreateChatRoomDto;
+import com.example.api.chatroom.type.ChatRoomEnum;
 import com.example.api.common.exception.CustomException;
 import com.example.api.common.type.ApplicationStateEnum;
 import com.example.api.common.type.ErrorCodeEnum;
@@ -55,8 +57,22 @@ public class MatchingController {
             log.error("MatchingController::createMatching: Login is needed");
             throw new CustomException(ErrorCodeEnum.LOGIN_IS_NOT_DONE);
         }
+        
+        // 매칭 전용 채팅방 생성
+        CreateChatRoomDto createChatRoomDto = CreateChatRoomDto.builder()
+                .masterId(securityUser.getUserId())
+                .chatroomName(saveMatchingDto.getTitle())
+                .type(ChatRoomEnum.Matching)
+                .isActive(true)
+                .build();
+        ChatRoom chatRoom = createChatRoomUsecase.createRoom(createChatRoomDto);
+        addMemberChatRoomUsecase.addMember(chatRoom.getChatroomId(), securityUser.getUserId());
+        saveMatchingDto.setChatRoomId(chatRoom.getChatroomId());
+        
+        // 매칭 데이터 저장
         FindMatchingDto findMatchingDto = saveMatchingUsecase.createMatching(securityUser.getUserId(), saveMatchingDto);
         
+        // Owner 등록
         SaveMatchingApplicationDto saveMatchingApplicationDto = SaveMatchingApplicationDto.builder()
                 .userId(securityUser.getUserId())
                 .matchingId(findMatchingDto.getMatchingId())
@@ -64,6 +80,7 @@ public class MatchingController {
                 .isActive(true)
                 .build();
         matchingApplicationUsecase.createMatchingApplicationData(securityUser.getUserId(), saveMatchingApplicationDto);
+        
         return findMatchingDto;
     }
 
