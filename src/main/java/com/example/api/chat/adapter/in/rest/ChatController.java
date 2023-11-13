@@ -18,6 +18,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
+import org.springframework.messaging.handler.annotation.Header;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -42,20 +43,28 @@ public class ChatController {
      * @param roomId (ID)
      * @param message (데이터)
      */
+//    @Operation(summary = "Send message", description = "채팅방에 메시지를 보낸다.")
+//    @MessageMapping("/chat/{roomId}")
+//    public void sendMessage(@DestinationVariable String roomId, AddChatDto message, String contentType, @RequestParam("file") MultipartFile file) {
+//        SecurityUser securityUser = AuthenticationUtils.getCurrentUserAuthentication();
+//        if (securityUser == null) {
+//            log.error("ChatController::sendMessage: Login is needed");
+//            throw new CustomException(ErrorCodeEnum.LOGIN_IS_NOT_DONE);
+//        }
+//        message.setSenderId(securityUser.getUserId());
+//        if (contentType.equals("image")) {
+//            message.setContent(uploadFileUsecase.uploadFile(file));
+//        }
+//        sendChatUsecase.send(roomId, message);
+//    }
+
     @Operation(summary = "Send message", description = "채팅방에 메시지를 보낸다.")
     @MessageMapping("/chat/{roomId}")
-    public void sendMessage(@DestinationVariable String roomId, AddChatDto message, String contentType, @RequestParam("file") MultipartFile file) {
-        SecurityUser securityUser = AuthenticationUtils.getCurrentUserAuthentication();
-        if (securityUser == null) {
-            log.error("ChatController::sendMessage: Login is needed");
-            throw new CustomException(ErrorCodeEnum.LOGIN_IS_NOT_DONE);
-        }
-        log.info("roomId : {}", roomId);
-        if (contentType.equals("image")) {
-            message.setContent(uploadFileUsecase.uploadFile(file));
-        }
+    public void sendMessage(@DestinationVariable String roomId, AddChatDto message, @Header("userId") UUID userId) {
+        message.setSenderId(userId);
         sendChatUsecase.send(roomId, message);
     }
+
 
     /**
      * 구독을 시작할 때 클라이언트가 사용
@@ -65,11 +74,11 @@ public class ChatController {
     @Operation(summary = "Enter chatroom", description = "채팅방에 입장한다.")
     @MessageMapping("/subscribe/{roomId}")
     public void subscribe(@DestinationVariable String roomId) {
-        SecurityUser securityUser = AuthenticationUtils.getCurrentUserAuthentication();
-        if (securityUser == null) {
-            log.error("ChatController::subscribe: Login is needed");
-            throw new CustomException(ErrorCodeEnum.LOGIN_IS_NOT_DONE);
-        }
+//        SecurityUser securityUser = AuthenticationUtils.getCurrentUserAuthentication();
+//        if (securityUser == null) {
+//            log.error("ChatController::subscribe: Login is needed");
+//            throw new CustomException(ErrorCodeEnum.LOGIN_IS_NOT_DONE);
+//        }
         subscribeRoomUsecase.subscribe(roomId);
     }
 

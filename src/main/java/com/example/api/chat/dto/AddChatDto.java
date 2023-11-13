@@ -12,7 +12,7 @@ public class AddChatDto {
     @NotNull
     private UUID roomId;
     
-    @NotNull
+//    @NotNull
     private UUID senderId;
     
     @NotBlank
