@@ -87,11 +87,10 @@ public class MatchingController {
     /**
      * 새 매칭 신청 생성
      * @param matchingApplicationDto (데이터)
-     * @return chatroom
      */
     @Operation(summary = "Create matching application", description = "새로운 매칭 신청을 생성한다.")
     @PostMapping("/matching/application")
-    public ChatRoom createMatchingApplication(@Valid @RequestBody SaveMatchingApplicationDto matchingApplicationDto) {
+    public void createMatchingApplication(@Valid @RequestBody SaveMatchingApplicationDto matchingApplicationDto) {
         SecurityUser securityUser = AuthenticationUtils.getCurrentUserAuthentication();
         if (securityUser == null) {
             log.error("MatchingController::createMatchingApplication: Login is needed");
@@ -108,8 +107,8 @@ public class MatchingController {
         }
         
         MatchingApplication matchingApplication = matchingApplicationUsecase.createMatchingApplicationData(securityUser.getUserId(), matchingApplicationDto);
-        ChatRoom chatRoom = createChatRoomUsecase.createMatchingChatRoom(matchingApplication);
-        return addMemberChatRoomUsecase.setupMatchingChatRoom(matchingApplication, chatRoom);
+        //ChatRoom chatRoom = createChatRoomUsecase.createMatchingChatRoom(matchingApplication);
+        //return addMemberChatRoomUsecase.setupMatchingChatRoom(matchingApplication, chatRoom);
     }
     
     /**

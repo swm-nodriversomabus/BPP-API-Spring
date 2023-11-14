@@ -22,7 +22,6 @@ public class PreferenceController {
     private final FindPreferenceUsecase findPreferenceUsecase;
     private final UserPreferenceUsecase userPreferenceUsecase;
     private final MatchingPreferenceUsecase matchingPreferenceUsecase;
-    private final ComparePreferenceUsecase comparePreferenceUsecase;
 
     /**
      * 선호도 데이터 생성

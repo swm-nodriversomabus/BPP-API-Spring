@@ -16,8 +16,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@Slf4j
 @RequiredArgsConstructor
+@Slf4j
 @Tag(name = "Member", description = "Member API")
 public class MemberController {
     private final AddMemberChatRoomUsecase addMemberChatRoomUsecase;
