@@ -5,8 +5,8 @@ import lombok.Getter;
 import lombok.ToString;
 
 @Getter
-@ToString
 @AllArgsConstructor
+@ToString
 public enum TasteEnum {
     Cold("찬 음식", 1),
     Hot("뜨거운 음식", 2),

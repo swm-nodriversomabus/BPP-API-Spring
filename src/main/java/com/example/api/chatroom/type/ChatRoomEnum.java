@@ -4,9 +4,9 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.ToString;
 
-@ToString
-@AllArgsConstructor
 @Getter
+@AllArgsConstructor
+@ToString
 public enum ChatRoomEnum {
     Normal("일반", 1),
     Matching("매칭", 2),
