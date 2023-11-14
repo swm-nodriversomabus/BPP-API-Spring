@@ -4,9 +4,9 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.ToString;
 
-@ToString
-@AllArgsConstructor
 @Getter
+@AllArgsConstructor
+@ToString
 public enum UserRoleEnum {
     Admin("관리자", 1),
     User("일반 사용자", 2);

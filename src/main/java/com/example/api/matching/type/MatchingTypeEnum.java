@@ -4,9 +4,9 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.ToString;
 
-@ToString
-@AllArgsConstructor
 @Getter
+@AllArgsConstructor
+@ToString
 public enum MatchingTypeEnum {
     TravelMate("여행객 매칭"),
     Dining("식사 매칭"),
