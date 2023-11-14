@@ -10,8 +10,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@Slf4j
 @RequiredArgsConstructor
+@Slf4j
 public class SmsController {
     private final SendCertificationCodeUsecase sendCertificationCodeUsecase;
     private final VerifyCodeUsecase verifyCodeUsecase;
