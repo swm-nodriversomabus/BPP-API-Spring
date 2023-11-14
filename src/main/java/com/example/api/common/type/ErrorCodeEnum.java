@@ -21,6 +21,7 @@ public enum ErrorCodeEnum {
     APPLICATION_NOT_FOUND(HttpStatus.BAD_REQUEST, "신청 정보가 없습니다"),
     IMAGE_NOT_FOUND(HttpStatus.BAD_REQUEST, "사진이 없습니다"),
     FILE_NOT_FOUND(HttpStatus.BAD_REQUEST, "파일이 없습니다"),
+    IMAGE_NOT_FOUND(HttpStatus.BAD_REQUEST, "사진이 없습니다"),
     INVALID_DATATYPE(HttpStatus.BAD_REQUEST, "유효하지 않은 데이터입니다"),
     // 401 Unauthorized
     LOGIN_IS_NOT_DONE(HttpStatus.UNAUTHORIZED, "로그인 정보가 없습니다"),
