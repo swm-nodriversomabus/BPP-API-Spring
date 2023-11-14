@@ -11,8 +11,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
-@Slf4j
 @RequiredArgsConstructor
+@Slf4j
 @Transactional(readOnly = true)
 public class AccommodationService implements AccommodationUsecase {
     private final MatchingMapperInterface matchingMapper;
@@ -24,5 +24,30 @@ public class AccommodationService implements AccommodationUsecase {
         Accommodation accommodation = matchingMapper.toDomain(accommodationDto);
         accommodation.setMatchingId(matchingId);
         accommodationPort.createAccommodation(accommodation);
+    }
+    
+    @Override
+    public AccommodationDto getAccommodation(Long matchingId) {
+        return matchingMapper.toDto(accommodationPort.getAccommodation(matchingId));
+    }
+    
+    @Override
+    @Transactional
+    public void updateAccommodation(Long matchingId, AccommodationDto accommodationDto) {
+        Accommodation accommodation = matchingMapper.toDomain(accommodationDto);
+        accommodation.setMatchingId(matchingId);
+        accommodationPort.updateAccommodation(accommodation);
+    }
+    
+    @Override
+    @Transactional
+    public void deleteAccommodation(Long matchingId) {
+        Accommodation accommodation = Accommodation.builder()
+                .matchingId(matchingId)
+                .price(0)
+                .pricePerOne(0)
+                .room("")
+                .build();
+        accommodationPort.deleteAccommodation(accommodation);
     }
 }

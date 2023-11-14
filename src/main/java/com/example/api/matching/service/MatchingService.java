@@ -24,8 +24,8 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.*;
 
 @Service
-@Slf4j
 @RequiredArgsConstructor
+@Slf4j
 @Transactional(readOnly = true)
 public class MatchingService implements SaveMatchingUsecase, FindMatchingUsecase, DeleteMatchingUsecase, LikeUsecase {
     private final PreferenceService preferenceService;
@@ -100,6 +100,9 @@ public class MatchingService implements SaveMatchingUsecase, FindMatchingUsecase
                 FindMatchingDto findMatchingDto = this.getMatchingById(matchingData.getFirst());
                 if (findMatchingDto != null) {
                     sortedMatchingList.add(findMatchingDto);
+                    if (sortedMatchingList.size() == 10) {
+                        break;
+                    }
                 }
             }
         } catch (Exception e) {

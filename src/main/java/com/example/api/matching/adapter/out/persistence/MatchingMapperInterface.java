@@ -28,5 +28,6 @@ public interface MatchingMapperInterface {
     FindMatchingDto toDto(MatchingEntity matchingEntity);
     AccommodationDto toDto(Accommodation accommodation);
     AccommodationMatchingDto toDto(AccommodationMatching accommodationMatching);
+    AccommodationMatchingDto toDto(FindMatchingDto matchingDto);
     LikeDto toDto(LikeEntity likeEntity);
 }
