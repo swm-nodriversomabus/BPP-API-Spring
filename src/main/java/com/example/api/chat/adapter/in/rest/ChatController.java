@@ -42,7 +42,7 @@ public class ChatController {
      * @param message (메시지)
      */
     @Operation(summary = "Send message", description = "채팅방에 메시지를 보낸다.")
-    @MessageMapping(value = "/chat/{roomId}")
+    @MessageMapping("/chat/{roomId}")
     public void sendMessage(@DestinationVariable String roomId, @Header("userId") UUID userId, AddChatDto message) {
         message.setSenderId(userId);
         sendChatUsecase.send(roomId, message);
@@ -57,7 +57,7 @@ public class ChatController {
     @PostMapping("/chat/image")
     public String upload(@RequestBody MultipartFile file) {
         if (file == null) {
-            log.error("ChatController::sendMessage: image is not found");
+            log.error("ChatController::upload: image is not found");
             throw new CustomException(ErrorCodeEnum.IMAGE_NOT_FOUND);
         }
         return fileUploadUsecase.upload(file);
