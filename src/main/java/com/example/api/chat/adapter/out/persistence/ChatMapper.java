@@ -8,7 +8,7 @@ import java.util.List;
 
 @Mapper(componentModel = "spring",
         injectionStrategy = InjectionStrategy.CONSTRUCTOR,
-        unmappedTargetPolicy = ReportingPolicy.IGNORE) // 스프링과 사용할 때는 필수적으로 붙여주자, 일치하지 않는 필드는 무ㅡ
+        unmappedTargetPolicy = ReportingPolicy.IGNORE) // 스프링과 사용할 때는 필수적으로 붙여주자, 일치하지 않는 필드는 무시
 public interface ChatMapper {
     @Mapping(source = "roomId", target = "roomId.chatroomId")
     @Mapping(source = "senderId", target = "senderId.userId")
