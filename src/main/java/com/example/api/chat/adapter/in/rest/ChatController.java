@@ -31,8 +31,8 @@ import java.util.UUID;
 @Slf4j
 @Tag(name = "Chat", description = "Chat API")
 public class ChatController {
-    private final SendChatUsecase sendChatUsecase;
     private final SubscribeRoomUsecase subscribeRoomUsecase;
+    private final SendChatUsecase sendChatUsecase;
     private final GetChatListUsecase getChatListUsecase;
     private final FileUploadUsecase fileUploadUsecase;
 
@@ -78,7 +78,7 @@ public class ChatController {
      * 채팅 내역 불러오기
      * @param roomId (ID)
      * @param pageable (데이터)
-     * @return List<Chat>
+     * @return chat list
      */
     @Operation(summary = "Get chat list", description = "채팅 목록을 불러온다.")
     @GetMapping("/chat")
