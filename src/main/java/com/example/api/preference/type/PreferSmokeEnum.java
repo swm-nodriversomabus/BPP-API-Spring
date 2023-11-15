@@ -5,8 +5,8 @@ import lombok.Getter;
 import lombok.ToString;
 
 @Getter
-@AllArgsConstructor
 @ToString
+@AllArgsConstructor
 public enum PreferSmokeEnum {
     None("선호 없음", 0),
     Nonsmoke("비흡연", 1),

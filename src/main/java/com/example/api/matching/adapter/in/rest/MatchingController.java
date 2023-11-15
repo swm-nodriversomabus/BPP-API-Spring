@@ -55,7 +55,7 @@ public class MatchingController {
      */
     @Operation(summary = "Create matching", description = "새로운 매칭을 생성한다.")
     @PostMapping("/matching")
-    public FindMatchingDto createMatching(@Valid @RequestBody SaveMatchingDto saveMatchingDto, @Valid @RequestBody AccommodationDto accommodationDto) {
+    public FindMatchingDto createMatching(@Valid @RequestBody SaveMatchingDto saveMatchingDto, @Valid @RequestBody(required = false) AccommodationDto accommodationDto) {
         SecurityUser securityUser = AuthenticationUtils.getCurrentUserAuthentication();
         if (securityUser == null) {
             log.error("MatchingController::createMatching: Login is needed");
