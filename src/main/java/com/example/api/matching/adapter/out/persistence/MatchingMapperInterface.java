@@ -21,6 +21,7 @@ public interface MatchingMapperInterface {
     AccommodationEntity toEntity(Accommodation accommodation);
     LikeEntity toEntity(LikeDto likeDto);
     Matching toDomain(MatchingEntity matchingEntity);
+    AccommodationMatching toAccommodationDomain(MatchingEntity matchingEntity);
     MatchingApplication toDomain(MatchingApplicationEntity matchingApplicationEntity);
     Accommodation toDomain(AccommodationEntity accommodationEntity);
     FindMatchingDto toDto(Matching matching);

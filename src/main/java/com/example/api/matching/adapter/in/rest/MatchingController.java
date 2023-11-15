@@ -114,6 +114,21 @@ public class MatchingController {
         }
         return findMatchingUsecase.getAll();
     }
+
+    /**
+     * 숙소 매칭 목록 조회
+     * @return accommodation matching list
+     */
+    @Operation(summary = "Get all accommodation matching", description = "모든 숙소 매칭 목록을 조회한다.")
+    @GetMapping("/accommodationmatching")
+    public List<AccommodationMatchingDto> getAccommodationMatchingList() {
+        SecurityUser securityUser = AuthenticationUtils.getCurrentUserAuthentication();
+        if (securityUser == null) {
+            log.error("MatchingController::getAccommodationMatchingList: Login is needed");
+            throw new CustomException(ErrorCodeEnum.LOGIN_IS_NOT_DONE);
+        }
+        return accommodationUsecase.getAccommodationMatchingList();
+    }
     
     /**
      * ID가 matchingId인 매칭 조회 (유형 범용)
@@ -200,6 +215,17 @@ public class MatchingController {
             throw new CustomException(ErrorCodeEnum.LOGIN_IS_NOT_DONE);
         }
         return likeUsecase.getLikeCount(matchingId);
+    }
+    
+    @Operation(summary = "Get recommended accommodation list", description = "추천 숙소 리스트를 반환한다.")
+    @GetMapping("/accommodation/recommended")
+    public List<AccommodationDto> getRecommendedAccommodationList() {
+        SecurityUser securityUser = AuthenticationUtils.getCurrentUserAuthentication();
+        if (securityUser == null) {
+            log.error("MatchingController::getRecommendedAccommodationList: Login is needed");
+            throw new CustomException(ErrorCodeEnum.LOGIN_IS_NOT_DONE);
+        }
+        return accommodationUsecase.getRecommendedAccommodationList(securityUser.getUserId());
     }
 
     /**

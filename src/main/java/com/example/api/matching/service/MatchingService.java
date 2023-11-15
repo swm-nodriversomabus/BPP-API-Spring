@@ -29,12 +29,12 @@ import java.util.*;
 @Transactional(readOnly = true)
 public class MatchingService implements SaveMatchingUsecase, FindMatchingUsecase, DeleteMatchingUsecase, LikeUsecase {
     private final PreferenceService preferenceService;
-    private final MatchingMapperInterface matchingMapper;
     private final SaveMatchingPort saveMatchingPort;
     private final FindMatchingPort findMatchingPort;
     private final DeleteMatchingPort deleteMatchingPort;
     private final MatchingApplicationPort matchingApplicationPort;
     private final LikePort likePort;
+    private final MatchingMapperInterface matchingMapper;
 
     @Override
     @Transactional

@@ -1,6 +1,7 @@
 package com.example.api.matching.repository;
 
 import com.example.api.matching.adapter.out.persistence.MatchingEntity;
+import com.example.api.matching.type.MatchingTypeEnum;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
@@ -11,6 +12,7 @@ public interface MatchingRepository extends JpaRepository<MatchingEntity, Long> 
     List<MatchingEntity> getAllBy();
     Optional<MatchingEntity> getByMatchingId(Long matchingId);
     List<MatchingEntity> getByWriterId(UUID userId);
+    List<MatchingEntity> getByType(MatchingTypeEnum type);
     List<MatchingEntity> getByIsActive(Boolean isActive);
     void deleteAllBy();
     void deleteByMatchingId(Long matchingId);
