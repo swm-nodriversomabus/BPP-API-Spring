@@ -26,7 +26,7 @@ public class PhoneCertificationPersistence implements CertificationCodePort, Che
 
     /**
      * 인증 번호 만료 여부 확인
-     * @param phone
+     * @param phone (휴대폰 번호)
      */
     @Override
     public void findCheckedPhone(String phone) {
@@ -35,7 +35,7 @@ public class PhoneCertificationPersistence implements CertificationCodePort, Che
 
     /**
      * 인증 여부 저장
-     * @param phone
+     * @param phone (휴대폰 번호)
      */
     @Override
     public void saveCheckedPhone(String phone) {

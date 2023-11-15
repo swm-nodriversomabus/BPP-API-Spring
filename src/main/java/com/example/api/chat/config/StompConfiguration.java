@@ -4,7 +4,6 @@ import com.example.api.chat.handler.StompHandler;
 import com.example.api.common.exception.CustomException;
 import com.example.api.common.type.ErrorCodeEnum;
 import jakarta.servlet.http.Cookie;
-import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -22,8 +21,8 @@ import org.springframework.web.util.WebUtils;
 import java.util.Map;
 
 @Configuration
-@EnableWebSocketMessageBroker // STOMP 사용 용도
 @RequiredArgsConstructor
+@EnableWebSocketMessageBroker // STOMP 사용 용도
 public class StompConfiguration implements WebSocketMessageBrokerConfigurer {
     // WebSocketHandler 생성자 추가
     private final StompHandler stompHandler;

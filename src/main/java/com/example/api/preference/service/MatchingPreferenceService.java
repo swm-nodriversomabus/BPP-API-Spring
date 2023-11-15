@@ -15,7 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
-@Transactional
+@Transactional(readOnly = true)
 public class MatchingPreferenceService implements MatchingPreferenceUsecase {
     private final PreferenceMapperInterface preferenceMapper;
     private final SavePreferencePort savePreferencePort;
@@ -23,12 +23,14 @@ public class MatchingPreferenceService implements MatchingPreferenceUsecase {
     private final CreateMatchingPreferencePort createMatchingPreferencePort;
     
     @Override
+    @Transactional
     public MatchingPreferenceDto createMatchingPreference(MatchingPreferenceDto matchingPreferenceDto) {
         MatchingPreferenceEntity matchingPreferenceEntity = createMatchingPreferencePort.createMatchingPreference(preferenceMapper.toEntity(matchingPreferenceDto));
         return preferenceMapper.toDto(matchingPreferenceEntity);
     }
     
     @Override
+    @Transactional
     public FindPreferenceDto updateMatchingPreference(Long matchingId, SavePreferenceDto savePreferenceDto) {
         Long preferenceId = comparePreferencePort.getMatchingPreferenceId(matchingId);
         return preferenceMapper.toDto(savePreferencePort.updatePreference(preferenceId, preferenceMapper.toDomain(savePreferenceDto)));

@@ -16,9 +16,9 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.*;
 
 @Service
+@RequiredArgsConstructor
 @Slf4j
 @Transactional(readOnly = true)
-@RequiredArgsConstructor
 public class MemberService implements AddMemberChatRoomUsecase {
     private final FindMatchingPort findMatchingPort;
     private final AddMemberChatRoomPort addMemberChatRoomPort;
