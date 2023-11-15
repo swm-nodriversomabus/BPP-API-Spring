@@ -114,6 +114,17 @@ public class MatchingController {
         }
         return findMatchingUsecase.getAll();
     }
+    
+    @Operation(summary = "Get all dining matching", description = "모든 식사 매칭 목록을 조회한다.")
+    @GetMapping("/diningmatching")
+    public List<FindMatchingDto> getDiningMatchingList() {
+        SecurityUser securityUser = AuthenticationUtils.getCurrentUserAuthentication();
+        if (securityUser == null) {
+            log.error("MatchingController::getDiningMatchingList: Login is needed");
+            throw new CustomException(ErrorCodeEnum.LOGIN_IS_NOT_DONE);
+        }
+        return findMatchingUsecase.getDiningMatchingList();
+    }
 
     /**
      * 숙소 매칭 목록 조회

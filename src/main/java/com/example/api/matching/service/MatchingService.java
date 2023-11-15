@@ -62,6 +62,11 @@ public class MatchingService implements SaveMatchingUsecase, FindMatchingUsecase
     public List<FindMatchingDto> getAll() {
         return this.setCurrentMember(findMatchingPort.getAllBy());
     }
+    
+    @Override
+    public List<FindMatchingDto> getDiningMatchingList() {
+        return this.setCurrentMember(findMatchingPort.getDiningMatchingList());
+    }
 
     @Override
     public FindMatchingDto getMatchingById(Long matchingId) {
