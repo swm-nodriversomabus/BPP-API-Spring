@@ -25,17 +25,17 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.*;
 
 @Service
-@Slf4j
 @RequiredArgsConstructor
+@Slf4j
 @Transactional(readOnly = true)
 public class MatchingService implements SaveMatchingUsecase, FindMatchingUsecase, DeleteMatchingUsecase, LikeUsecase {
     private final PreferenceService preferenceService;
-    private final MatchingMapperInterface matchingMapper;
     private final SaveMatchingPort saveMatchingPort;
     private final FindMatchingPort findMatchingPort;
     private final DeleteMatchingPort deleteMatchingPort;
     private final MatchingApplicationPort matchingApplicationPort;
     private final LikePort likePort;
+    private final MatchingMapperInterface matchingMapper;
 
     @Override
     @Transactional
@@ -62,6 +62,11 @@ public class MatchingService implements SaveMatchingUsecase, FindMatchingUsecase
     @Override
     public List<FindMatchingDto> getAll() {
         return this.setCurrentMember(findMatchingPort.getAllBy());
+    }
+    
+    @Override
+    public List<FindMatchingDto> getDiningMatchingList() {
+        return this.setCurrentMember(findMatchingPort.getDiningMatchingList());
     }
 
     @Override
@@ -100,6 +105,10 @@ public class MatchingService implements SaveMatchingUsecase, FindMatchingUsecase
             for (Pair<Long, Integer> matchingData: matchingScoreList) { // 유사도가 높은 순서로 정렬한 후 반환
                 FindMatchingDto findMatchingDto = this.getMatchingById(matchingData.getFirst());
                 if (findMatchingDto != null) {
+                    sortedMatchingList.add(findMatchingDto);
+                    if (sortedMatchingList.size() == 10) {
+                        break;
+                    }
                     MatchingApplicationPK matchingApplicationPK = MatchingApplicationPK.builder()
                                     .userId(userId)
                                     .matchingId(findMatchingDto.getMatchingId())

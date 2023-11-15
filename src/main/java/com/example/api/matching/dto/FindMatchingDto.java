@@ -16,6 +16,7 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 public class FindMatchingDto {
+    @NotNull
     private Long matchingId;
     
     @NotNull
@@ -47,7 +48,7 @@ public class FindMatchingDto {
     private Integer currentMember;
     
     @NotNull
-    @Min(1)
+    @Min(2)
     private Integer maxMember;
     
     @NotNull

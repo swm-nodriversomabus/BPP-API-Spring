@@ -37,7 +37,7 @@ public class SaveMatchingDto {
     private LocalDateTime endDate;
     
     @NotNull
-    @Min(value = 1, message = "MaxMember must be at least 1")
+    @Min(value = 2, message = "MaxMember must be at least 2")
     private Integer maxMember;
     
     @NotNull

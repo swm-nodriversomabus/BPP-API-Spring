@@ -4,6 +4,7 @@ import com.example.api.matching.application.port.out.*;
 import com.example.api.matching.domain.Matching;
 import com.example.api.matching.repository.LikeRepository;
 import com.example.api.matching.repository.MatchingRepository;
+import com.example.api.matching.type.MatchingTypeEnum;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.stereotype.Repository;
@@ -29,6 +30,11 @@ public class MatchingPersistenceAdapter implements SaveMatchingPort, FindMatchin
     @Override
     public List<MatchingEntity> getAllBy() {
         return matchingRepository.getAllBy();
+    }
+    
+    @Override
+    public List<MatchingEntity> getDiningMatchingList() {
+        return matchingRepository.getByType(MatchingTypeEnum.Dining);
     }
     
     @Override
