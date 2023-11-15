@@ -26,6 +26,9 @@ public class MatchingEntity extends BaseEntity {
     private UUID writerId;
     
     @Column(nullable = false)
+    private UUID chatRoomId;
+    
+    @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private MatchingTypeEnum type;
     

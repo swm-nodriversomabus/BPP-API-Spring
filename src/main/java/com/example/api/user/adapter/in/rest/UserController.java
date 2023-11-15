@@ -64,11 +64,6 @@ public class UserController {
     @Operation(summary = "Create user", description = "새로운 사용자를 추가한다.")
     @PostMapping("/user")
     public void createUser(@Valid @RequestBody CreateUserDto userDto, BindingResult bindingResult) {
-        SecurityUser securityUser = AuthenticationUtils.getCurrentUserAuthentication();
-        if (securityUser == null) {
-            log.error("UserController::createUser: Login is needed");
-            throw new CustomException(ErrorCodeEnum.LOGIN_IS_NOT_DONE);
-        }
         UUID userId = saveUserUsecase.createUser(userDto);
         profileImageUsecase.initializeProfileImage(userId);
     }
@@ -109,6 +104,21 @@ public class UserController {
     }
 
     /**
+     * 로그인한 사용자 ID 조회
+     * @return user ID
+     */
+    @Operation(summary = "Get userId", description = "사용자 ID를 조회한다.")
+    @GetMapping("/user/id")
+    public UUID getUserId() {
+        SecurityUser securityUser = AuthenticationUtils.getCurrentUserAuthentication();
+        if (securityUser == null) {
+            log.error("UserController::getUserId: Login is needed");
+            throw new CustomException(ErrorCodeEnum.LOGIN_IS_NOT_DONE);
+        }
+        return securityUser.getUserId();
+    }
+
+    /**
      * 개별 사용자 조회
      * @return User data
      */
@@ -121,6 +131,21 @@ public class UserController {
             throw new CustomException(ErrorCodeEnum.LOGIN_IS_NOT_DONE);
         }
         return findUserUsecase.getUser(securityUser.getUserId());
+    }
+
+    /**
+     * ID로 사용자 조회
+     * @return User data
+     */
+    @Operation(summary = "Get user by userId", description = "ID가 userId인 사용자를 조회한다.")
+    @GetMapping("/user/{userId}")
+    public FindUserDto getUserByUserId(@PathVariable UUID userId) {
+        SecurityUser securityUser = AuthenticationUtils.getCurrentUserAuthentication();
+        if (securityUser == null) {
+            log.error("UserController::getUserByUserId: Login is needed");
+            throw new CustomException(ErrorCodeEnum.LOGIN_IS_NOT_DONE);
+        }
+        return findUserUsecase.getUser(userId);
     }
 
     /**
@@ -165,7 +190,7 @@ public class UserController {
             log.error("UserController::getPendingMatchingList: Login is needed");
             throw new CustomException(ErrorCodeEnum.LOGIN_IS_NOT_DONE);
         }
-        return matchingApplicationUsecase.getByUserIdIsAndStateEquals(securityUser.getUserId(), ApplicationStateEnum.Pending);
+        return matchingApplicationUsecase.getByUserIdAndStateEquals(securityUser.getUserId(), ApplicationStateEnum.Pending);
     }
 
     /**
@@ -180,7 +205,7 @@ public class UserController {
             log.error("UserController::getApprovedMatchingList: Login is needed");
             throw new CustomException(ErrorCodeEnum.LOGIN_IS_NOT_DONE);
         }
-        return matchingApplicationUsecase.getByUserIdIsAndStateEquals(securityUser.getUserId(), ApplicationStateEnum.Approved);
+        return matchingApplicationUsecase.getByUserIdAndStateEquals(securityUser.getUserId(), ApplicationStateEnum.Approved);
     }
 
     /**

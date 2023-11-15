@@ -1,6 +1,5 @@
 package com.example.api.social.adapter.out.persistence;
 
-
 import com.example.api.social.dto.AddSocialDto;
 import org.mapstruct.InjectionStrategy;
 import org.mapstruct.Mapper;

@@ -4,6 +4,7 @@ import com.example.api.common.exception.CustomException;
 import com.example.api.common.type.ApplicationStateEnum;
 import com.example.api.common.type.ErrorCodeEnum;
 import com.example.api.common.type.Pair;
+import com.example.api.matching.adapter.out.persistence.MatchingApplicationPK;
 import com.example.api.matching.adapter.out.persistence.MatchingEntity;
 import com.example.api.matching.adapter.out.persistence.MatchingMapperInterface;
 import com.example.api.matching.application.port.in.DeleteMatchingUsecase;
@@ -52,7 +53,7 @@ public class MatchingService implements SaveMatchingUsecase, FindMatchingUsecase
         List<FindMatchingDto> matchingList = new ArrayList<>();
         for (MatchingEntity matchingData: matchingEntities) {
             Matching matching = matchingMapper.toDomain(matchingData);
-            matching.setCurrentMember(matchingApplicationPort.getByMatchingIdIsAndStateEquals(matchingData.getMatchingId(), ApplicationStateEnum.Approved).size() + 1);
+            matching.setCurrentMember(matchingApplicationPort.getByMatchingIdAndStateEquals(matchingData.getMatchingId(), ApplicationStateEnum.Approved).size() + 1);
             matchingList.add(matchingMapper.toDto(matching));
         }
         return matchingList;
@@ -70,7 +71,7 @@ public class MatchingService implements SaveMatchingUsecase, FindMatchingUsecase
             return null;
         }
         Matching matching = matchingMapper.toDomain(matchingEntity.get());
-        matching.setCurrentMember(matchingApplicationPort.getByMatchingIdIsAndStateEquals(matchingId, ApplicationStateEnum.Approved).size() + 1);
+        matching.setCurrentMember(matchingApplicationPort.getByMatchingIdAndStateEquals(matchingId, ApplicationStateEnum.Approved).size() + 1);
         return matchingMapper.toDto(matching);
     }
 
@@ -99,7 +100,13 @@ public class MatchingService implements SaveMatchingUsecase, FindMatchingUsecase
             for (Pair<Long, Integer> matchingData: matchingScoreList) { // 유사도가 높은 순서로 정렬한 후 반환
                 FindMatchingDto findMatchingDto = this.getMatchingById(matchingData.getFirst());
                 if (findMatchingDto != null) {
-                    sortedMatchingList.add(findMatchingDto);
+                    MatchingApplicationPK matchingApplicationPK = MatchingApplicationPK.builder()
+                                    .userId(userId)
+                                    .matchingId(findMatchingDto.getMatchingId())
+                                    .build();
+                    if (matchingApplicationPort.getByMatchingApplicationPK(matchingApplicationPK).isEmpty()) {
+                        sortedMatchingList.add(findMatchingDto);
+                    }
                 }
             }
         } catch (Exception e) {

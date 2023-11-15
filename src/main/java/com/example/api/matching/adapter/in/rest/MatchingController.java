@@ -3,6 +3,8 @@ package com.example.api.matching.adapter.in.rest;
 import com.example.api.auth.domain.SecurityUser;
 import com.example.api.chatroom.application.port.in.CreateChatRoomUsecase;
 import com.example.api.chatroom.domain.ChatRoom;
+import com.example.api.chatroom.dto.CreateChatRoomDto;
+import com.example.api.chatroom.type.ChatRoomEnum;
 import com.example.api.common.exception.CustomException;
 import com.example.api.common.type.ApplicationStateEnum;
 import com.example.api.common.type.ErrorCodeEnum;
@@ -23,6 +25,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 @RestController
@@ -53,8 +57,22 @@ public class MatchingController {
             log.error("MatchingController::createMatching: Login is needed");
             throw new CustomException(ErrorCodeEnum.LOGIN_IS_NOT_DONE);
         }
-        FindMatchingDto findMatchingDto =  saveMatchingUsecase.createMatching(securityUser.getUserId(), saveMatchingDto);
         
+        // 매칭 전용 채팅방 생성
+        CreateChatRoomDto createChatRoomDto = CreateChatRoomDto.builder()
+                .masterId(securityUser.getUserId())
+                .chatroomName(saveMatchingDto.getTitle())
+                .type(ChatRoomEnum.Matching)
+                .isActive(true)
+                .build();
+        ChatRoom chatRoom = createChatRoomUsecase.createRoom(createChatRoomDto);
+        addMemberChatRoomUsecase.addMember(chatRoom.getChatroomId(), securityUser.getUserId());
+        saveMatchingDto.setChatRoomId(chatRoom.getChatroomId());
+        
+        // 매칭 데이터 저장
+        FindMatchingDto findMatchingDto = saveMatchingUsecase.createMatching(securityUser.getUserId(), saveMatchingDto);
+        
+        // Owner 등록
         SaveMatchingApplicationDto saveMatchingApplicationDto = SaveMatchingApplicationDto.builder()
                 .userId(securityUser.getUserId())
                 .matchingId(findMatchingDto.getMatchingId())
@@ -62,17 +80,17 @@ public class MatchingController {
                 .isActive(true)
                 .build();
         matchingApplicationUsecase.createMatchingApplicationData(securityUser.getUserId(), saveMatchingApplicationDto);
+        
         return findMatchingDto;
     }
 
     /**
      * 새 매칭 신청 생성
      * @param matchingApplicationDto (데이터)
-     * @return chatroom
      */
     @Operation(summary = "Create matching application", description = "새로운 매칭 신청을 생성한다.")
     @PostMapping("/matching/application")
-    public ChatRoom createMatchingApplication(@Valid @RequestBody SaveMatchingApplicationDto matchingApplicationDto) {
+    public void createMatchingApplication(@Valid @RequestBody SaveMatchingApplicationDto matchingApplicationDto) {
         SecurityUser securityUser = AuthenticationUtils.getCurrentUserAuthentication();
         if (securityUser == null) {
             log.error("MatchingController::createMatchingApplication: Login is needed");
@@ -89,8 +107,8 @@ public class MatchingController {
         }
         
         MatchingApplication matchingApplication = matchingApplicationUsecase.createMatchingApplicationData(securityUser.getUserId(), matchingApplicationDto);
-        ChatRoom chatRoom = createChatRoomUsecase.createMatchingChatRoom(matchingApplication);
-        return addMemberChatRoomUsecase.setupMatchingChatRoom(matchingApplication, chatRoom);
+        //ChatRoom chatRoom = createChatRoomUsecase.createMatchingChatRoom(matchingApplication);
+        //return addMemberChatRoomUsecase.setupMatchingChatRoom(matchingApplication, chatRoom);
     }
     
     /**
@@ -137,11 +155,11 @@ public class MatchingController {
             log.error("MatchingController::getPendingUserList: Login is needed");
             throw new CustomException(ErrorCodeEnum.LOGIN_IS_NOT_DONE);
         }
-        return matchingApplicationUsecase.getByMatchingIdIsAndStateEquals(matchingId, ApplicationStateEnum.Pending);
+        return matchingApplicationUsecase.getByMatchingIdAndStateEquals(matchingId, ApplicationStateEnum.Pending);
     }
 
     /**
-     * ID가 matchingId인 매칭의 참가자 목록 조회
+     * ID가 matchingId인 매칭의 작성자 포함 참가자 목록 조회
      * @param matchingId (ID)
      * @return participant list
      */
@@ -153,7 +171,8 @@ public class MatchingController {
             log.error("MatchingController::getApprovedUserList: Login is needed");
             throw new CustomException(ErrorCodeEnum.LOGIN_IS_NOT_DONE);
         }
-        return matchingApplicationUsecase.getByMatchingIdIsAndStateEquals(matchingId, ApplicationStateEnum.Approved);
+        List<ApplicationStateEnum> stateList = new ArrayList<>(Arrays.asList(ApplicationStateEnum.Approved, ApplicationStateEnum.Owner));
+        return matchingApplicationUsecase.getByMatchingIdAndStateIn(matchingId, stateList);
     }
 
     /**

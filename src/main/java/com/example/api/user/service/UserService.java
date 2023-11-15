@@ -144,7 +144,7 @@ public class UserService implements SaveUserUsecase, FindUserUsecase, DeleteUser
         ProfileImage profileImage = ProfileImage.builder()
                 .userId(userId)
                 .profileImage(filename)
-                .state(ApplicationStateEnum.Pending)
+                .state(ApplicationStateEnum.Approved)
                 .updatedAt(LocalDateTime.now())
                 .build();
         profileImagePort.saveProfileImage(profileImage);

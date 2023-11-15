@@ -16,8 +16,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@Slf4j
 @RequiredArgsConstructor
+@Slf4j
 @Tag(name = "Member", description = "Member API")
 public class MemberController {
     private final AddMemberChatRoomUsecase addMemberChatRoomUsecase;
@@ -26,7 +26,7 @@ public class MemberController {
      * 방 생성 후, 유저들을 초대해 들어오는 경우
      * @param addMemberDto (데이터)
      */
-    @Operation(summary = "Add member", description = "채팅방에 사용자를 초대한다.")
+    @Operation(summary = "Add members", description = "채팅방에 사용자를 초대한다.")
     @PostMapping("/members")
     public void addMembers(@Valid @RequestBody AddMemberDto addMemberDto) {
         SecurityUser securityUser = AuthenticationUtils.getCurrentUserAuthentication();
@@ -34,6 +34,6 @@ public class MemberController {
             log.error("MemberController::addMembers: Login is needed");
             throw new CustomException(ErrorCodeEnum.LOGIN_IS_NOT_DONE);
         }
-        addMemberChatRoomUsecase.addMember(addMemberDto);
+        addMemberChatRoomUsecase.addMembers(addMemberDto);
     }
 }

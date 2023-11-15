@@ -1,6 +1,5 @@
 package com.example.api.user.dto;
 
-import com.example.api.social.adapter.out.persistence.SocialEntity;
 import com.example.api.user.type.UserGenderEnum;
 import com.example.api.user.type.UserRoleEnum;
 import jakarta.validation.constraints.*;

@@ -14,6 +14,7 @@ import java.util.UUID;
 public class Matching {
     private Long matchingId;
     private UUID writerId;
+    private UUID chatRoomId;
     private MatchingTypeEnum type;
     private String title;
     private String place;

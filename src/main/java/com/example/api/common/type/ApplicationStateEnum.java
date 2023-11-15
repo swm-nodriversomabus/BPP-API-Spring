@@ -4,9 +4,9 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.ToString;
 
-@ToString
-@AllArgsConstructor
 @Getter
+@AllArgsConstructor
+@ToString
 public enum ApplicationStateEnum {
     Pending("대기", 0),
     Canceled("취소", 1),

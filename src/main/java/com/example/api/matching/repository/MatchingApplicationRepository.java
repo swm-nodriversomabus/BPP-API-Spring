@@ -5,12 +5,11 @@ import com.example.api.matching.adapter.out.persistence.MatchingApplicationEntit
 import com.example.api.matching.adapter.out.persistence.MatchingApplicationPK;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 public interface MatchingApplicationRepository extends JpaRepository<MatchingApplicationEntity, MatchingApplicationPK> {
     Optional<MatchingApplicationEntity> getByUserIdAndMatchingId(UUID userId, Long matchingId);
-    List<MatchingApplicationEntity> getByUserIdIsAndStateEquals(UUID userId, ApplicationStateEnum state);
+    List<MatchingApplicationEntity> getByUserIdAndStateEquals(UUID userId, ApplicationStateEnum state);
     List<MatchingApplicationEntity> getByMatchingIdAndStateEquals(Long matchingId, ApplicationStateEnum state);
+    List<MatchingApplicationEntity> getByMatchingIdAndStateIn(Long matchingId, List<ApplicationStateEnum> stateList);
 }
