@@ -22,8 +22,8 @@ import java.util.List;
 import java.util.UUID;
 
 @RestController
-@Slf4j
 @RequiredArgsConstructor
+@Slf4j
 @Tag(name = "ChatRoom", description = "ChatRoom API")
 public class ChatRoomController {
     private final CreateChatRoomUsecase createChatRoomUsecase;

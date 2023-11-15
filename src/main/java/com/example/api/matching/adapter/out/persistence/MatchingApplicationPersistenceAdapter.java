@@ -9,6 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.stereotype.Repository;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -33,12 +34,17 @@ public class MatchingApplicationPersistenceAdapter implements MatchingApplicatio
     }
     
     @Override
-    public List<MatchingApplicationEntity> getByUserIdIsAndStateEquals(UUID userId, ApplicationStateEnum state) {
-        return matchingApplicationRepository.getByUserIdIsAndStateEquals(userId, state);
+    public List<MatchingApplicationEntity> getByUserIdAndStateEquals(UUID userId, ApplicationStateEnum state) {
+        return matchingApplicationRepository.getByUserIdAndStateEquals(userId, state);
     }
     
     @Override
-    public List<MatchingApplicationEntity> getByMatchingIdIsAndStateEquals(Long matchingId, ApplicationStateEnum state) {
+    public List<MatchingApplicationEntity> getByMatchingIdAndStateEquals(Long matchingId, ApplicationStateEnum state) {
         return matchingApplicationRepository.getByMatchingIdAndStateEquals(matchingId, state);
+    }
+    
+    @Override
+    public List<MatchingApplicationEntity> getByMatchingIdAndStateIn(Long matchingId, List<ApplicationStateEnum> stateList) {
+        return matchingApplicationRepository.getByMatchingIdAndStateIn(matchingId, stateList);
     }
 }

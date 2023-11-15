@@ -12,6 +12,9 @@ import com.example.api.preference.domain.Preference;
 import com.example.api.preference.dto.ComparePreferenceDto;
 import com.example.api.preference.dto.FindPreferenceDto;
 import com.example.api.preference.dto.SavePreferenceDto;
+import com.example.api.preference.type.PreferSmokeEnum;
+import com.example.api.preference.type.TasteEnum;
+import com.example.api.user.type.UserGenderEnum;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -31,7 +34,24 @@ public class PreferenceService implements SavePreferenceUsecase, FindPreferenceU
     private final FindPreferencePort findPreferencePort;
     private final ComparePreferencePort comparePreferencePort;
     
-    public ComparePreferenceDto getDefaultPreference() {
+    public FindPreferenceDto getDefaultPreference() {
+        return FindPreferenceDto.builder()
+                .preferenceId(0L)
+                .alcoholAmount(2)
+                .mateAllowedAlcohol(2)
+                .taste(TasteEnum.Spicy)
+                .allowedMoveTime(60)
+                .allowedPeople(4)
+                .preferGender(UserGenderEnum.None)
+                .smoke(false)
+                .preferSmoke(PreferSmokeEnum.None)
+                .slang(2)
+                .createdAt(LocalDateTime.now())
+                .updatedAt(LocalDateTime.now())
+                .build();
+    }
+
+    public ComparePreferenceDto getDefaultComparePreference() {
         return ComparePreferenceDto.builder()
                 .preferenceId(0L)
                 .alcoholAmount(2)
@@ -58,7 +78,13 @@ public class PreferenceService implements SavePreferenceUsecase, FindPreferenceU
     }
     
     @Override
-    public Optional<ComparePreferenceDto> getByPreferenceId(Long preferenceId) {
+    public Optional<FindPreferenceDto> getByPreferenceId(Long preferenceId) {
+        return findPreferencePort.getByPreferenceId(preferenceId)
+                .map(preferenceMapper::toDto);
+    }
+    
+    @Override
+    public Optional<ComparePreferenceDto> getComparePreference(Long preferenceId) {
         return findPreferencePort.getByPreferenceId(preferenceId)
                 .map(PreferenceEntity::toCompareDto);
     }
@@ -73,14 +99,14 @@ public class PreferenceService implements SavePreferenceUsecase, FindPreferenceU
     // ComparePreference
     
     @Override
-    public ComparePreferenceDto getUserPreference(UUID userId) {
+    public FindPreferenceDto getUserPreference(UUID userId) {
         Long preferenceId = comparePreferencePort.getUserPreferenceId(userId);
         if (preferenceId == 0L) {
             log.warn("PreferenceService::getUserPreference: User preference data not found");
             return this.getDefaultPreference();
             //throw new CustomException(ErrorCodeEnum.PREFERENCE_NOT_FOUND);
         }
-        Optional<ComparePreferenceDto> preferenceDto = this.getByPreferenceId(preferenceId);
+        Optional<FindPreferenceDto> preferenceDto = this.getByPreferenceId(preferenceId);
         if (preferenceDto.isEmpty()) {
             log.warn("PreferenceService::getUserPreference: User preference data not found");
             return this.getDefaultPreference();
@@ -90,14 +116,16 @@ public class PreferenceService implements SavePreferenceUsecase, FindPreferenceU
     }
     
     @Override
-    public ComparePreferenceDto getMatchingPreference(Long matchingId) {
+    public FindPreferenceDto getMatchingPreference(Long matchingId) {
         Long preferenceId = comparePreferencePort.getMatchingPreferenceId(matchingId);
         return this.getByPreferenceId(preferenceId).orElse(this.getDefaultPreference());
     }
     
     public Integer getMatchingScore(UUID userId, Long matchingId) {
-        ComparePreferenceDto userPreference = this.getUserPreference(userId);
-        ComparePreferenceDto matchingPreference = this.getMatchingPreference(matchingId);
+        Long userPreferenceId = comparePreferencePort.getUserPreferenceId(userId);
+        Long matchingPreferenceId = comparePreferencePort.getMatchingPreferenceId(matchingId);
+        ComparePreferenceDto userPreference = this.getComparePreference(userPreferenceId).orElse(this.getDefaultComparePreference());
+        ComparePreferenceDto matchingPreference = this.getComparePreference(matchingPreferenceId).orElse(this.getDefaultComparePreference());
         Integer score = 0;
         score += Math.abs(userPreference.getAlcoholAmount() - matchingPreference.getAlcoholAmount());
         score += Math.abs(userPreference.getMateAllowedAlcohol() - matchingPreference.getMateAllowedAlcohol());

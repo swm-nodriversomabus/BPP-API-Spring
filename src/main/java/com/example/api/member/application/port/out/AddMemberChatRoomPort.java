@@ -6,5 +6,5 @@ import com.example.api.member.domain.Member;
 import java.util.List;
 
 public interface AddMemberChatRoomPort {
-    void addMember(List<Member> members, ChatRoom chatRoom);
+    void addMembers(List<Member> members, ChatRoom chatRoom);
 }

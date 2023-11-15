@@ -13,10 +13,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.UUID;
+import java.util.*;
 
 @Service
 @Slf4j
@@ -26,14 +23,29 @@ public class MemberService implements AddMemberChatRoomUsecase {
     private final FindMatchingPort findMatchingPort;
     private final AddMemberChatRoomPort addMemberChatRoomPort;
     private final RetrieveChatRoomPort retrieveChatRoomPort;
+
+    /**
+     * 채팅방의 한 명의 멤버 추가
+     * @param chatRoomId (채팅방 ID)
+     * @param userId (사용자 ID)
+     */
+    @Override
+    @Transactional
+    public void addMember(UUID chatRoomId, UUID userId) {
+        AddMemberDto addMemberDto = AddMemberDto.builder()
+                .chatroomId(chatRoomId)
+                .memberIds(new ArrayList<>(Collections.singletonList(userId)))
+                .build();
+        this.addMembers(addMemberDto);
+    }
     
     /**
-     * 채팅방에 멤버 추가
+     * 채팅방에 여러 명의 멤버 추가
      * @param addMemberDto (데이터)
      */
     @Override
     @Transactional
-    public void addMember(AddMemberDto addMemberDto) {
+    public void addMembers(AddMemberDto addMemberDto) {
         List<Member> members = new ArrayList<>();
         ChatRoom chatRoom = retrieveChatRoomPort.retrieveChatRoom(addMemberDto.getChatroomId());
         for (UUID userId: addMemberDto.getMemberIds()) {
@@ -44,7 +56,7 @@ public class MemberService implements AddMemberChatRoomUsecase {
                     .build();
             members.add(member);
         }
-        addMemberChatRoomPort.addMember(members, chatRoom);
+        addMemberChatRoomPort.addMembers(members, chatRoom);
     }
 
     /**
@@ -66,7 +78,7 @@ public class MemberService implements AddMemberChatRoomUsecase {
                 .chatroomId(chatRoom.getChatroomId())
                 .memberIds(memberIds)
                 .build();
-        this.addMember(addMemberDto);
+        this.addMembers(addMemberDto);
 
         chatRoom.setMembers(memberIds);
         return chatRoom;

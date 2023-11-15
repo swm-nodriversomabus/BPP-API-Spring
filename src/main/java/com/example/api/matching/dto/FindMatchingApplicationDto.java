@@ -19,7 +19,6 @@ public class FindMatchingApplicationDto {
     private UUID userId;
 
     @NotNull
-    @Min(1)
     private Long matchingId;
 
     @NotNull

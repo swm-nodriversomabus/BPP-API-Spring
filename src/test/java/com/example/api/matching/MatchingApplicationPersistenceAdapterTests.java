@@ -50,13 +50,13 @@ public class MatchingApplicationPersistenceAdapterTests {
 
     @Test
     void getByUserIdIsAndStateEqualsTest() {
-        matchingApplicationPersistenceAdapter.getByUserIdIsAndStateEquals(userUUID, ApplicationStateEnum.Pending);
-        verify(matchingApplicationRepository, times(1)).getByUserIdIsAndStateEquals(userUUID, ApplicationStateEnum.Pending);
+        matchingApplicationPersistenceAdapter.getByUserIdAndStateEquals(userUUID, ApplicationStateEnum.Pending);
+        verify(matchingApplicationRepository, times(1)).getByUserIdAndStateEquals(userUUID, ApplicationStateEnum.Pending);
     }
 
     @Test
     void getByMatchingIdIsAndStateEqualsTest() {
-        matchingApplicationPersistenceAdapter.getByMatchingIdIsAndStateEquals(1L, ApplicationStateEnum.Approved);
+        matchingApplicationPersistenceAdapter.getByMatchingIdAndStateEquals(1L, ApplicationStateEnum.Approved);
         verify(matchingApplicationRepository, times(1)).getByMatchingIdAndStateEquals(1L, ApplicationStateEnum.Approved);
     }
 }

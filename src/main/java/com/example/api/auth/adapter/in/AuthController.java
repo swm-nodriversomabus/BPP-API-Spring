@@ -8,15 +8,14 @@ import com.example.api.auth.utils.CookieUtils;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
 
 @RestController
-@Slf4j
 @RequiredArgsConstructor
+@Slf4j
 public class AuthController {
     private final JwtUtilService jwtUtilService;
     private final FindRefreshUsecase findRefreshUsecase;

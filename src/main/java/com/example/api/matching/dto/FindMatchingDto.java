@@ -23,6 +23,9 @@ public class FindMatchingDto {
     private UUID writerId;
     
     @NotNull
+    private UUID chatRoomId;
+    
+    @NotNull
     private MatchingTypeEnum type;
     
     @NotBlank

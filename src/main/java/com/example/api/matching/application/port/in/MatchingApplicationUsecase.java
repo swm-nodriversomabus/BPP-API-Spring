@@ -11,8 +11,9 @@ import java.util.UUID;
 
 public interface MatchingApplicationUsecase {
     MatchingApplication createMatchingApplicationData(UUID userId, SaveMatchingApplicationDto matchingApplicationDto);
-    List<FindMatchingDto> getByUserIdIsAndStateEquals(UUID userId, ApplicationStateEnum state);
-    List<FindUserInfoDto> getByMatchingIdIsAndStateEquals(Long matchingId, ApplicationStateEnum state);
+    List<FindMatchingDto> getByUserIdAndStateEquals(UUID userId, ApplicationStateEnum state);
+    List<FindUserInfoDto> getByMatchingIdAndStateEquals(Long matchingId, ApplicationStateEnum state);
+    List<FindUserInfoDto> getByMatchingIdAndStateIn(Long matchingId, List<ApplicationStateEnum> state);
     String getUserStatus(UUID userId, Long matchingId);
     void processMatchingApplication(SaveMatchingApplicationDto matchingApplicationDto);
 }
