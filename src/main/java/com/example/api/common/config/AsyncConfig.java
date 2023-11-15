@@ -10,8 +10,8 @@ import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 
 import java.util.concurrent.ThreadPoolExecutor;
 
-@EnableAsync
 @Configuration
+@EnableAsync
 public class AsyncConfig implements AsyncConfigurer {
     /**
      * 비동기 작업을 처리 가능하게 설정

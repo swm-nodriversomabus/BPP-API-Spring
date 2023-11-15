@@ -17,9 +17,9 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.UUID;
 
 @Service
-@Slf4j
 @RequiredArgsConstructor
-@Transactional
+@Slf4j
+@Transactional(readOnly = true)
 public class UserPreferenceService implements UserPreferenceUsecase {
     private final PreferenceMapperInterface preferenceMapper;
     private final SavePreferencePort savePreferencePort;
@@ -27,6 +27,7 @@ public class UserPreferenceService implements UserPreferenceUsecase {
     private final CreateUserPreferencePort createUserPreferencePort;
     
     @Override
+    @Transactional
     public UserPreferenceDto createUserPreference(UserPreferenceDto userPreferenceDto) {
         UserPreferenceEntity userPreferenceEntity = createUserPreferencePort.createUserPreference(preferenceMapper.toEntity(userPreferenceDto));
         return preferenceMapper.toDto(userPreferenceEntity);

@@ -12,8 +12,8 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.Optional;
 
 @Service
-@Slf4j
 @RequiredArgsConstructor
+@Slf4j
 @Transactional(readOnly = true)
 public class SocialService {
     private final SaveSocialPort saveSocialPort;

@@ -22,10 +22,10 @@ import org.springframework.kafka.support.serializer.JsonDeserializer;
 import java.util.HashMap;
 import java.util.Map;
 
-@EnableKafka
 @Configuration
 @RequiredArgsConstructor
 @Slf4j
+@EnableKafka
 public class KafkaConsumerConfig {
     @Value("${kafka.bootstrapAddress}")
     private String bootstrapAddress;
@@ -86,5 +86,3 @@ public class KafkaConsumerConfig {
 
 
 }
-
-

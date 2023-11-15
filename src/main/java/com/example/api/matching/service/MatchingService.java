@@ -113,7 +113,7 @@ public class MatchingService implements SaveMatchingUsecase, FindMatchingUsecase
                                     .userId(userId)
                                     .matchingId(findMatchingDto.getMatchingId())
                                     .build();
-                    if (matchingApplicationPort.getByMatchingApplicationPK(matchingApplicationPK).isEmpty()) {
+                    if (matchingApplicationPort.getByMatchingApplicationPK(matchingApplicationPK).isEmpty()) { // 신청 상태가 None인 매칭만 보여줌
                         sortedMatchingList.add(findMatchingDto);
                     }
                 }

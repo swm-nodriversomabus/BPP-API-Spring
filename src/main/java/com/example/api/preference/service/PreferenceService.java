@@ -25,8 +25,8 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Service
-@Slf4j
 @RequiredArgsConstructor
+@Slf4j
 @Transactional(readOnly = true)
 public class PreferenceService implements SavePreferenceUsecase, FindPreferenceUsecase, ComparePreferenceUsecase {
     private final PreferenceMapperInterface preferenceMapper;

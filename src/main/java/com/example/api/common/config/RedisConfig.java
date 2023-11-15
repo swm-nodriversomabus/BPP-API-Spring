@@ -12,9 +12,9 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.repository.configuration.EnableRedisRepositories;
 
 @Configuration
-@EnableRedisRepositories
 @RequiredArgsConstructor
 @Slf4j
+@EnableRedisRepositories
 public class RedisConfig {
     private final RedisProperties redisProperties;
     @Bean

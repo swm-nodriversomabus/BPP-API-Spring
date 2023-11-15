@@ -21,8 +21,8 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Service
-@Slf4j
 @RequiredArgsConstructor
+@Slf4j
 @Transactional(readOnly = true)
 public class NotificationService implements SaveNotificationUsecase, FindNotificationUsecase {
     private final NotificationMapperInterface notificationMapper;

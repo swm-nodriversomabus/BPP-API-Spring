@@ -14,6 +14,7 @@ import com.example.api.matching.application.port.in.*;
 import com.example.api.matching.domain.MatchingApplication;
 import com.example.api.matching.dto.*;
 import com.example.api.matching.type.MatchingTypeEnum;
+import com.example.api.member.application.port.in.AddMemberChatRoomUsecase;
 import com.example.api.user.application.port.in.FindUserUsecase;
 import com.example.api.user.dto.FindUserInfoDto;
 import com.example.api.user.dto.UserAuthorityCheckDto;
@@ -43,6 +44,8 @@ public class MatchingController {
     private final MatchingApplicationUsecase matchingApplicationUsecase;
     private final AccommodationUsecase accommodationUsecase;
     private final LikeUsecase likeUsecase;
+    private final CreateChatRoomUsecase createChatRoomUsecase;
+    private final AddMemberChatRoomUsecase addMemberChatRoomUsecase;
     private final MatchingMapperInterface matchingMapper;
 
     /**
@@ -58,7 +61,6 @@ public class MatchingController {
             log.error("MatchingController::createMatching: Login is needed");
             throw new CustomException(ErrorCodeEnum.LOGIN_IS_NOT_DONE);
         }
-        FindMatchingDto findMatchingDto = saveMatchingUsecase.createMatching(securityUser.getUserId(), saveMatchingDto);
         
         // 매칭 전용 채팅방 생성
         CreateChatRoomDto createChatRoomDto = CreateChatRoomDto.builder()

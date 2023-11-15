@@ -9,8 +9,8 @@ import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
 
-@RequiredArgsConstructor
 @Repository
+@RequiredArgsConstructor
 public class SocialPersistenceAdapter implements SaveSocialPort, FindSocialPort {
     private final SocialRepository socialRepository;
     private final SocialMapper socialMapper;
