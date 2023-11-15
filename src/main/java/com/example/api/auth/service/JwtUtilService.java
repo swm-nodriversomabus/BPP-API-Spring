@@ -17,8 +17,8 @@ import java.util.Base64;
 import java.util.Date;
 
 @Service
-@Slf4j
 @RequiredArgsConstructor
+@Slf4j
 public class JwtUtilService {
     private final JwtProperties jwtProperties;
     private final RefreshTokenService refreshTokenService;
@@ -70,7 +70,7 @@ public class JwtUtilService {
             Jws<Claims> claimsJws = Jwts.parserBuilder()
                     .setSigningKey(secretKey)
                     .build().parseClaimsJws(token);
-            return claimsJws.getBody().getExpiration().after(new Date()); // 만료 시간 유혀성 검사
+            return claimsJws.getBody().getExpiration().after(new Date()); // 만료 시간 유효성 검사
         } catch (Exception e) {
             log.error(e.getMessage());
             return false;

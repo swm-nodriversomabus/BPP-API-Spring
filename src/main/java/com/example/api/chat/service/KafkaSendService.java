@@ -11,22 +11,24 @@ import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.concurrent.CompletableFuture;
 
-@Slf4j
 @Service
 @RequiredArgsConstructor
+@Slf4j
 @Transactional(readOnly = true)
 public class KafkaSendService implements SendChatUsecase {
-    private final KafkaTemplate<String, Chat> kafkaTemplate;
     private final ChatMapper chatMapper;
     private final ChatAsyncService chatService;
     private final KafkaConsumerConfig kafkaConsumerConfig;
+    private final KafkaTemplate<String, Chat> kafkaTemplate;
 
     @Override
     @Transactional
     public void send(String roomId, AddChatDto message) {
         Chat sendChat = chatMapper.toDomain(message);
+        sendChat.setCreatedAt(LocalDateTime.now());
         final CompletableFuture<Void> chatResult = chatService.saveChat(message);
         // 비동기 작업으로 디비 저장
         chatResult.thenAccept(
@@ -38,6 +40,5 @@ public class KafkaSendService implements SendChatUsecase {
         kafkaConsumerConfig.createListenerContainerForRoom(roomId); // 혹시 몰라 컨슈머가 없을 수도 있어 추가
         kafkaTemplate.send(roomId, sendChat);
         log.info("kafka send FINISH");
-
     }
 }
