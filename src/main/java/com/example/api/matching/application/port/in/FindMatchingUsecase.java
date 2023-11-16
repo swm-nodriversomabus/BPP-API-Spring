@@ -7,6 +7,7 @@ import java.util.UUID;
 
 public interface FindMatchingUsecase {
     List<FindMatchingDto> getAll();
+    List<FindMatchingDto> getDiningMatchingList();
     FindMatchingDto getMatchingById(Long matchingId);
     List<FindMatchingDto> getMatchingByWriterId(UUID userId);
     List<FindMatchingDto> getMatchingByIsActive(Boolean isActive);

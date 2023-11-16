@@ -23,15 +23,15 @@ public class ChatPersistentAdapter implements AddChatPort, GetChatListPort {
     private final ChatMapper chatMapper;
     
     @Override
-    public void addChat(AddChatDto addChatDto) {
+    public Chat addChat(AddChatDto addChatDto) {
         ChatEntity chatEntity = chatMapper.toEntity(addChatDto);
-        chatRepository.save(chatEntity);
+        return chatMapper.toDomain(chatRepository.save(chatEntity));
     }
 
     @Override
     public List<Chat> getChatList(UUID roomId, Pageable pageable) {
         Page<ChatEntity> ret = chatRepository.findAllByRoomId_ChatroomId(roomId, pageable);
-        if (ret != null && ret.hasContent()){
+        if (ret != null && ret.hasContent()) {
             return chatMapper.toDomainList(ret.getContent());
         }
         return new ArrayList<>();

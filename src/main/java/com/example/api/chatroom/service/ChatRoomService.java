@@ -23,9 +23,9 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
+@RequiredArgsConstructor
 @Slf4j
 @Transactional(readOnly = true)
-@RequiredArgsConstructor
 public class ChatRoomService implements CreateChatRoomUsecase, FindChatRomListUsecase {
     private final CreateChatRoomPort createChatRoomPort;
     private final FindChatRoomListPort findChatRoomListPort;

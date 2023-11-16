@@ -8,8 +8,8 @@ import org.springframework.web.socket.config.annotation.WebSocketConfigurer;
 import org.springframework.web.socket.config.annotation.WebSocketHandlerRegistry;
 
 @Configuration
-@EnableWebSocket
 @RequiredArgsConstructor
+@EnableWebSocket
 public class ChatConfiguration implements WebSocketConfigurer {
     // WebSocketHandler 생성자 추가
     private final WebSocketHandler webSocketHandler;

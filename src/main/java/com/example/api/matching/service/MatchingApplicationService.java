@@ -29,8 +29,8 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.*;
 
 @Service
-@Slf4j
 @RequiredArgsConstructor
+@Slf4j
 @Transactional(readOnly = true)
 public class MatchingApplicationService implements MatchingApplicationUsecase {
     private final UserMapperInterface userMapper;

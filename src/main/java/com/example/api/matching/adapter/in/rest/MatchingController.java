@@ -9,9 +9,11 @@ import com.example.api.common.exception.CustomException;
 import com.example.api.common.type.ApplicationStateEnum;
 import com.example.api.common.type.ErrorCodeEnum;
 import com.example.api.common.utils.AuthenticationUtils;
+import com.example.api.matching.adapter.out.persistence.MatchingMapperInterface;
 import com.example.api.matching.application.port.in.*;
 import com.example.api.matching.domain.MatchingApplication;
 import com.example.api.matching.dto.*;
+import com.example.api.matching.type.MatchingTypeEnum;
 import com.example.api.member.application.port.in.AddMemberChatRoomUsecase;
 import com.example.api.user.application.port.in.FindUserUsecase;
 import com.example.api.user.dto.FindUserInfoDto;
@@ -40,9 +42,11 @@ public class MatchingController {
     private final FindMatchingUsecase findMatchingUsecase;
     private final DeleteMatchingUsecase deleteMatchingUsecase;
     private final MatchingApplicationUsecase matchingApplicationUsecase;
+    private final AccommodationUsecase accommodationUsecase;
     private final LikeUsecase likeUsecase;
     private final CreateChatRoomUsecase createChatRoomUsecase;
     private final AddMemberChatRoomUsecase addMemberChatRoomUsecase;
+    private final MatchingMapperInterface matchingMapper;
 
     /**
      * 새 매칭 생성
@@ -51,7 +55,7 @@ public class MatchingController {
      */
     @Operation(summary = "Create matching", description = "새로운 매칭을 생성한다.")
     @PostMapping("/matching")
-    public FindMatchingDto createMatching(@Valid @RequestBody SaveMatchingDto saveMatchingDto) {
+    public FindMatchingDto createMatching(@Valid @RequestBody SaveMatchingDto saveMatchingDto, @Valid @RequestBody(required = false) AccommodationDto accommodationDto) {
         SecurityUser securityUser = AuthenticationUtils.getCurrentUserAuthentication();
         if (securityUser == null) {
             log.error("MatchingController::createMatching: Login is needed");
@@ -81,6 +85,13 @@ public class MatchingController {
                 .build();
         matchingApplicationUsecase.createMatchingApplicationData(securityUser.getUserId(), saveMatchingApplicationDto);
         
+        if (saveMatchingDto.getType().equals(MatchingTypeEnum.Accommodation)) {
+            if (accommodationDto == null) {
+                log.error("MatchingController::createMatching: Accommodation data not found");
+                throw new CustomException(ErrorCodeEnum.ACCOMMODATION_NOT_FOUND);
+            }
+            accommodationUsecase.createAccommodation(findMatchingDto.getMatchingId(), accommodationDto);
+        }
         return findMatchingDto;
     }
 
@@ -126,20 +137,65 @@ public class MatchingController {
         return findMatchingUsecase.getAll();
     }
     
+    @Operation(summary = "Get all dining matching", description = "모든 식사 매칭 목록을 조회한다.")
+    @GetMapping("/diningmatching")
+    public List<FindMatchingDto> getDiningMatchingList() {
+        SecurityUser securityUser = AuthenticationUtils.getCurrentUserAuthentication();
+        if (securityUser == null) {
+            log.error("MatchingController::getDiningMatchingList: Login is needed");
+            throw new CustomException(ErrorCodeEnum.LOGIN_IS_NOT_DONE);
+        }
+        return findMatchingUsecase.getDiningMatchingList();
+    }
+
     /**
-     * ID가 matchingId인 매칭 조회
+     * 숙소 매칭 목록 조회
+     * @return accommodation matching list
+     */
+    @Operation(summary = "Get all accommodation matching", description = "모든 숙소 매칭 목록을 조회한다.")
+    @GetMapping("/accommodationmatching")
+    public List<AccommodationMatchingDto> getAccommodationMatchingList() {
+        SecurityUser securityUser = AuthenticationUtils.getCurrentUserAuthentication();
+        if (securityUser == null) {
+            log.error("MatchingController::getAccommodationMatchingList: Login is needed");
+            throw new CustomException(ErrorCodeEnum.LOGIN_IS_NOT_DONE);
+        }
+        return accommodationUsecase.getAccommodationMatchingList();
+    }
+    
+    /**
+     * ID가 matchingId인 매칭 조회 (유형 범용)
      * @param matchingId (데이터)
      * @return matching data
      */
     @Operation(summary = "Get matching", description = "ID가 matchingId인 매칭을 조회한다.")
     @GetMapping("/matching/{matchingId}")
-    public FindMatchingDto getMatchingById(@PathVariable Long matchingId) {
+    public AccommodationMatchingDto getMatchingById(@PathVariable Long matchingId) {
         SecurityUser securityUser = AuthenticationUtils.getCurrentUserAuthentication();
         if (securityUser == null) {
             log.error("MatchingController::getMatchingById: Login is needed");
             throw new CustomException(ErrorCodeEnum.LOGIN_IS_NOT_DONE);
         }
-        return findMatchingUsecase.getMatchingById(matchingId);
+        AccommodationMatchingDto matchingDto = matchingMapper.toDto(findMatchingUsecase.getMatchingById(matchingId));
+        if (matchingDto.getType().equals(MatchingTypeEnum.Accommodation)) {
+            AccommodationDto accommodationDto = accommodationUsecase.getAccommodation(matchingId);
+            matchingDto.setPrice(accommodationDto.getPrice());
+            matchingDto.setPricePerOne(accommodationDto.getPrice() / Math.max(matchingDto.getCurrentMember(), 1));
+            matchingDto.setRoom(accommodationDto.getRoom());
+        }
+        return matchingDto;
+    }
+
+    @Operation(summary = "Get matching", description = "자기 자신의 매칭을 조회한다.")
+    @GetMapping("/matching/my-matching")
+    public List<FindMatchingDto> getMyMatching() {
+        SecurityUser securityUser = AuthenticationUtils.getCurrentUserAuthentication();
+        if (securityUser == null) {
+            log.error("MatchingController::getMatchingById: Login is needed");
+            throw new CustomException(ErrorCodeEnum.LOGIN_IS_NOT_DONE);
+        }
+        return findMatchingUsecase.getMatchingByWriterId(securityUser.getUserId());
+//        return findMatchingUsecase.getMatchingById(matchingId);
     }
 
     /**
@@ -206,6 +262,17 @@ public class MatchingController {
         }
         return likeUsecase.getLikeCount(matchingId);
     }
+    
+    @Operation(summary = "Get recommended accommodation list", description = "추천 숙소 리스트를 반환한다.")
+    @GetMapping("/accommodation/recommended")
+    public List<AccommodationDto> getRecommendedAccommodationList() {
+        SecurityUser securityUser = AuthenticationUtils.getCurrentUserAuthentication();
+        if (securityUser == null) {
+            log.error("MatchingController::getRecommendedAccommodationList: Login is needed");
+            throw new CustomException(ErrorCodeEnum.LOGIN_IS_NOT_DONE);
+        }
+        return accommodationUsecase.getRecommendedAccommodationList(securityUser.getUserId());
+    }
 
     /**
      * ID가 matchingId인 매칭 정보 수정
@@ -222,6 +289,17 @@ public class MatchingController {
             throw new CustomException(ErrorCodeEnum.LOGIN_IS_NOT_DONE);
         }
         return saveMatchingUsecase.updateMatching(matchingId, matchingDto);
+    }
+    
+    @Operation(summary = "Update accommodation", description = "숙소 정보를 수정한다.")
+    @PutMapping("/matching/{matchingId}/accommodation")
+    public void updateAccommodation(@PathVariable Long matchingId, @RequestBody AccommodationDto accommodationDto) {
+        SecurityUser securityUser = AuthenticationUtils.getCurrentUserAuthentication();
+        if (securityUser == null) {
+            log.error("MatchingController::updateAccommodation: Login is needed");
+            throw new CustomException(ErrorCodeEnum.LOGIN_IS_NOT_DONE);
+        }
+        accommodationUsecase.updateAccommodation(matchingId, accommodationDto);
     }
 
     /**
@@ -295,5 +373,21 @@ public class MatchingController {
             throw new CustomException(ErrorCodeEnum.INVALID_PERMISSION);
         }
         deleteMatchingUsecase.deleteMatching(matchingId);
+    }
+    
+    @Operation(summary = "Reset accommodation", description = "숙소 정보를 초기화한다.")
+    @DeleteMapping("/matching/{matchingId}/accommodation")
+    public void deleteAccommodation(@PathVariable Long matchingId) {
+        SecurityUser securityUser = AuthenticationUtils.getCurrentUserAuthentication();
+        if (securityUser == null) {
+            log.error("MatchingController::deleteAccommodation: Login is needed");
+            throw new CustomException(ErrorCodeEnum.LOGIN_IS_NOT_DONE);
+        }
+        FindMatchingDto matchingDto = findMatchingUsecase.getMatchingById(matchingId);
+        if (matchingDto == null) {
+            log.error("MatchingController::deleteMatching: No such matching");
+            throw new CustomException(ErrorCodeEnum.MATCHING_NOT_FOUND);
+        }
+        accommodationUsecase.deleteAccommodation(matchingId);
     }
 }

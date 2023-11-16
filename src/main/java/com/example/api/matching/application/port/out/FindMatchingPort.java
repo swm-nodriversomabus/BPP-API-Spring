@@ -8,6 +8,7 @@ import java.util.UUID;
 
 public interface FindMatchingPort {
     List<MatchingEntity> getAllBy();
+    List<MatchingEntity> getDiningMatchingList();
     Optional<MatchingEntity> getByMatchingId(Long matchingId);
     List<MatchingEntity> getByWriterId(UUID userId);
     List<MatchingEntity> getByIsActive(Boolean isActive);

@@ -26,8 +26,8 @@ import java.util.Map;
 import java.util.Random;
 
 @Service
-@Slf4j
 @RequiredArgsConstructor
+@Slf4j
 public class SMSService implements SendCertificationCodeUsecase, VerifyCodeUsecase {
     private final AWSConfig awsConfig;
     private final CertificationCodePort certificationCodePort;

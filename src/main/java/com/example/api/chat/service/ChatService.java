@@ -13,8 +13,8 @@ import java.util.List;
 import java.util.UUID;
 
 @Service
-@Slf4j
 @RequiredArgsConstructor
+@Slf4j
 @Transactional(readOnly = true)
 public class ChatService implements GetChatListUsecase {
     private final GetChatListPort getChatListPort;
