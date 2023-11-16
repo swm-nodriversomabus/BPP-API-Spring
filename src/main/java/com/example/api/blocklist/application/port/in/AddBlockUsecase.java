@@ -4,6 +4,6 @@ import com.example.api.blocklist.dto.AddBlockDto;
 
 import java.util.UUID;
 
-public interface AddBlockUseccase {
+public interface AddBlockUsecase {
     void addBlockUser(AddBlockDto addBlockDto, UUID userId);
 }

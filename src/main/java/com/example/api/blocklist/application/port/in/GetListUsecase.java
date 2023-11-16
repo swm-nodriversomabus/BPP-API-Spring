@@ -1,6 +1,5 @@
 package com.example.api.blocklist.application.port.in;
 
-import com.example.api.blocklist.domain.BlockList;
 import com.example.api.user.domain.BlockUser;
 import org.springframework.data.domain.Pageable;
 
