@@ -5,11 +5,8 @@ import com.example.api.blocklist.application.port.out.GetBlockListPort;
 import com.example.api.blocklist.application.port.out.ReleaseBlockPort;
 import com.example.api.blocklist.domain.BlockList;
 import com.example.api.blocklist.repositorty.BlockListRepository;
-import com.example.api.chat.adapter.out.persistence.ChatEntity;
-import com.example.api.user.domain.BlockUser;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.cglib.core.Block;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
@@ -17,8 +14,6 @@ import org.springframework.stereotype.Repository;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
-
-
 
 @Repository
 @RequiredArgsConstructor

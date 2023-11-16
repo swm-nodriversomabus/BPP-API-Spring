@@ -105,16 +105,15 @@ public class MatchingService implements SaveMatchingUsecase, FindMatchingUsecase
             for (Pair<Long, Integer> matchingData: matchingScoreList) { // 유사도가 높은 순서로 정렬한 후 반환
                 FindMatchingDto findMatchingDto = this.getMatchingById(matchingData.getFirst());
                 if (findMatchingDto != null) {
-                    sortedMatchingList.add(findMatchingDto);
-                    if (sortedMatchingList.size() == 10) {
-                        break;
-                    }
                     MatchingApplicationPK matchingApplicationPK = MatchingApplicationPK.builder()
                                     .userId(userId)
                                     .matchingId(findMatchingDto.getMatchingId())
                                     .build();
                     if (matchingApplicationPort.getByMatchingApplicationPK(matchingApplicationPK).isEmpty()) { // 신청 상태가 None인 매칭만 보여줌
                         sortedMatchingList.add(findMatchingDto);
+                        if (sortedMatchingList.size() == 10) {
+                            break;
+                        }
                     }
                 }
             }

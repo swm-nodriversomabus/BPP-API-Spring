@@ -7,8 +7,8 @@ import java.util.UUID;
 
 @Getter
 @Builder
-@AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor
 public class BlockList {
     private UUID userId;
     private BlockUser blocklistUserId;

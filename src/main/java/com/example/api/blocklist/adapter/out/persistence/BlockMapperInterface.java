@@ -1,6 +1,5 @@
 package com.example.api.blocklist.adapter.out.persistence;
 
-
 import com.example.api.blocklist.domain.BlockList;
 import com.example.api.blocklist.dto.AddBlockDto;
 import com.example.api.user.domain.BlockUser;

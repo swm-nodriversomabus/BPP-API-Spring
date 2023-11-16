@@ -1,8 +1,7 @@
 package com.example.api.blocklist.service;
 
-
 import com.example.api.blocklist.adapter.out.persistence.BlockMapperInterface;
-import com.example.api.blocklist.application.port.in.AddBlockUseccase;
+import com.example.api.blocklist.application.port.in.AddBlockUsecase;
 import com.example.api.blocklist.application.port.in.GetListUsecase;
 import com.example.api.blocklist.application.port.in.ReleaseBlockUsecase;
 import com.example.api.blocklist.application.port.out.AddBlockUserPort;
@@ -20,13 +19,12 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 @Service
+@RequiredArgsConstructor
 @Slf4j
 @Transactional(readOnly = true)
-@RequiredArgsConstructor
-public class BlockListService implements AddBlockUseccase, GetListUsecase, ReleaseBlockUsecase {
+public class BlockListService implements AddBlockUsecase, GetListUsecase, ReleaseBlockUsecase {
     private final AddBlockUserPort addBlockUserPort;
     private final GetBlockListPort getBlockListPort;
     private final ReleaseBlockPort releaseBlockPort;
