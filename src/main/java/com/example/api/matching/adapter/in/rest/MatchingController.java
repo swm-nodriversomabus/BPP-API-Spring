@@ -143,6 +143,18 @@ public class MatchingController {
         return findMatchingUsecase.getMatchingById(matchingId);
     }
 
+    @Operation(summary = "Get matching", description = "자기 자신의 매칭을 조회한다.")
+    @GetMapping("/matching/my-matching")
+    public List<FindMatchingDto> getMyMatching() {
+        SecurityUser securityUser = AuthenticationUtils.getCurrentUserAuthentication();
+        if (securityUser == null) {
+            log.error("MatchingController::getMatchingById: Login is needed");
+            throw new CustomException(ErrorCodeEnum.LOGIN_IS_NOT_DONE);
+        }
+        return findMatchingUsecase.getMatchingByWriterId(securityUser.getUserId());
+//        return findMatchingUsecase.getMatchingById(matchingId);
+    }
+
     /**
      * ID가 matchingId인 매칭의 대기자 목록 조회
      * @param matchingId (ID)
