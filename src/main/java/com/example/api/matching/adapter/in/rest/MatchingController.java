@@ -210,13 +210,17 @@ public class MatchingController {
      */
     @Operation(summary = "Get matching by place coordinate", description = "선택한 위치와 가까운 여행지의 매칭 목록을 조회한다.")
     @GetMapping("/matching/nearfrom")
-    public List<FindMatchingDto> getNearMatching(@RequestBody Pair<Double, Double> coordination) {
+    public List<FindMatchingDto> getNearMatching(@RequestBody(required = false) Pair<Double, Double> coordination) {
         SecurityUser securityUser = AuthenticationUtils.getCurrentUserAuthentication();
         if (securityUser == null) {
             log.error("MatchingController::getNearMatching: Login is needed");
             throw new CustomException(ErrorCodeEnum.LOGIN_IS_NOT_DONE);
         }
-        return findMatchingUsecase.getNearMatching(coordination.getFirst(), coordination.getSecond());
+        Pair<Double, Double> coordinationData = coordination;
+        if (coordinationData == null) {
+            coordinationData = new Pair<>(37.5544, 126.9707); // 서울역
+        }
+        return findMatchingUsecase.getNearMatching(coordinationData.getFirst(), coordinationData.getSecond());
     }
 
     /**
