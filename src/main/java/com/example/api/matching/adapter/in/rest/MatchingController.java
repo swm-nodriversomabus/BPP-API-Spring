@@ -8,6 +8,7 @@ import com.example.api.chatroom.type.ChatRoomEnum;
 import com.example.api.common.exception.CustomException;
 import com.example.api.common.type.ApplicationStateEnum;
 import com.example.api.common.type.ErrorCodeEnum;
+import com.example.api.common.type.Pair;
 import com.example.api.common.utils.AuthenticationUtils;
 import com.example.api.matching.adapter.out.persistence.MatchingMapperInterface;
 import com.example.api.matching.application.port.in.*;
@@ -204,19 +205,18 @@ public class MatchingController {
 
     /**
      * 선택한 위치와 가까운 매칭 조회
-     * @param latitude (위도)
-     * @param longitude (경도)
+     * @param coordination (위치)
      * @return near matching list
      */
     @Operation(summary = "Get matching by place coordinate", description = "선택한 위치와 가까운 여행지의 매칭 목록을 조회한다.")
     @GetMapping("/matching/nearfrom")
-    public List<FindMatchingDto> getNearMatching(Double latitude, Double longitude) {
+    public List<FindMatchingDto> getNearMatching(@RequestBody Pair<Double, Double> coordination) {
         SecurityUser securityUser = AuthenticationUtils.getCurrentUserAuthentication();
         if (securityUser == null) {
             log.error("MatchingController::getNearMatching: Login is needed");
             throw new CustomException(ErrorCodeEnum.LOGIN_IS_NOT_DONE);
         }
-        return findMatchingUsecase.getNearMatching(latitude, longitude);
+        return findMatchingUsecase.getNearMatching(coordination.getFirst(), coordination.getSecond());
     }
 
     /**
