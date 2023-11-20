@@ -48,6 +48,11 @@ public class MatchingPersistenceAdapter implements SaveMatchingPort, FindMatchin
     }
     
     @Override
+    public List<MatchingEntity> getByPlaceCoordinate(Double latitude, Double longitude) {
+        return matchingRepository.getByLatitudeGreaterThanEqualAndLatitudeLessThanEqualAndLongitudeGreaterThanEqualAndLongitudeLessThanEqual(latitude - 0.02, latitude + 0.02, longitude - 0.025, longitude + 0.025);
+    }
+    
+    @Override
     public List<MatchingEntity> getByIsActive(Boolean isActive) {
         return matchingRepository.getByIsActive(isActive);
     }

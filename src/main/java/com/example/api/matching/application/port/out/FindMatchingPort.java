@@ -11,5 +11,6 @@ public interface FindMatchingPort {
     List<MatchingEntity> getDiningMatchingList();
     Optional<MatchingEntity> getByMatchingId(Long matchingId);
     List<MatchingEntity> getByWriterId(UUID userId);
+    List<MatchingEntity> getByPlaceCoordinate(Double latitude, Double longitude);
     List<MatchingEntity> getByIsActive(Boolean isActive);
 }

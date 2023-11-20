@@ -12,6 +12,7 @@ public interface MatchingRepository extends JpaRepository<MatchingEntity, Long> 
     List<MatchingEntity> getAllBy();
     Optional<MatchingEntity> getByMatchingId(Long matchingId);
     List<MatchingEntity> getByWriterId(UUID userId);
+    List<MatchingEntity> getByLatitudeGreaterThanEqualAndLatitudeLessThanEqualAndLongitudeGreaterThanEqualAndLongitudeLessThanEqual(Double minLatitude, Double maxLatitude, Double minLongitude, Double maxLongitude);
     List<MatchingEntity> getByType(MatchingTypeEnum type);
     List<MatchingEntity> getByIsActive(Boolean isActive);
     void deleteAllBy();

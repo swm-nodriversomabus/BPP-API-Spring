@@ -11,7 +11,6 @@ import com.example.api.common.type.ErrorCodeEnum;
 import com.example.api.common.utils.AuthenticationUtils;
 import com.example.api.matching.adapter.out.persistence.MatchingMapperInterface;
 import com.example.api.matching.application.port.in.*;
-import com.example.api.matching.domain.MatchingApplication;
 import com.example.api.matching.dto.*;
 import com.example.api.matching.type.MatchingTypeEnum;
 import com.example.api.member.application.port.in.AddMemberChatRoomUsecase;
@@ -117,9 +116,7 @@ public class MatchingController {
             throw new CustomException(ErrorCodeEnum.MATCHING_NOT_FOUND);
         }
         
-        MatchingApplication matchingApplication = matchingApplicationUsecase.createMatchingApplicationData(securityUser.getUserId(), matchingApplicationDto);
-        //ChatRoom chatRoom = createChatRoomUsecase.createMatchingChatRoom(matchingApplication);
-        //return addMemberChatRoomUsecase.setupMatchingChatRoom(matchingApplication, chatRoom);
+        matchingApplicationUsecase.createMatchingApplicationData(securityUser.getUserId(), matchingApplicationDto);
     }
     
     /**
@@ -136,7 +133,11 @@ public class MatchingController {
         }
         return findMatchingUsecase.getAll();
     }
-    
+
+    /**
+     * 식사 매칭 목록 조회
+     * @return dining matching list
+     */
     @Operation(summary = "Get all dining matching", description = "모든 식사 매칭 목록을 조회한다.")
     @GetMapping("/diningmatching")
     public List<FindMatchingDto> getDiningMatchingList() {
@@ -186,16 +187,36 @@ public class MatchingController {
         return matchingDto;
     }
 
-    @Operation(summary = "Get matching", description = "자기 자신의 매칭을 조회한다.")
+    /**
+     * 로그인한 사용자가 작성한 매칭 조회
+     * @return own matching
+     */
+    @Operation(summary = "Get own matching", description = "자기 자신의 매칭을 조회한다.")
     @GetMapping("/matching/my-matching")
     public List<FindMatchingDto> getMyMatching() {
         SecurityUser securityUser = AuthenticationUtils.getCurrentUserAuthentication();
         if (securityUser == null) {
-            log.error("MatchingController::getMatchingById: Login is needed");
+            log.error("MatchingController::getMyMatching: Login is needed");
             throw new CustomException(ErrorCodeEnum.LOGIN_IS_NOT_DONE);
         }
         return findMatchingUsecase.getMatchingByWriterId(securityUser.getUserId());
-//        return findMatchingUsecase.getMatchingById(matchingId);
+    }
+
+    /**
+     * 선택한 위치와 가까운 매칭 조회
+     * @param latitude (위도)
+     * @param longitude (경도)
+     * @return near matching list
+     */
+    @Operation(summary = "Get matching by place coordinate", description = "선택한 위치와 가까운 여행지의 매칭 목록을 조회한다.")
+    @GetMapping("/matching/nearfrom")
+    public List<FindMatchingDto> getNearMatching(Double latitude, Double longitude) {
+        SecurityUser securityUser = AuthenticationUtils.getCurrentUserAuthentication();
+        if (securityUser == null) {
+            log.error("MatchingController::getNearMatching: Login is needed");
+            throw new CustomException(ErrorCodeEnum.LOGIN_IS_NOT_DONE);
+        }
+        return findMatchingUsecase.getNearMatching(latitude, longitude);
     }
 
     /**
@@ -262,7 +283,11 @@ public class MatchingController {
         }
         return likeUsecase.getLikeCount(matchingId);
     }
-    
+
+    /**
+     * 추천 숙소 리스트 조회
+     * @return recommended accommodation list
+     */
     @Operation(summary = "Get recommended accommodation list", description = "추천 숙소 리스트를 반환한다.")
     @GetMapping("/accommodation/recommended")
     public List<AccommodationDto> getRecommendedAccommodationList() {
@@ -290,7 +315,12 @@ public class MatchingController {
         }
         return saveMatchingUsecase.updateMatching(matchingId, matchingDto);
     }
-    
+
+    /**
+     * 숙소 정보 수정
+     * @param matchingId (ID)
+     * @param accommodationDto (데이터)
+     */
     @Operation(summary = "Update accommodation", description = "숙소 정보를 수정한다.")
     @PutMapping("/matching/{matchingId}/accommodation")
     public void updateAccommodation(@PathVariable Long matchingId, @RequestBody AccommodationDto accommodationDto) {
@@ -374,7 +404,11 @@ public class MatchingController {
         }
         deleteMatchingUsecase.deleteMatching(matchingId);
     }
-    
+
+    /**
+     * 숙소 정보 초기화
+     * @param matchingId (ID)
+     */
     @Operation(summary = "Reset accommodation", description = "숙소 정보를 초기화한다.")
     @DeleteMapping("/matching/{matchingId}/accommodation")
     public void deleteAccommodation(@PathVariable Long matchingId) {
