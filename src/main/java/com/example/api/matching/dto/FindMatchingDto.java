@@ -4,6 +4,7 @@ import com.example.api.matching.type.MatchingTypeEnum;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.*;
 
 import java.time.LocalDateTime;
@@ -33,6 +34,12 @@ public class FindMatchingDto {
     
     @NotBlank
     private String place;
+
+    @Size(min = -90, max = 90)
+    private Double latitude;
+
+    @Size(min = -180, max = 180)
+    private Double longitude;
     
     @NotBlank
     private String content;

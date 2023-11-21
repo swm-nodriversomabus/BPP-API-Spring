@@ -18,6 +18,8 @@ public class Matching {
     private MatchingTypeEnum type;
     private String title;
     private String place;
+    private Double latitude;
+    private Double longitude;
     private String content;
     private LocalDateTime startDate;
     private LocalDateTime endDate;
