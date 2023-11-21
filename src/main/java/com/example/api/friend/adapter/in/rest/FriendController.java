@@ -76,14 +76,14 @@ public class FriendController {
 
     @Operation(summary = "check friend", description = "친구 여부 확인")
     @GetMapping("/friend/{friendId}")
-    public ResponseEntity<String> findFriend(@PathVariable UUID friendId){
+    public ResponseEntity<Boolean> findFriend(@PathVariable UUID friendId){
         SecurityUser securityUser = AuthenticationUtils.getCurrentUserAuthentication();
         if (securityUser == null) {
             log.error("FriendController::findFriend: Login is needed");
             throw new CustomException(ErrorCodeEnum.LOGIN_IS_NOT_DONE);
         }
-
-        return ResponseEntity.ok("yes");
+        Boolean res = findFriendUsecase.findFriend(securityUser.getUserId(), friendId);
+        return ResponseEntity.ok(res);
 
     }
 }

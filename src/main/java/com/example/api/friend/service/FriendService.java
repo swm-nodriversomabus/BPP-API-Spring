@@ -20,6 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -40,7 +41,13 @@ public class FriendService implements AddFriendUsecase, FindFriendUsecase, Delet
         Friend friend = addFriendPort.addFriend(friendMapper.toDomain(friendDto));
         return friendMapper.toDto(friend);
     }
-    
+
+    @Override
+    public Boolean findFriend(UUID userId, UUID friendId) {
+        Optional<FriendEntity> friend = findFriendPort.findFriend(userId,friendId);
+        return friend.isPresent();
+    }
+
     @Override
     public List<FindUserDto> getFriendList(UUID userId) {
         List<FindUserDto> friendList = new ArrayList<>();

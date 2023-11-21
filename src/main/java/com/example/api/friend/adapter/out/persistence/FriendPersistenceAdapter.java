@@ -10,6 +10,7 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Repository
@@ -33,5 +34,10 @@ public class FriendPersistenceAdapter implements AddFriendPort, FindFriendPort, 
     @Override
     public void deleteFriend(Friend friend) {
         friendRepository.delete(friendMapper.toEntity(friend));
+    }
+
+    @Override
+    public Optional<FriendEntity> findFriend(UUID userId, UUID friendId) {
+        return friendRepository.getByUserIdAndFriendId(userId, friendId);
     }
 }
