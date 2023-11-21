@@ -3,16 +3,20 @@ package com.example.api.chatroom.dto;
 import com.example.api.chatroom.type.ChatRoomEnum;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.UUID;
 
 @Data
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class CreateChatRoomDto {
-    @NotNull
-    private UUID masterId; // TODO 추후 jwt에서 얻을 수 있어 삭제 가능
+//    @NotNull
+    private UUID masterId;
     
     @NotBlank
     private String chatroomName;

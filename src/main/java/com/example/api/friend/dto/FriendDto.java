@@ -12,7 +12,7 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 public class FriendDto {
-    @NotNull
+//    @NotNull
     private UUID userId;
     
     @NotNull
