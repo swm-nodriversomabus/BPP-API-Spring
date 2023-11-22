@@ -10,6 +10,5 @@ import java.util.UUID;
 
 public interface FriendRepository extends JpaRepository<FriendEntity, FriendPK> {
     List<FriendEntity> getByUserId(UUID userId);
-
     Optional<FriendEntity> getByUserIdAndFriendId(UUID userId, UUID friendId);
 }

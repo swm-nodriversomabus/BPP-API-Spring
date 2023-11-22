@@ -13,6 +13,7 @@ import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Repository
@@ -25,6 +26,11 @@ public class BlockUserPersistentAdapter implements AddBlockUserPort, GetBlockLis
     @Override
     public void addBlockUser(BlockList blockList) {
         blockListRepository.save(blockMapperInterface.toEntity(blockList));
+    }
+    
+    @Override
+    public Optional<BlockListEntity> getBlockUser(UUID userId, UUID blockedUserId) {
+        return blockListRepository.getByUserIdAndBlocklistUserId_UserId(userId, blockedUserId);
     }
 
     @Override
