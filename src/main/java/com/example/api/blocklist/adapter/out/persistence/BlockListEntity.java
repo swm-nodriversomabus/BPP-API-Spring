@@ -21,10 +21,10 @@ import java.util.UUID;
 public class BlockListEntity extends BaseEntity {
     @Id
     private UUID userId;
-    
+
+    @Id
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(nullable = false, name="blocklist_userid", foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
     @ToString.Exclude
-    @Id
     private UserEntity blocklistUserId;
 }

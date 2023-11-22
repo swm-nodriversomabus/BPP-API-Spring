@@ -38,6 +38,12 @@ public class MatchingEntity extends BaseEntity {
     @Column(nullable = false, length = 3000)
     private String place;
     
+    @Column
+    private Double latitude;
+    
+    @Column
+    private Double longitude;
+    
     @Column(nullable = false, length = 6000)
     private String content;
     

@@ -13,9 +13,11 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequiredArgsConstructor
@@ -39,6 +41,7 @@ public class FriendController {
             log.error("FriendController::addFriend: Login is needed");
             throw new CustomException(ErrorCodeEnum.LOGIN_IS_NOT_DONE);
         }
+        friendDto.setUserId(securityUser.getUserId());
         return addFriendUsecase.addFriend(friendDto);
     }
 
@@ -70,5 +73,18 @@ public class FriendController {
             throw new CustomException(ErrorCodeEnum.LOGIN_IS_NOT_DONE);
         }
         deleteFriendUsecase.deleteFriend(friendDto);
+    }
+
+    @Operation(summary = "check friend", description = "친구 여부 확인")
+    @GetMapping("/friend/{friendId}")
+    public ResponseEntity<Boolean> findFriend(@PathVariable UUID friendId){
+        SecurityUser securityUser = AuthenticationUtils.getCurrentUserAuthentication();
+        if (securityUser == null) {
+            log.error("FriendController::findFriend: Login is needed");
+            throw new CustomException(ErrorCodeEnum.LOGIN_IS_NOT_DONE);
+        }
+        Boolean res = findFriendUsecase.findFriend(securityUser.getUserId(), friendId);
+        return ResponseEntity.ok(res);
+
     }
 }

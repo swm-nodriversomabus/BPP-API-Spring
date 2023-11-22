@@ -7,4 +7,5 @@ import java.util.UUID;
 
 public interface FindFriendUsecase {
     List<FindUserDto> getFriendList(UUID userId);
+    Boolean findFriend(UUID userId, UUID friendId);
 }

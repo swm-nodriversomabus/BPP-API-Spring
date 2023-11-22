@@ -84,6 +84,11 @@ public class MatchingService implements SaveMatchingUsecase, FindMatchingUsecase
     public List<FindMatchingDto> getMatchingByWriterId(UUID userId) {
         return this.setCurrentMember(findMatchingPort.getByWriterId(userId));
     }
+    
+    @Override
+    public List<FindMatchingDto> getNearMatching(Double latitude, Double longitude) {
+        return this.setCurrentMember(findMatchingPort.getByPlaceCoordinate(latitude, longitude));
+    }
 
     @Override
     public List<FindMatchingDto> getMatchingByIsActive(Boolean isActive) {

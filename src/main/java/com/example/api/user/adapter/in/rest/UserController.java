@@ -230,6 +230,19 @@ public class UserController {
                 .body(new InputStreamResource(fileStream));
     }
 
+    @Operation(summary = "Get user profile image", description = "사용자의 프로필 이미지를 불러온다.")
+    @GetMapping("/user/image/{userId}")
+    public ResponseEntity<InputStreamResource> getProfileUserImage(@PathVariable UUID userId) {
+        String filename = profileImageUsecase.getProfileImageName(userId);
+        if (filename == null) {
+            return null;
+        }
+        InputStream fileStream = fileDisplayUsecase.display(filename);
+        return ResponseEntity.ok()
+                .contentType(MediaType.IMAGE_PNG)
+                .body(new InputStreamResource(fileStream));
+    }
+
     /**
      * 현재 로그인한 사용자 정보 수정
      * @param userDto (데이터)

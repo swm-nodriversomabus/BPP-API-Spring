@@ -17,6 +17,13 @@ import com.example.api.matching.domain.MatchingApplication;
 import com.example.api.matching.dto.FindMatchingDto;
 import com.example.api.matching.dto.SaveMatchingApplicationDto;
 import com.example.api.member.service.MemberService;
+import com.example.api.notification.adapter.out.persistence.NotificationMapperInterface;
+import com.example.api.notification.application.port.out.SaveNotificationPort;
+import com.example.api.notification.application.port.out.UserNotificationPort;
+import com.example.api.notification.domain.Notification;
+import com.example.api.notification.dto.SaveNotificationDto;
+import com.example.api.notification.dto.UserNotificationDto;
+import com.example.api.notification.type.NotificationTypeEnum;
 import com.example.api.user.adapter.out.persistence.UserEntity;
 import com.example.api.user.adapter.out.persistence.UserMapperInterface;
 import com.example.api.user.application.port.out.FindUserPort;
@@ -33,11 +40,14 @@ import java.util.*;
 @Slf4j
 @Transactional(readOnly = true)
 public class MatchingApplicationService implements MatchingApplicationUsecase {
-    private final UserMapperInterface userMapper;
-    private final MatchingMapperInterface matchingMapper;
     private final FindUserPort findUserPort;
     private final FindMatchingPort findMatchingPort;
     private final MatchingApplicationPort matchingApplicationPort;
+    private final SaveNotificationPort saveNotificationPort;
+    private final UserNotificationPort userNotificationPort;
+    private final UserMapperInterface userMapper;
+    private final MatchingMapperInterface matchingMapper;
+    private final NotificationMapperInterface notificationMapper;
     private final MemberService memberService;
     private final FcmService fcmService;
 
@@ -138,6 +148,21 @@ public class MatchingApplicationService implements MatchingApplicationUsecase {
             MatchingEntity matchingEntity = findMatchingPort.getByMatchingId(matchingApplication.getMatchingId()).get();
             memberService.addMember(matchingEntity.getChatRoomId(), matchingApplication.getUserId());
         }
+        
+        // 알림 추가
+        SaveNotificationDto saveNotificationDto = SaveNotificationDto.builder()
+                .type(state.equals(ApplicationStateEnum.Approved) ? NotificationTypeEnum.ApplicationApproved : NotificationTypeEnum.ApplicationDeclined)
+                .content(state.equals(ApplicationStateEnum.Approved) ? "매칭 신청이 수락되었어요!" : "매칭 신청이 거절되었어요.")
+                .isActive(true)
+                .build();
+        Notification notification = saveNotificationPort.createNotification(notificationMapper.toDomain(saveNotificationDto));
+        UserNotificationDto userNotificationDto = UserNotificationDto.builder()
+                .userId(matchingApplicationDto.getUserId())
+                .notificationId(notification.getNotificationId())
+                .isRead(false)
+                .readAt(null)
+                .build();
+        userNotificationPort.createUserNotification(notificationMapper.toEntity(userNotificationDto));
         
         // 푸시 알림 전송
         FcmDto fcmDto = FcmDto.builder()

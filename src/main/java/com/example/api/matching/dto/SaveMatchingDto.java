@@ -4,6 +4,7 @@ import com.example.api.matching.type.MatchingTypeEnum;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.*;
 
 import java.time.LocalDateTime;
@@ -27,6 +28,12 @@ public class SaveMatchingDto {
     @NotBlank(message = "Place is empty")
     private String place;
     
+//    @Size(min = -90, max = 90)
+    private Double latitude;
+    
+//    @Size(min = -180, max = 180)
+    private Double longitude;
+    
     @NotNull
     private String content;
     
@@ -47,6 +54,14 @@ public class SaveMatchingDto {
     @NotNull
     @Min(0)
     private Integer plusAge;
+    
+//    @Min(0)
+    private Integer price;
+    
+//    @Min(0)
+    private Integer pricePerOne;
+    
+    private String room;
     
     @NotNull
     @Min(0)
