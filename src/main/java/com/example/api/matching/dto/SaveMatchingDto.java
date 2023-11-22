@@ -28,10 +28,10 @@ public class SaveMatchingDto {
     @NotBlank(message = "Place is empty")
     private String place;
     
-    @Size(min = -90, max = 90)
+//    @Size(min = -90, max = 90)
     private Double latitude;
     
-    @Size(min = -180, max = 180)
+//    @Size(min = -180, max = 180)
     private Double longitude;
     
     @NotNull
