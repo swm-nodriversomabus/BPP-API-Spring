@@ -31,7 +31,11 @@ public class BlockListController {
     private final GetListUsecase getListUsecase;
     private final ReleaseBlockUsecase releaseBlockUsecase;
 
-    @Operation(summary = "add Block User", description = "차단할 유저 추가")
+    /**
+     * 사용자 차단
+     * @param addBlockDto (데이터)
+     */
+    @Operation(summary = "Block user", description = "사용자를 차단한다.")
     @PostMapping("/block")
     public void addBlockUser(@Valid @RequestBody AddBlockDto addBlockDto) {
         SecurityUser securityUser = AuthenticationUtils.getCurrentUserAuthentication();
@@ -42,7 +46,12 @@ public class BlockListController {
         addBlockUsecase.addBlockUser(addBlockDto, securityUser.getUserId());
     }
 
-    @Operation(summary = "get List block User", description = "차단한 유저 리스트제공")
+    /**
+     * 차단한 사용자 목록 조회
+     * @param pageable (데이터)
+     * @return blocked user list
+     */
+    @Operation(summary = "Get blocked user list", description = "차단한 사용자 목록을 조회한다.")
     @GetMapping("/block")
     public List<BlockUser> getBlockList(@PageableDefault(sort = "createdAt", direction = Sort.Direction.DESC, size = 30) Pageable pageable) {
         SecurityUser securityUser = AuthenticationUtils.getCurrentUserAuthentication();
@@ -53,7 +62,11 @@ public class BlockListController {
         return getListUsecase.getBlockList(pageable, securityUser.getUserId());
     }
 
-    @Operation(summary = "release block user", description = "차단한 유저 해제")
+    /**
+     * 사용자 차단 해제
+     * @param deleteBlockDto (데이터)
+     */
+    @Operation(summary = "Release blocked user", description = "사용자 차단을 해제한다.")
     @DeleteMapping("/block")
     public void releaseBlockUser(@Valid @RequestBody DeleteBlockDto deleteBlockDto) {
         SecurityUser securityUser = AuthenticationUtils.getCurrentUserAuthentication();
