@@ -55,6 +55,14 @@ public class SaveMatchingDto {
     @Min(0)
     private Integer plusAge;
     
+//    @Min(0)
+    private Integer price;
+    
+//    @Min(0)
+    private Integer pricePerOne;
+    
+    private String room;
+    
     @NotNull
     @Min(0)
     private Integer readCount;
