@@ -55,7 +55,7 @@ public class MatchingController {
      */
     @Operation(summary = "Create matching", description = "새로운 매칭을 생성한다.")
     @PostMapping("/matching")
-    public FindMatchingDto createMatching(@Valid @RequestBody SaveMatchingDto saveMatchingDto, @Valid @RequestBody(required = false) AccommodationDto accommodationDto) {
+    public FindMatchingDto createMatching(@Valid @RequestBody SaveMatchingDto saveMatchingDto) {
         SecurityUser securityUser = AuthenticationUtils.getCurrentUserAuthentication();
         if (securityUser == null) {
             log.error("MatchingController::createMatching: Login is needed");
@@ -86,10 +86,12 @@ public class MatchingController {
         matchingApplicationUsecase.createMatchingApplicationData(securityUser.getUserId(), saveMatchingApplicationDto);
         
         if (saveMatchingDto.getType().equals(MatchingTypeEnum.Accommodation)) {
-            if (accommodationDto == null) {
-                log.error("MatchingController::createMatching: Accommodation data not found");
-                throw new CustomException(ErrorCodeEnum.ACCOMMODATION_NOT_FOUND);
-            }
+            AccommodationDto accommodationDto = AccommodationDto.builder()
+                    .matchingId(findMatchingDto.getMatchingId())
+                    .price(saveMatchingDto.getPrice())
+                    .pricePerOne(saveMatchingDto.getPricePerOne())
+                    .room(saveMatchingDto.getRoom())
+                    .build();
             accommodationUsecase.createAccommodation(findMatchingDto.getMatchingId(), accommodationDto);
         }
         return findMatchingDto;
