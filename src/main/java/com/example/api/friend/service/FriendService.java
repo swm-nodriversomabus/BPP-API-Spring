@@ -53,7 +53,7 @@ public class FriendService implements AddFriendUsecase, FindFriendUsecase, Delet
         List<FindUserDto> friendList = new ArrayList<>();
         List<FriendEntity> friendPairList = findFriendPort.getFriendList(userId);
         for (FriendEntity friendPair: friendPairList) {
-            friendList.add(userMapper.toDto(findUserPort.getByUserId(friendPair.getUserId()).orElseThrow()));
+            friendList.add(userMapper.toDto(findUserPort.getByUserId(friendPair.getFriendId()).orElseThrow()));
         }
         return friendList;
     }
