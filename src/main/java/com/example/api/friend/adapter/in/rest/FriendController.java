@@ -41,7 +41,7 @@ public class FriendController {
             log.error("FriendController::addFriend: Login is needed");
             throw new CustomException(ErrorCodeEnum.LOGIN_IS_NOT_DONE);
         }
-        friendDto.setFriendId(securityUser.getUserId());
+        friendDto.setUserId(securityUser.getUserId());
         return addFriendUsecase.addFriend(friendDto);
     }
 
