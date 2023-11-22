@@ -183,9 +183,13 @@ public class MatchingController {
         AccommodationMatchingDto matchingDto = matchingMapper.toDto(findMatchingUsecase.getMatchingById(matchingId));
         if (matchingDto.getType().equals(MatchingTypeEnum.Accommodation)) {
             AccommodationDto accommodationDto = accommodationUsecase.getAccommodation(matchingId);
-            matchingDto.setPrice(accommodationDto.getPrice());
-            matchingDto.setPricePerOne(accommodationDto.getPrice() / Math.max(matchingDto.getCurrentMember(), 1));
-            matchingDto.setRoom(accommodationDto.getRoom());
+            if (accommodationDto.getPrice() != null) {
+                matchingDto.setPrice(accommodationDto.getPrice());
+                matchingDto.setPricePerOne(accommodationDto.getPrice() / Math.max(matchingDto.getCurrentMember(), 1));
+            }
+            if (accommodationDto.getRoom() != null) {
+                matchingDto.setRoom(accommodationDto.getRoom());
+            }
         }
         return matchingDto;
     }
